@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, Copy, Trash2, FileText, Edit } from "lucide-react";
+import { Heart, Copy, Trash2, FileText, Edit, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 
 // Mock data for liked ideas
@@ -36,6 +37,14 @@ export function Library() {
   const [likedIdeas, setLikedIdeas] = useState(mockLikedIdeas);
   const [editingIdea, setEditingIdea] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
+  const [generateFormData, setGenerateFormData] = useState({
+    brandName: "",
+    niche: "",
+    competitorsSocialLinks: "",
+    platforms: "",
+    competitorsPlatformLinks: "",
+  });
   const {
     toast
   } = useToast();
@@ -86,12 +95,41 @@ export function Library() {
     setIsEditDialogOpen(false);
     setEditingIdea(null);
   };
+
+  const handleGenerateIdeas = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Generating content with:", generateFormData);
+    toast({
+      title: "Generating ideas",
+      description: "Content ideas are being generated based on your inputs."
+    });
+    setIsGenerateDialogOpen(false);
+    // TODO: Implement content generation logic
+  };
+
+  const handlePlatformChange = (value: string) => {
+    setGenerateFormData(prev => ({
+      ...prev,
+      platforms: value
+    }));
+  };
   return <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-4xl font-serif font-bold mb-4">The Library of Ideas</h1>
-        <p className="text-muted-foreground">
-          Your collection of liked content ideas, ready to use whenever you need inspiration.
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-4xl font-serif font-bold mb-2">The Library of Ideas</h1>
+            <p className="text-muted-foreground">
+              Your collection of liked content ideas, ready to use whenever you need inspiration.
+            </p>
+          </div>
+          <Button 
+            onClick={() => setIsGenerateDialogOpen(true)}
+            className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Generate Ideas
+          </Button>
+        </div>
       </div>
 
       {likedIdeas.length === 0 ? <Card className="bg-card border-border text-center py-12 shadow-butter-glow">
@@ -196,6 +234,90 @@ export function Library() {
               Save Changes
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Generate Ideas Dialog */}
+      <Dialog open={isGenerateDialogOpen} onOpenChange={setIsGenerateDialogOpen}>
+        <DialogContent className="sm:max-w-[600px] bg-card border-border shadow-butter-glow">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-xl">Generate Content Ideas</DialogTitle>
+            <DialogDescription>
+              Fill in the details below to generate personalized content ideas.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleGenerateIdeas} className="space-y-6 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="brandName">Brand Name</Label>
+              <Input
+                id="brandName"
+                placeholder="Enter your brand name"
+                value={generateFormData.brandName}
+                onChange={(e) => setGenerateFormData(prev => ({ ...prev, brandName: e.target.value }))}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="niche">Niche</Label>
+              <Input
+                id="niche"
+                placeholder="e.g., Fashion, Technology, Food & Beverage"
+                value={generateFormData.niche}
+                onChange={(e) => setGenerateFormData(prev => ({ ...prev, niche: e.target.value }))}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="competitorsSocialLinks">Competitors' Social Links</Label>
+              <Textarea
+                id="competitorsSocialLinks"
+                placeholder="Enter competitor social media links (one per line)"
+                value={generateFormData.competitorsSocialLinks}
+                onChange={(e) => setGenerateFormData(prev => ({ ...prev, competitorsSocialLinks: e.target.value }))}
+                className="min-h-[100px]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Platforms to Target</Label>
+              <Select value={generateFormData.platforms} onValueChange={handlePlatformChange}>
+                <SelectTrigger className="w-full bg-background">
+                  <SelectValue placeholder="Select platform(s)" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border-border z-50">
+                  <SelectItem value="instagram">Instagram</SelectItem>
+                  <SelectItem value="linkedin">LinkedIn</SelectItem>
+                  <SelectItem value="youtube">YouTube</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="competitorsPlatformLinks">Competitor's Platform Links</Label>
+              <Textarea
+                id="competitorsPlatformLinks"
+                placeholder="Enter specific competitor platform links"
+                value={generateFormData.competitorsPlatformLinks}
+                onChange={(e) => setGenerateFormData(prev => ({ ...prev, competitorsPlatformLinks: e.target.value }))}
+                className="min-h-[100px]"
+              />
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsGenerateDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button 
+                type="submit" 
+                className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
+              >
+                Generate Content
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </div>;
