@@ -88,7 +88,7 @@ export function Generate() {
                 <SelectContent className="bg-background border-border z-50">
                   <SelectItem value="instagram">Instagram</SelectItem>
                   <SelectItem value="linkedin">LinkedIn</SelectItem>
-                  <SelectItem value="both">Both Instagram & LinkedIn</SelectItem>
+                  <SelectItem value="youtube">YouTube</SelectItem>
                 </SelectContent>
               </Select>
             </div>
