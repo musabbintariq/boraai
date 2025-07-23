@@ -25,7 +25,7 @@ const CTA = () => {
           </span>
         </div>
         
-        <h2 className="text-4xl font-bold text-white mb-8 leading-[0.9] tracking-tight md:text-4xl font-serif">
+        <h2 className="text-5xl font-bold text-white mb-8 leading-[0.9] tracking-wide md:text-5xl font-serif">
           Transform Your Content{" "}
           <span className="block">Strategy Today</span>
         </h2>

@@ -11,7 +11,7 @@ const Header = () => {
             <div className="w-9 h-9 bg-transparent rounded-xl flex items-center justify-center shadow-soft">
               <Sparkles className="w-5 h-5" style={{ color: 'hsl(45 93% 58%)' }} />
             </div>
-            <span className="text-xl font-bold text-foreground tracking-wide font-serif">Bora AI</span>
+            <span className="text-2xl font-bold text-foreground tracking-wide font-serif">Bora AI</span>
           </div>
 
           {/* Navigation - Clean spacing */}
