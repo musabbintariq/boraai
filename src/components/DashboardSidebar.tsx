@@ -37,7 +37,7 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
     <Sidebar className={collapsed ? "w-14" : "w-60"} collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg font-italiana text-primary">
+          <SidebarGroupLabel className="text-lg font-serif text-primary">
             {!collapsed && "Bora AI"}
           </SidebarGroupLabel>
           <SidebarGroupContent>

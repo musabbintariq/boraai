@@ -33,7 +33,7 @@ export function Generate() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-4xl font-italiana mb-4">Generate Content</h1>
+        <h1 className="text-4xl font-serif mb-4">Generate Content</h1>
         <p className="text-muted-foreground">
           Create amazing content for your brand by providing some basic information.
         </p>
@@ -41,7 +41,7 @@ export function Generate() {
 
       <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle className="font-italiana">Content Generator</CardTitle>
+          <CardTitle className="font-serif">Content Generator</CardTitle>
           <CardDescription>
             Fill in the details below to generate personalized content ideas.
           </CardDescription>

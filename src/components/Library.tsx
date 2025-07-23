@@ -48,7 +48,7 @@ export function Library() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-4xl font-italiana mb-4">Content Library</h1>
+        <h1 className="text-4xl font-serif mb-4">Content Library</h1>
         <p className="text-muted-foreground">
           Your collection of liked content ideas, ready to use whenever you need inspiration.
         </p>
@@ -58,7 +58,7 @@ export function Library() {
         <Card className="bg-card border-border text-center py-12">
           <CardContent>
             <Heart className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-            <CardTitle className="font-italiana mb-2">No Liked Ideas Yet</CardTitle>
+            <CardTitle className="font-serif mb-2">No Liked Ideas Yet</CardTitle>
             <CardDescription>
               Start generating content and like your favorite ideas to see them here.
             </CardDescription>
@@ -71,7 +71,7 @@ export function Library() {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>
-                    <CardTitle className="font-italiana text-xl mb-2">{idea.title}</CardTitle>
+                    <CardTitle className="font-serif text-xl mb-2">{idea.title}</CardTitle>
                     <div className="flex items-center gap-2 mb-2">
                       <Badge variant="secondary">{idea.platform}</Badge>
                       <span className="text-sm text-muted-foreground">{idea.createdAt}</span>
