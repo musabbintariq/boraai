@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight } from "lucide-react";
 const CTA = () => {
-  return <section className="py-32 bg-gradient-lovable relative overflow-hidden">
+  return <section className="py-32 relative overflow-hidden">
+      {/* Background image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+        style={{ backgroundImage: 'url(/lovable-uploads/b8dddceb-7c6b-452e-a61c-0ec638702d67.png)' }}
+      />
+      <div className="absolute inset-0 bg-black/40" />
+      
       {/* Minimal background decoration */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-20 w-32 h-32 border border-white rounded-3xl rotate-12" />
