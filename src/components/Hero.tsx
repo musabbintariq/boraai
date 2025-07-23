@@ -27,7 +27,7 @@ const Hero = () => {
       </div>
 
       {/* Main content with clean typography */}
-      <div className="relative z-10 text-center max-w-5xl mx-auto px-6">
+      <div className="relative z-10 text-center max-w-5xl mx-auto px-6 pt-20 md:pt-0">
         <div className="mb-8">
           
         </div>
