@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { Heart, Copy, Trash2, FileText } from "lucide-react";
+import { Heart, Copy, Trash2, FileText, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
 // Mock data for liked ideas
@@ -35,6 +39,8 @@ const mockLikedIdeas = [
 
 export function Library() {
   const [likedIdeas, setLikedIdeas] = useState(mockLikedIdeas);
+  const [editingIdea, setEditingIdea] = useState<any>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const { toast } = useToast();
 
   const handleCopy = (content: string) => {
@@ -60,6 +66,37 @@ export function Library() {
       description: `Creating script for: ${idea.title}`,
     });
     console.log("Scripting idea:", idea.title);
+  };
+
+  const handleEdit = (idea: any) => {
+    setEditingIdea({ ...idea, tags: idea.tags.join(', ') }); // Convert tags array to string for editing
+    setIsEditDialogOpen(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (!editingIdea) return;
+    
+    const updatedIdea = {
+      ...editingIdea,
+      tags: editingIdea.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag.length > 0)
+    };
+    
+    setLikedIdeas(prev => prev.map(idea => 
+      idea.id === updatedIdea.id ? updatedIdea : idea
+    ));
+    
+    setIsEditDialogOpen(false);
+    setEditingIdea(null);
+    
+    toast({
+      title: "Idea updated",
+      description: "Your idea has been successfully updated.",
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditDialogOpen(false);
+    setEditingIdea(null);
   };
 
   return (
@@ -129,6 +166,14 @@ export function Library() {
                       Copy
                     </Button>
                     <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(idea)}
+                    >
+                      <Edit className="h-4 w-4 mr-1" />
+                      Edit
+                    </Button>
+                    <Button
                       size="sm"
                       onClick={() => handleScriptIt(idea)}
                       className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
@@ -143,6 +188,65 @@ export function Library() {
           ))}
         </div>
       )}
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-[600px] bg-card border-border shadow-butter-glow">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-xl">Edit Idea</DialogTitle>
+            <DialogDescription>
+              Make changes to your content idea. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {editingIdea && (
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-title">Title</Label>
+                <Input
+                  id="edit-title"
+                  value={editingIdea.title}
+                  onChange={(e) => setEditingIdea(prev => ({ ...prev, title: e.target.value }))}
+                  className="col-span-3"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="edit-content">Description</Label>
+                <Textarea
+                  id="edit-content"
+                  value={editingIdea.content}
+                  onChange={(e) => setEditingIdea(prev => ({ ...prev, content: e.target.value }))}
+                  className="col-span-3 min-h-[120px]"
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="edit-tags">Tags (comma separated)</Label>
+                <Input
+                  id="edit-tags"
+                  value={editingIdea.tags}
+                  onChange={(e) => setEditingIdea(prev => ({ ...prev, tags: e.target.value }))}
+                  placeholder="fashion, summer, trends"
+                  className="col-span-3"
+                />
+              </div>
+            </div>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCancelEdit}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleSaveEdit}
+              className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
+            >
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
