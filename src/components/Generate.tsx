@@ -120,7 +120,7 @@ export function Generate() {
 
             <Button 
               type="submit" 
-              className="w-full bg-white text-black hover:bg-white/90"
+              className="w-full bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
               size="lg"
             >
               Generate Content
