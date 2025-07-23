@@ -42,7 +42,10 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
     <Sidebar className={collapsed ? "w-14" : "w-60"} collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-2xl font-serif text-primary py-4 px-2">
+          <SidebarGroupLabel 
+            className="text-2xl font-serif text-primary py-4 px-2 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => setActiveView("analytics")}
+          >
             {!collapsed && "Bora AI"}
           </SidebarGroupLabel>
           <SidebarGroupContent className="mt-8">
