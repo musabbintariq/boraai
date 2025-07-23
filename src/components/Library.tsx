@@ -239,7 +239,7 @@ export function Library() {
 
       {/* Generate Ideas Dialog */}
       <Dialog open={isGenerateDialogOpen} onOpenChange={setIsGenerateDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] bg-card border-border shadow-butter-glow">
+        <DialogContent className="sm:max-w-[450px] bg-card border-border shadow-butter-glow">
           <DialogHeader>
             <DialogTitle className="font-serif text-xl">Generate Content Ideas</DialogTitle>
             <DialogDescription>
