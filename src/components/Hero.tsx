@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, TrendingUp, Zap } from "lucide-react";
-import heroImage from "@/assets/hero-content-ideas.jpg";
 const Hero = () => {
   return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Clean gradient background inspired by Lovable */}
-      <div className="absolute inset-0 bg-gradient-lovable" />
+      {/* Dark background image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+        style={{ backgroundImage: 'url(/lovable-uploads/318b0b2c-863e-4aeb-a2d9-692275c0c6dd.png)' }}
+      />
+      <div className="absolute inset-0 bg-black/20" />
       
       {/* Minimal floating elements */}
       <div className="absolute top-20 left-10 opacity-40">
@@ -42,7 +45,7 @@ const Hero = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-          <Button variant="hero" size="lg" className="px-10 py-4 bg-white text-primary hover:bg-white/90 shadow-soft rounded-xl font-light text-sm">
+          <Button size="lg" className="px-10 py-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft rounded-xl font-light text-sm">
             Start Creating Ideas
             <Sparkles className="w-5 h-5 ml-2" />
           </Button>
