@@ -32,7 +32,7 @@ const Hero = () => {
           
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-[0.9] tracking-tight lg:text-4xl">
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-[0.9] tracking-tight lg:text-4xl font-serif">
           <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent">
             Real content for real people
           </span>

@@ -29,7 +29,7 @@ const Features = () => {
   return <section className="py-32 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
-          <h2 className="text-4xl font-bold text-foreground mb-6 tracking-tight md:text-4xl">
+          <h2 className="text-4xl font-bold text-foreground mb-6 tracking-tight md:text-4xl font-serif">
             Everything You Need to{" "}
             <span className="bg-gradient-primary bg-clip-text text-transparent">Create Amazing Content</span>
           </h2>
@@ -47,7 +47,7 @@ const Features = () => {
                     <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 shadow-soft">
                       <Icon className="w-7 h-7" style={{ color: 'hsl(45 93% 58%)' }} />
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-4 tracking-tight">{feature.title}</h3>
+                    <h3 className="text-xl font-bold text-foreground mb-4 tracking-tight font-serif">{feature.title}</h3>
                     <p className="text-muted-foreground leading-relaxed font-light">{feature.description}</p>
                   </div>
                 </CardContent>
