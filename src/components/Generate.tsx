@@ -41,7 +41,7 @@ export function Generate() {
 
       <Card className="bg-card border-border">
         <CardHeader>
-          <CardTitle className="font-serif">Content Generator</CardTitle>
+          <CardTitle className="font-sans font-bold">Content Generator</CardTitle>
           <CardDescription>
             Fill in the details below to generate personalized content ideas.
           </CardDescription>
