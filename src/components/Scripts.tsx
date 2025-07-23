@@ -131,9 +131,20 @@ export function Scripts() {
                       <span className="text-sm text-muted-foreground">{script.createdAt}</span>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => handleRemove(script.id)} className="h-8 w-8 p-0 hover:bg-destructive/10">
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => handlePreview(script)}
+                      className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90 border-[hsl(var(--butter-yellow))]"
+                    >
+                      <Eye className="h-4 w-4 mr-1" />
+                      Preview
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => handleRemove(script.id)} className="h-8 w-8 p-0 hover:bg-destructive/10">
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -149,10 +160,6 @@ export function Scripts() {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => handlePreview(script)}>
-                      <Eye className="h-4 w-4 mr-1" />
-                      Preview
-                    </Button>
                     <Button variant="outline" size="sm" onClick={() => handleCopy(script.script)}>
                       <Copy className="h-4 w-4 mr-1" />
                       Copy
