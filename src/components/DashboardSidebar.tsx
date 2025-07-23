@@ -1,4 +1,4 @@
-import { PenTool, Heart, BarChart3 } from "lucide-react";
+import { PenTool, Heart, BarChart3, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardSidebarProps {
   activeView: "analytics" | "generate" | "library";
@@ -19,6 +20,7 @@ interface DashboardSidebarProps {
 export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebarProps) {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
+  const navigate = useNavigate();
 
   const menuItems = [
     {
@@ -37,6 +39,11 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
       value: "library" as const,
     },
   ];
+
+  const handleLogout = () => {
+    // TODO: Add actual logout logic when authentication is implemented
+    navigate('/');
+  };
 
   return (
     <Sidebar className={collapsed ? "w-14" : "w-60"} collapsible="icon">
@@ -65,6 +72,17 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        
+        {/* Logout Button */}
+        <div className="mt-auto p-2">
+          <SidebarMenuButton
+            onClick={handleLogout}
+            className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+          >
+            <LogOut className="h-4 w-4" />
+            {!collapsed && <span>Logout</span>}
+          </SidebarMenuButton>
+        </div>
       </SidebarContent>
     </Sidebar>
   );
