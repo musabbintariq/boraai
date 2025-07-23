@@ -26,7 +26,7 @@ const Header = () => {
           <nav className="hidden md:flex items-center gap-10">
             <a 
               href="#features" 
-              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors font-normal"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('features');
@@ -36,7 +36,7 @@ const Header = () => {
             </a>
             <a 
               href="#how-it-works" 
-              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors font-normal"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('how-it-works');
@@ -46,7 +46,7 @@ const Header = () => {
             </a>
             <a 
               href="#pricing" 
-              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors font-normal"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('pricing');
@@ -83,7 +83,7 @@ const Header = () => {
             <div className="px-6 py-4 space-y-4">
               <a 
                 href="#features" 
-                className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors font-normal py-2"
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick('features');
@@ -93,7 +93,7 @@ const Header = () => {
               </a>
               <a 
                 href="#how-it-works" 
-                className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors font-normal py-2"
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick('how-it-works');
@@ -103,7 +103,7 @@ const Header = () => {
               </a>
               <a 
                 href="#pricing" 
-                className="block text-muted-foreground hover:text-foreground transition-colors font-medium py-2"
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors font-normal py-2"
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick('pricing');
