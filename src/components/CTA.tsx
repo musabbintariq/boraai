@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight } from "lucide-react";
-
 const CTA = () => {
-  return (
-    <section className="py-32 bg-gradient-lovable relative overflow-hidden">
+  return <section className="py-32 bg-gradient-lovable relative overflow-hidden">
       {/* Minimal background decoration */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-20 w-32 h-32 border border-white rounded-3xl rotate-12" />
@@ -20,29 +18,21 @@ const CTA = () => {
           </span>
         </div>
         
-        <h2 className="text-4xl md:text-7xl font-bold text-white mb-8 leading-[0.9] tracking-tight">
+        <h2 className="text-4xl font-bold text-white mb-8 leading-[0.9] tracking-tight md:text-4xl">
           Transform Your Content{" "}
           <span className="block">Strategy Today</span>
         </h2>
         
-        <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+        <p className="text-xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed font-light md:text-lg">
           Join thousands of content creators who never run out of fresh, engaging ideas.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
-          <Button 
-            variant="hero" 
-            size="lg" 
-            className="text-lg px-12 py-5 bg-white text-primary hover:bg-white/90 shadow-soft font-semibold rounded-xl"
-          >
+          <Button variant="hero" size="lg" className="px-12 py-5 bg-white text-primary hover:bg-white/90 shadow-soft rounded-xl text-base font-light">
             Get Started Free
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
-          <Button 
-            variant="outline" 
-            size="lg" 
-            className="text-lg px-12 py-5 bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 rounded-xl font-medium"
-          >
+          <Button variant="outline" size="lg" className="px-12 py-5 bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 rounded-xl text-base font-light">
             Learn More
           </Button>
         </div>
@@ -51,8 +41,6 @@ const CTA = () => {
           No credit card required • Setup in 2 minutes • Cancel anytime
         </p>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default CTA;
