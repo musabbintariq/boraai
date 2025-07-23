@@ -88,7 +88,7 @@ export function Library() {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>
-                    <CardTitle className="font-serif text-xl mb-2">{idea.title}</CardTitle>
+                    <CardTitle className="font-sans font-bold text-xl mb-2">{idea.title}</CardTitle>
                     <div className="flex items-center gap-2 mb-2">
                       <Badge variant="secondary">{idea.platform}</Badge>
                       <span className="text-sm text-muted-foreground">{idea.createdAt}</span>
