@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileText, Copy, Trash2, Edit, Play, Download } from "lucide-react";
+import { FileText, Copy, Trash2, Edit, Play, Download, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,6 +39,8 @@ export function Scripts() {
   const [scripts, setScripts] = useState(mockScripts);
   const [editingScript, setEditingScript] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [previewScript, setPreviewScript] = useState<any>(null);
+  const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const {
     toast
   } = useToast();
@@ -96,6 +98,11 @@ export function Scripts() {
       description: "The script has been downloaded to your device."
     });
   };
+
+  const handlePreview = (script: any) => {
+    setPreviewScript(script);
+    setIsPreviewDialogOpen(true);
+  };
   return <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="text-4xl font-serif font-bold mb-2">Your Scripts</h1>
@@ -131,7 +138,7 @@ export function Scripts() {
               </CardHeader>
               <CardContent>
                 <div className="bg-muted/50 rounded-lg p-4 mb-4">
-                  <p className="text-sm font-mono leading-relaxed">{script.script}</p>
+                  <p className="text-sm font-mono leading-relaxed line-clamp-2 break-words overflow-hidden">{script.script}</p>
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -142,6 +149,10 @@ export function Scripts() {
                   </div>
                   
                   <div className="flex gap-2">
+                    <Button variant="outline" size="sm" onClick={() => handlePreview(script)}>
+                      <Eye className="h-4 w-4 mr-1" />
+                      Preview
+                    </Button>
                     <Button variant="outline" size="sm" onClick={() => handleCopy(script.script)}>
                       <Copy className="h-4 w-4 mr-1" />
                       Copy
@@ -210,6 +221,51 @@ export function Scripts() {
             </Button>
             <Button onClick={handleSaveEdit} className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90">
               Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Preview Dialog */}
+      <Dialog open={isPreviewDialogOpen} onOpenChange={setIsPreviewDialogOpen}>
+        <DialogContent className="sm:max-w-[700px] bg-card border-border shadow-butter-glow">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-xl">Script Preview</DialogTitle>
+            <DialogDescription>
+              Full preview of your script content.
+            </DialogDescription>
+          </DialogHeader>
+          
+          {previewScript && (
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Title</Label>
+                <div className="bg-muted/50 rounded-lg p-3">
+                  <h3 className="font-sans font-bold text-lg">{previewScript.title}</h3>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Script Content</Label>
+                <div className="bg-muted/50 rounded-lg p-4 max-h-[400px] overflow-y-auto">
+                  <p className="text-sm font-mono leading-relaxed whitespace-pre-wrap break-words">
+                    {previewScript.script}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsPreviewDialogOpen(false)}>
+              Close
+            </Button>
+            <Button 
+              onClick={() => handleCopy(previewScript?.script || "")} 
+              className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
+            >
+              <Copy className="h-4 w-4 mr-1" />
+              Copy Script
             </Button>
           </DialogFooter>
         </DialogContent>
