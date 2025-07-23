@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Heart, Copy, Share } from "lucide-react";
+import { Heart, Copy, Trash2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 // Mock data for liked ideas
 const mockLikedIdeas = [
@@ -33,16 +34,32 @@ const mockLikedIdeas = [
 ];
 
 export function Library() {
-  const [likedIdeas] = useState(mockLikedIdeas);
+  const [likedIdeas, setLikedIdeas] = useState(mockLikedIdeas);
+  const { toast } = useToast();
 
   const handleCopy = (content: string) => {
     navigator.clipboard.writeText(content);
-    // TODO: Add toast notification
+    toast({
+      title: "Copied to clipboard",
+      description: "Content has been copied to your clipboard.",
+    });
   };
 
-  const handleShare = (idea: any) => {
-    // TODO: Implement share functionality
-    console.log("Sharing idea:", idea.title);
+  const handleRemove = (id: number) => {
+    setLikedIdeas(prev => prev.filter(idea => idea.id !== id));
+    toast({
+      title: "Idea removed",
+      description: "The idea has been removed from your library.",
+    });
+  };
+
+  const handleScriptIt = (idea: any) => {
+    // TODO: Implement script it functionality
+    toast({
+      title: "Script it",
+      description: `Creating script for: ${idea.title}`,
+    });
+    console.log("Scripting idea:", idea.title);
   };
 
   return (
@@ -77,7 +94,17 @@ export function Library() {
                       <span className="text-sm text-muted-foreground">{idea.createdAt}</span>
                     </div>
                   </div>
-                  <Heart className="h-5 w-5 fill-current" style={{ color: 'hsl(var(--butter-yellow))' }} />
+                  <div className="flex items-center gap-1">
+                    <Heart className="h-5 w-5 fill-current" style={{ color: 'hsl(var(--butter-yellow))' }} />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRemove(idea.id)}
+                      className="h-8 w-8 p-0 hover:bg-destructive/10"
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -102,12 +129,12 @@ export function Library() {
                       Copy
                     </Button>
                     <Button
-                      variant="outline"
                       size="sm"
-                      onClick={() => handleShare(idea)}
+                      onClick={() => handleScriptIt(idea)}
+                      className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
                     >
-                      <Share className="h-4 w-4 mr-1" />
-                      Share
+                      <FileText className="h-4 w-4 mr-1" />
+                      Script it
                     </Button>
                   </div>
                 </div>
