@@ -1,4 +1,4 @@
-import { Heart, BarChart3, LogOut } from "lucide-react";
+import { Lightbulb, BarChart3, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -30,7 +30,7 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
     },
     {
       title: "Ideas",
-      icon: Heart,
+      icon: Lightbulb,
       value: "library" as const,
     },
   ];
