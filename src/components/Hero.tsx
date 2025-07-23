@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, TrendingUp, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 const Hero = () => {
+  const navigate = useNavigate();
+  
   return <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Dark background image */}
       <div 
@@ -44,7 +47,11 @@ const Hero = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-12 sm:mb-16 px-4">
-          <Button size="lg" className="w-full sm:w-auto px-8 sm:px-10 py-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft rounded-xl font-light text-base">
+          <Button 
+            size="lg" 
+            className="w-full sm:w-auto px-8 sm:px-10 py-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft rounded-xl font-light text-base"
+            onClick={() => navigate('/dashboard')}
+          >
             Start Creating Ideas
             <Sparkles className="w-5 h-5 ml-2" style={{ color: 'hsl(45 93% 58%)' }} />
           </Button>

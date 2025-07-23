@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 const CTA = () => {
+  const navigate = useNavigate();
+  
   return <section className="py-16 sm:py-24 lg:py-32 relative overflow-hidden">
       {/* Background image */}
       <div 
@@ -35,7 +38,12 @@ const CTA = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-6 sm:mb-8">
-          <Button variant="hero" size="lg" className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-white text-black hover:bg-white/90 shadow-soft rounded-xl text-base font-light">
+          <Button 
+            variant="hero" 
+            size="lg" 
+            className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-white text-black hover:bg-white/90 shadow-soft rounded-xl text-base font-light"
+            onClick={() => navigate('/dashboard')}
+          >
             Get Started Free
             <ArrowRight className="w-5 h-5 ml-2" style={{ color: 'hsl(45 93% 58%)' }} />
           </Button>
