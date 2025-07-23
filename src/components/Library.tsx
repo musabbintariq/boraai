@@ -102,7 +102,7 @@ export function Library() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-4xl font-serif mb-4">Content Library</h1>
+        <h1 className="text-4xl font-serif font-bold mb-4">Content Library</h1>
         <p className="text-muted-foreground">
           Your collection of liked content ideas, ready to use whenever you need inspiration.
         </p>
