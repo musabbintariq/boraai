@@ -33,7 +33,7 @@ export function Generate() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-4xl font-serif mb-4">Generate Content</h1>
+        <h1 className="text-4xl font-serif font-bold mb-4">Generate Content</h1>
         <p className="text-muted-foreground">
           Create amazing content for your brand by providing some basic information.
         </p>
