@@ -20,7 +20,7 @@ const CTA = () => {
       <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
         <div className="mb-8">
           <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-5 py-2.5 rounded-full text-sm font-medium border border-white/20">
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-4 h-4" style={{ color: 'hsl(45 93% 58%)' }} />
             Ready to Get Started?
           </span>
         </div>
@@ -37,7 +37,7 @@ const CTA = () => {
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
           <Button variant="hero" size="lg" className="px-12 py-5 bg-white text-primary hover:bg-white/90 shadow-soft rounded-xl text-base font-light">
             Get Started Free
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <ArrowRight className="w-5 h-5 ml-2" style={{ color: 'hsl(45 93% 58%)' }} />
           </Button>
           <Button variant="outline" size="lg" className="px-12 py-5 bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 rounded-xl text-base font-light">
             Learn More

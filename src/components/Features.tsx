@@ -45,7 +45,7 @@ const Features = () => {
                 <CardContent className="p-10">
                   <div className="mb-6">
                     <div className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center mb-6 shadow-soft">
-                      <Icon className="w-7 h-7 text-white" />
+                      <Icon className="w-7 h-7" style={{ color: 'hsl(45 93% 58%)' }} />
                     </div>
                     <h3 className="text-xl font-bold text-foreground mb-4 tracking-tight">{feature.title}</h3>
                     <p className="text-muted-foreground leading-relaxed font-light">{feature.description}</p>

@@ -12,17 +12,17 @@ const Hero = () => {
       {/* Minimal floating elements */}
       <div className="absolute top-20 left-10 opacity-40">
         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 animate-pulse">
-          <TrendingUp className="w-6 h-6 text-white" />
+          <TrendingUp className="w-6 h-6" style={{ color: 'hsl(45 93% 58%)' }} />
         </div>
       </div>
       <div className="absolute top-32 right-20 opacity-40 animation-delay-1000">
         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 animate-pulse">
-          <Sparkles className="w-5 h-5 text-white" />
+          <Sparkles className="w-5 h-5" style={{ color: 'hsl(45 93% 58%)' }} />
         </div>
       </div>
       <div className="absolute bottom-32 left-20 opacity-40 animation-delay-2000">
         <div className="bg-white/10 backdrop-blur-md rounded-2xl p-2 animate-pulse">
-          <Zap className="w-4 h-4 text-white" />
+          <Zap className="w-4 h-4" style={{ color: 'hsl(45 93% 58%)' }} />
         </div>
       </div>
 
@@ -33,21 +33,20 @@ const Hero = () => {
         </div>
         
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-[0.9] tracking-tight lg:text-4xl">
-          Never Run Out of{" "}
           <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent">
-            Content Ideas
+            Bora AI
           </span>
         </h1>
         
         <p className="text-xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed font-light md:text-xl">
-          Get trending, personalized content ideas for your brand instantly. 
-          AI-powered suggestions tailored to your niche and audience.
+          AI-powered content creation that never runs out of fresh ideas.
+          Get trending, personalized suggestions tailored to your niche and audience.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
           <Button size="lg" className="px-10 py-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-soft rounded-xl font-light text-sm">
             Start Creating Ideas
-            <Sparkles className="w-5 h-5 ml-2" />
+            <Sparkles className="w-5 h-5 ml-2" style={{ color: 'hsl(45 93% 58%)' }} />
           </Button>
           <Button variant="outline" size="lg" className="px-10 py-4 bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 rounded-xl font-light text-base">
             Watch Demo

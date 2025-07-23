@@ -37,7 +37,7 @@ const HowItWorks = () => {
                   <CardContent className="p-10 text-center">
                     <div className="mb-8">
                       <div className={`w-20 h-20 bg-gradient-to-br ${step.color} rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-soft`}>
-                        <Icon className="w-10 h-10 text-white" />
+                        <Icon className="w-10 h-10" style={{ color: 'hsl(45 93% 58%)' }} />
                       </div>
                       <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-lg shadow-soft">
                         {index + 1}
@@ -50,7 +50,7 @@ const HowItWorks = () => {
                 
                 {/* Arrow for desktop */}
                 {index < steps.length - 1 && <div className="hidden md:block absolute top-1/2 -right-6 transform -translate-y-1/2 z-10">
-                    <ArrowRight className="w-8 h-8 text-primary opacity-40" />
+                    <ArrowRight className="w-8 h-8 opacity-40" style={{ color: 'hsl(45 93% 58%)' }} />
                   </div>}
               </div>;
         })}
@@ -59,7 +59,7 @@ const HowItWorks = () => {
         <div className="text-center">
           <Button variant="gradient" size="lg" className="px-12 py-5 shadow-soft rounded-xl font-light text-base">
             Start Creating Content Ideas
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <ArrowRight className="w-5 h-5 ml-2" style={{ color: 'hsl(45 93% 58%)' }} />
           </Button>
         </div>
       </div>

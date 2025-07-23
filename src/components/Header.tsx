@@ -9,9 +9,9 @@ const Header = () => {
           {/* Logo - Clean and minimal */}
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-gradient-primary rounded-xl flex items-center justify-center shadow-soft">
-              <Sparkles className="w-5 h-5 text-white" />
+              <Sparkles className="w-5 h-5" style={{ color: 'hsl(45 93% 58%)' }} />
             </div>
-            <span className="text-xl font-bold text-foreground tracking-tight">ContentMuse</span>
+            <span className="text-xl font-bold text-foreground tracking-tight">Bora AI</span>
           </div>
 
           {/* Navigation - Clean spacing */}
@@ -35,7 +35,7 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="w-5 h-5" />
+            <Menu className="w-5 h-5" style={{ color: 'hsl(45 93% 58%)' }} />
           </Button>
         </div>
       </div>
