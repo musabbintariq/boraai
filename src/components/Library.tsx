@@ -247,7 +247,7 @@ export function Library() {
             </DialogDescription>
           </DialogHeader>
           
-          <form onSubmit={handleGenerateIdeas} className="space-y-6 py-4">
+          <form onSubmit={handleGenerateIdeas} className="space-y-4 py-2">
             <div className="space-y-2">
               <Label htmlFor="brandName">Brand Name</Label>
               <Input
@@ -277,7 +277,7 @@ export function Library() {
                 placeholder="Enter competitor social media links (one per line)"
                 value={generateFormData.competitorsSocialLinks}
                 onChange={(e) => setGenerateFormData(prev => ({ ...prev, competitorsSocialLinks: e.target.value }))}
-                className="min-h-[100px]"
+                className="min-h-[60px]"
               />
             </div>
 
@@ -302,7 +302,7 @@ export function Library() {
                 placeholder="Enter specific competitor platform links"
                 value={generateFormData.competitorsPlatformLinks}
                 onChange={(e) => setGenerateFormData(prev => ({ ...prev, competitorsPlatformLinks: e.target.value }))}
-                className="min-h-[100px]"
+                className="min-h-[60px]"
               />
             </div>
 
