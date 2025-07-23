@@ -45,7 +45,7 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel 
-            className="text-2xl font-serif text-primary py-4 px-2 cursor-pointer hover:opacity-80 transition-opacity"
+            className="text-3xl font-serif text-primary py-6 px-4 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => setActiveView("analytics")}
           >
             {!collapsed && "Bora AI"}
