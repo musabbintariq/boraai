@@ -37,17 +37,17 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
     <Sidebar className={collapsed ? "w-14" : "w-60"} collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg font-serif text-primary">
+          <SidebarGroupLabel className="text-xl font-serif text-primary py-4 px-2">
             {!collapsed && "Bora AI"}
           </SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupContent className="mt-8">
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.value}>
                   <SidebarMenuButton
                     isActive={activeView === item.value}
                     onClick={() => setActiveView(item.value)}
-                    className="w-full justify-start"
+                    className="w-full justify-start py-3"
                   >
                     <item.icon className="h-4 w-4" style={{ color: 'hsl(var(--butter-yellow))' }} />
                     {!collapsed && <span>{item.title}</span>}
