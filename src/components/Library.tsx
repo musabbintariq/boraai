@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 
 // Mock data for liked ideas
@@ -239,7 +240,7 @@ export function Library() {
 
       {/* Generate Ideas Dialog */}
       <Dialog open={isGenerateDialogOpen} onOpenChange={setIsGenerateDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] bg-card border-border shadow-butter-glow">
+        <DialogContent className="sm:max-w-[600px] bg-card border-border shadow-butter-glow max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle className="font-serif text-xl">Generate Content Ideas</DialogTitle>
             <DialogDescription>
@@ -247,77 +248,79 @@ export function Library() {
             </DialogDescription>
           </DialogHeader>
           
-          <form onSubmit={handleGenerateIdeas} className="space-y-6 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="brandName">Brand Name</Label>
-              <Input
-                id="brandName"
-                placeholder="Enter your brand name"
-                value={generateFormData.brandName}
-                onChange={(e) => setGenerateFormData(prev => ({ ...prev, brandName: e.target.value }))}
-                required
-              />
-            </div>
+          <ScrollArea className="flex-1 pr-6">
+            <form onSubmit={handleGenerateIdeas} className="space-y-6 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="brandName">Brand Name</Label>
+                <Input
+                  id="brandName"
+                  placeholder="Enter your brand name"
+                  value={generateFormData.brandName}
+                  onChange={(e) => setGenerateFormData(prev => ({ ...prev, brandName: e.target.value }))}
+                  required
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="niche">Niche</Label>
-              <Input
-                id="niche"
-                placeholder="e.g., Fashion, Technology, Food & Beverage"
-                value={generateFormData.niche}
-                onChange={(e) => setGenerateFormData(prev => ({ ...prev, niche: e.target.value }))}
-                required
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="niche">Niche</Label>
+                <Input
+                  id="niche"
+                  placeholder="e.g., Fashion, Technology, Food & Beverage"
+                  value={generateFormData.niche}
+                  onChange={(e) => setGenerateFormData(prev => ({ ...prev, niche: e.target.value }))}
+                  required
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="competitorsSocialLinks">Competitors' Social Links</Label>
-              <Textarea
-                id="competitorsSocialLinks"
-                placeholder="Enter competitor social media links (one per line)"
-                value={generateFormData.competitorsSocialLinks}
-                onChange={(e) => setGenerateFormData(prev => ({ ...prev, competitorsSocialLinks: e.target.value }))}
-                className="min-h-[100px]"
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="competitorsSocialLinks">Competitors' Social Links</Label>
+                <Textarea
+                  id="competitorsSocialLinks"
+                  placeholder="Enter competitor social media links (one per line)"
+                  value={generateFormData.competitorsSocialLinks}
+                  onChange={(e) => setGenerateFormData(prev => ({ ...prev, competitorsSocialLinks: e.target.value }))}
+                  className="min-h-[100px]"
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label>Platforms to Target</Label>
-              <Select value={generateFormData.platforms} onValueChange={handlePlatformChange}>
-                <SelectTrigger className="w-full bg-background">
-                  <SelectValue placeholder="Select platform(s)" />
-                </SelectTrigger>
-                <SelectContent className="bg-background border-border z-50">
-                  <SelectItem value="instagram">Instagram</SelectItem>
-                  <SelectItem value="linkedin">LinkedIn</SelectItem>
-                  <SelectItem value="youtube">YouTube</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+              <div className="space-y-2">
+                <Label>Platforms to Target</Label>
+                <Select value={generateFormData.platforms} onValueChange={handlePlatformChange}>
+                  <SelectTrigger className="w-full bg-background">
+                    <SelectValue placeholder="Select platform(s)" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border-border z-50">
+                    <SelectItem value="instagram">Instagram</SelectItem>
+                    <SelectItem value="linkedin">LinkedIn</SelectItem>
+                    <SelectItem value="youtube">YouTube</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="competitorsPlatformLinks">Competitor's Platform Links</Label>
-              <Textarea
-                id="competitorsPlatformLinks"
-                placeholder="Enter specific competitor platform links"
-                value={generateFormData.competitorsPlatformLinks}
-                onChange={(e) => setGenerateFormData(prev => ({ ...prev, competitorsPlatformLinks: e.target.value }))}
-                className="min-h-[100px]"
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="competitorsPlatformLinks">Competitor's Platform Links</Label>
+                <Textarea
+                  id="competitorsPlatformLinks"
+                  placeholder="Enter specific competitor platform links"
+                  value={generateFormData.competitorsPlatformLinks}
+                  onChange={(e) => setGenerateFormData(prev => ({ ...prev, competitorsPlatformLinks: e.target.value }))}
+                  className="min-h-[100px]"
+                />
+              </div>
+            </form>
+          </ScrollArea>
 
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsGenerateDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button 
-                type="submit" 
-                className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
-              >
-                Generate Content
-              </Button>
-            </DialogFooter>
-          </form>
+          <DialogFooter className="mt-6">
+            <Button variant="outline" onClick={() => setIsGenerateDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleGenerateIdeas}
+              className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
+            >
+              Generate Content
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>;
