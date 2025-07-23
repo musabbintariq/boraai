@@ -21,10 +21,10 @@ const HowItWorks = () => {
   return <section className="py-32 bg-muted/20">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tight">
+          <h2 className="text-4xl font-bold text-foreground mb-6 tracking-tight md:text-4xl">
             How It Works
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed">
+          <p className="text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed text-lg">
             Get from zero to viral content ideas in just three simple steps.
           </p>
         </div>
