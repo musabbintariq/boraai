@@ -1,4 +1,4 @@
-import { PenTool, Heart, BarChart3, LogOut } from "lucide-react";
+import { Heart, BarChart3, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,8 +13,8 @@ import {
 import { useNavigate } from "react-router-dom";
 
 interface DashboardSidebarProps {
-  activeView: "analytics" | "generate" | "library";
-  setActiveView: (view: "analytics" | "generate" | "library") => void;
+  activeView: "analytics" | "library";
+  setActiveView: (view: "analytics" | "library") => void;
 }
 
 export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebarProps) {
@@ -27,11 +27,6 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
       title: "Analytics",
       icon: BarChart3,
       value: "analytics" as const,
-    },
-    {
-      title: "Generate",
-      icon: PenTool,
-      value: "generate" as const,
     },
     {
       title: "Ideas",

@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
-import { Generate } from "@/components/Generate";
 import { Library } from "@/components/Library";
 import { Analytics } from "@/components/Analytics";
 
 const Dashboard = () => {
-  const [activeView, setActiveView] = useState<"analytics" | "generate" | "library">("analytics");
+  const [activeView, setActiveView] = useState<"analytics" | "library">("analytics");
 
   return (
     <SidebarProvider>
@@ -18,7 +17,6 @@ const Dashboard = () => {
           </header>
           <div className="p-8">
             {activeView === "analytics" && <Analytics />}
-            {activeView === "generate" && <Generate />}
             {activeView === "library" && <Library />}
           </div>
         </main>
