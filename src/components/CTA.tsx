@@ -35,7 +35,7 @@ const CTA = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
-          <Button variant="hero" size="lg" className="px-12 py-5 bg-white text-primary hover:bg-white/90 shadow-soft rounded-xl text-base font-light">
+          <Button variant="hero" size="lg" className="px-12 py-5 bg-white text-black hover:bg-white/90 shadow-soft rounded-xl text-base font-light">
             Get Started Free
             <ArrowRight className="w-5 h-5 ml-2" style={{ color: 'hsl(45 93% 58%)' }} />
           </Button>
