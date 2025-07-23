@@ -31,7 +31,7 @@ const Features = () => {
         <div className="text-center mb-20">
           <h2 className="text-5xl font-bold text-foreground mb-6 tracking-wide md:text-5xl font-serif">
             Everything You Need to{" "}
-            <span className="bg-gradient-primary bg-clip-text text-transparent">Create Amazing Content</span>
+            <span style={{ color: 'hsl(45 93% 58%)' }}>Create Amazing Content</span>
           </h2>
           <p className="text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed text-lg">
             Powerful features designed to streamline your content creation process and boost your creativity.
