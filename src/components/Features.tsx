@@ -26,29 +26,29 @@ const Features = () => {
     title: "Content Library",
     description: "Edit, organize, and manage all your saved ideas in one place. Never lose a great concept again."
   }];
-  return <section id="features" className="py-32 bg-background">
+  return <section id="features" className="py-16 sm:py-24 lg:py-32 bg-background">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-20">
-          <h2 className="text-5xl font-bold text-foreground mb-6 tracking-wide md:text-5xl font-serif">
+        <div className="text-center mb-16 sm:mb-20 px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6 tracking-wide font-serif">
             Everything You Need to{" "}
             <span style={{ color: 'hsl(45 93% 58%)' }}>Create Amazing Content</span>
           </h2>
-          <p className="text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed text-lg">
+          <p className="text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed text-base sm:text-lg">
             Powerful features designed to streamline your content creation process and boost your creativity.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
           {features.map((feature, index) => {
           const Icon = feature.icon;
           return <Card key={index} className="group hover:shadow-soft transition-all duration-300 hover:scale-[1.02] border-border/30 rounded-2xl">
-                <CardContent className="p-10">
+                <CardContent className="p-6 sm:p-8 lg:p-10">
                   <div className="mb-6">
-                    <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 shadow-soft">
-                      <Icon className="w-7 h-7" style={{ color: 'hsl(45 93% 58%)' }} />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-transparent rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-soft">
+                      <Icon className="w-6 h-6 sm:w-7 sm:h-7" style={{ color: 'hsl(45 93% 58%)' }} />
                     </div>
-                    <h3 className="text-2xl font-bold text-foreground mb-4 tracking-wide font-serif">{feature.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed font-light">{feature.description}</p>
+                    <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-3 sm:mb-4 tracking-wide font-serif">{feature.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed font-light text-sm sm:text-base">{feature.description}</p>
                   </div>
                 </CardContent>
               </Card>;

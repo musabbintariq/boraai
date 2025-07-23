@@ -54,18 +54,18 @@ const Pricing = () => {
   ];
 
   return (
-    <section id="pricing" className="py-32 bg-background">
+    <section id="pricing" className="py-16 sm:py-24 lg:py-32 bg-background">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-20">
-          <h2 className="text-5xl font-bold text-foreground mb-6 tracking-wide md:text-5xl font-serif">
+        <div className="text-center mb-16 sm:mb-20 px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6 tracking-wide font-serif">
             Choose Your Plan
           </h2>
-          <p className="text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed text-lg">
+          <p className="text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed text-base sm:text-lg">
             Select the perfect plan for your content creation needs
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
             <Card 
               key={index} 
@@ -74,33 +74,33 @@ const Pricing = () => {
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1 text-black" style={{ backgroundColor: 'hsl(45 93% 58%)' }}>
-                    <Sparkles className="w-4 h-4" />
+                <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2">
+                  <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1 text-black" style={{ backgroundColor: 'hsl(45 93% 58%)' }}>
+                    <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
                     Most Popular
                   </div>
                 </div>
               )}
               
-              <CardHeader className="text-center p-8">
-                <CardTitle className="text-2xl font-bold text-foreground mb-2 font-serif">
+              <CardHeader className="text-center p-6 sm:p-8">
+                <CardTitle className="text-xl sm:text-2xl font-bold text-foreground mb-2 font-serif">
                   {plan.name}
                 </CardTitle>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold text-foreground">{plan.price}</span>
-                  <span className="text-muted-foreground ml-2">/{plan.period}</span>
+                <div className="mb-3 sm:mb-4">
+                  <span className="text-3xl sm:text-4xl font-bold text-foreground">{plan.price}</span>
+                  <span className="text-muted-foreground ml-2 text-sm sm:text-base">/{plan.period}</span>
                 </div>
-                <p className="text-muted-foreground font-light">
+                <p className="text-muted-foreground font-light text-sm sm:text-base">
                   {plan.description}
                 </p>
               </CardHeader>
 
-              <CardContent className="p-8 pt-0">
-                <ul className="space-y-4 mb-8">
+              <CardContent className="p-6 sm:p-8 pt-0">
+                <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                      <span className="text-foreground font-light">{feature}</span>
+                      <Check className="w-4 h-4 sm:w-5 sm:h-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground font-light text-sm sm:text-base">{feature}</span>
                     </li>
                   ))}
                 </ul>

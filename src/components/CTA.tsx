@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight } from "lucide-react";
 const CTA = () => {
-  return <section className="py-32 relative overflow-hidden">
+  return <section className="py-16 sm:py-24 lg:py-32 relative overflow-hidden">
       {/* Background image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
@@ -25,21 +25,21 @@ const CTA = () => {
           </span>
         </div>
         
-        <h2 className="text-5xl font-bold text-white mb-8 leading-[0.9] tracking-wide md:text-5xl font-serif">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 sm:mb-8 leading-[0.9] tracking-wide font-serif">
           Transform Your Content{" "}
           <span className="block">Strategy Today</span>
         </h2>
         
-        <p className="text-xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed font-light md:text-lg">
+        <p className="text-lg sm:text-xl text-white/80 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed font-light">
           Join thousands of content creators who never run out of fresh, engaging ideas.
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
-          <Button variant="hero" size="lg" className="px-12 py-5 bg-white text-black hover:bg-white/90 shadow-soft rounded-xl text-base font-light">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-6 sm:mb-8">
+          <Button variant="hero" size="lg" className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-white text-black hover:bg-white/90 shadow-soft rounded-xl text-base font-light">
             Get Started Free
             <ArrowRight className="w-5 h-5 ml-2" style={{ color: 'hsl(45 93% 58%)' }} />
           </Button>
-          <Button variant="outline" size="lg" className="px-12 py-5 bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 rounded-xl text-base font-light">
+          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 rounded-xl text-base font-light">
             Learn More
           </Button>
         </div>
