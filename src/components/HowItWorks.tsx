@@ -18,7 +18,7 @@ const HowItWorks = () => {
     description: "Like your favorite ideas and build your personal content library for future use.",
     color: "from-pink-600 to-red-500"
   }];
-  return <section className="py-32 bg-muted/20">
+  return <section id="how-it-works" className="py-32 bg-muted/20">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-5xl font-bold text-foreground mb-6 tracking-wide md:text-5xl font-serif">

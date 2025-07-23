@@ -16,13 +16,34 @@ const Header = () => {
 
           {/* Navigation - Clean spacing */}
           <nav className="hidden md:flex items-center gap-10">
-            <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
+            <a 
+              href="#features" 
+              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Features
             </a>
-            <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
+            <a 
+              href="#how-it-works" 
+              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               How It Works
             </a>
-            <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
+            <a 
+              href="#pricing" 
+              className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Pricing
             </a>
           </nav>

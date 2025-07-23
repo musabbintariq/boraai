@@ -26,7 +26,7 @@ const Features = () => {
     title: "Content Library",
     description: "Edit, organize, and manage all your saved ideas in one place. Never lose a great concept again."
   }];
-  return <section className="py-32 bg-background">
+  return <section id="features" className="py-32 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-5xl font-bold text-foreground mb-6 tracking-wide md:text-5xl font-serif">
