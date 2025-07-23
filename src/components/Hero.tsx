@@ -11,17 +11,17 @@ const Hero = () => {
       
       {/* Minimal floating elements */}
       <div className="absolute top-20 left-10 opacity-40">
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 animate-pulse">
+        <div className="bg-transparent backdrop-blur-md rounded-2xl p-3 animate-pulse">
           <TrendingUp className="w-6 h-6" style={{ color: 'hsl(45 93% 58%)' }} />
         </div>
       </div>
       <div className="absolute top-32 right-20 opacity-40 animation-delay-1000">
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 animate-pulse">
+        <div className="bg-transparent backdrop-blur-md rounded-2xl p-3 animate-pulse">
           <Sparkles className="w-5 h-5" style={{ color: 'hsl(45 93% 58%)' }} />
         </div>
       </div>
       <div className="absolute bottom-32 left-20 opacity-40 animation-delay-2000">
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-2 animate-pulse">
+        <div className="bg-transparent backdrop-blur-md rounded-2xl p-2 animate-pulse">
           <Zap className="w-4 h-4" style={{ color: 'hsl(45 93% 58%)' }} />
         </div>
       </div>

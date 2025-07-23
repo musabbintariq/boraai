@@ -8,7 +8,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo - Clean and minimal */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-gradient-primary rounded-xl flex items-center justify-center shadow-soft">
+            <div className="w-9 h-9 bg-transparent rounded-xl flex items-center justify-center shadow-soft">
               <Sparkles className="w-5 h-5" style={{ color: 'hsl(45 93% 58%)' }} />
             </div>
             <span className="text-xl font-bold text-foreground tracking-tight">Bora AI</span>
