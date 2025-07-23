@@ -1,4 +1,4 @@
-import { Lightbulb, BarChart3, LogOut } from "lucide-react";
+import { Lightbulb, BarChart3, LogOut, FileText } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,8 +13,8 @@ import {
 import { useNavigate } from "react-router-dom";
 
 interface DashboardSidebarProps {
-  activeView: "analytics" | "library";
-  setActiveView: (view: "analytics" | "library") => void;
+  activeView: "analytics" | "library" | "scripts";
+  setActiveView: (view: "analytics" | "library" | "scripts") => void;
 }
 
 export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebarProps) {
@@ -32,6 +32,11 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
       title: "Ideas",
       icon: Lightbulb,
       value: "library" as const,
+    },
+    {
+      title: "Scripts",
+      icon: FileText,
+      value: "scripts" as const,
     },
   ];
 

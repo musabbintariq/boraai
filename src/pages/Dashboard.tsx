@@ -3,9 +3,10 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Library } from "@/components/Library";
 import { Analytics } from "@/components/Analytics";
+import { Scripts } from "@/components/Scripts";
 
 const Dashboard = () => {
-  const [activeView, setActiveView] = useState<"analytics" | "library">("analytics");
+  const [activeView, setActiveView] = useState<"analytics" | "library" | "scripts">("analytics");
 
   return (
     <SidebarProvider>
@@ -18,6 +19,7 @@ const Dashboard = () => {
           <div className="p-8">
             {activeView === "analytics" && <Analytics />}
             {activeView === "library" && <Library />}
+            {activeView === "scripts" && <Scripts />}
           </div>
         </main>
       </div>
