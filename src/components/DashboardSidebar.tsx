@@ -69,7 +69,7 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
         </SidebarGroup>
         
         {/* Logout Button */}
-        <div className="mt-auto p-2">
+        <div className="mt-8 p-2">
           <SidebarMenuButton
             onClick={handleLogout}
             className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10"
