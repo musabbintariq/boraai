@@ -25,41 +25,41 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-24 bg-muted/30">
+    <section className="py-32 bg-muted/20">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+        <div className="text-center mb-20">
+          <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tight">
             How It Works
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed">
             Get from zero to viral content ideas in just three simple steps.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid md:grid-cols-3 gap-12 mb-20">
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
               <div key={index} className="relative">
-                <Card className="group hover:shadow-primary transition-all duration-300 hover:scale-105 border-border/50">
-                  <CardContent className="p-8 text-center">
-                    <div className="mb-6">
-                      <div className={`w-16 h-16 bg-gradient-to-br ${step.color} rounded-full flex items-center justify-center mx-auto mb-4`}>
-                        <Icon className="w-8 h-8 text-white" />
+                <Card className="group hover:shadow-soft transition-all duration-300 hover:scale-[1.02] border-border/30 rounded-2xl">
+                  <CardContent className="p-10 text-center">
+                    <div className="mb-8">
+                      <div className={`w-20 h-20 bg-gradient-to-br ${step.color} rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-soft`}>
+                        <Icon className="w-10 h-10 text-white" />
                       </div>
-                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 text-white font-bold">
+                      <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-lg shadow-soft">
                         {index + 1}
                       </div>
                     </div>
-                    <h3 className="text-xl font-semibold text-foreground mb-4">{step.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{step.description}</p>
+                    <h3 className="text-xl font-bold text-foreground mb-4 tracking-tight">{step.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed font-light">{step.description}</p>
                   </CardContent>
                 </Card>
                 
                 {/* Arrow for desktop */}
                 {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                    <ArrowRight className="w-8 h-8 text-primary" />
+                  <div className="hidden md:block absolute top-1/2 -right-6 transform -translate-y-1/2 z-10">
+                    <ArrowRight className="w-8 h-8 text-primary opacity-40" />
                   </div>
                 )}
               </div>
@@ -68,7 +68,7 @@ const HowItWorks = () => {
         </div>
 
         <div className="text-center">
-          <Button variant="gradient" size="lg" className="text-lg px-8 py-4">
+          <Button variant="gradient" size="lg" className="text-lg px-12 py-5 font-semibold shadow-soft rounded-xl">
             Start Creating Content Ideas
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>

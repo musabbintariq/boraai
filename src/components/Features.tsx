@@ -36,30 +36,30 @@ const Features = () => {
   ];
 
   return (
-    <section className="py-24 bg-background">
+    <section className="py-32 bg-background">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Everything You Need to
-            <span className="bg-gradient-primary bg-clip-text text-transparent"> Create Amazing Content</span>
+        <div className="text-center mb-20">
+          <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tight">
+            Everything You Need to{" "}
+            <span className="bg-gradient-primary bg-clip-text text-transparent">Create Amazing Content</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed">
             Powerful features designed to streamline your content creation process and boost your creativity.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <Card key={index} className="group hover:shadow-primary transition-all duration-300 hover:scale-105 border-border/50">
-                <CardContent className="p-8">
+              <Card key={index} className="group hover:shadow-soft transition-all duration-300 hover:scale-[1.02] border-border/30 rounded-2xl">
+                <CardContent className="p-10">
                   <div className="mb-6">
-                    <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mb-4">
-                      <Icon className="w-6 h-6 text-white" />
+                    <div className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center mb-6 shadow-soft">
+                      <Icon className="w-7 h-7 text-white" />
                     </div>
-                    <h3 className="text-xl font-semibold text-foreground mb-3">{feature.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                    <h3 className="text-xl font-bold text-foreground mb-4 tracking-tight">{feature.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed font-light">{feature.description}</p>
                   </div>
                 </CardContent>
               </Card>
