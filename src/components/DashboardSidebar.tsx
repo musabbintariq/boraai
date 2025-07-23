@@ -34,7 +34,7 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
       value: "generate" as const,
     },
     {
-      title: "Library",
+      title: "Ideas",
       icon: Heart,
       value: "library" as const,
     },
