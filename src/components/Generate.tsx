@@ -11,7 +11,7 @@ export function Generate() {
     brandName: "",
     niche: "",
     competitorsSocialLinks: "",
-    platforms: [] as string[],
+    platforms: "",
     competitorsPlatformLinks: "",
   });
 
@@ -24,9 +24,7 @@ export function Generate() {
   const handlePlatformChange = (value: string) => {
     setFormData(prev => ({
       ...prev,
-      platforms: prev.platforms.includes(value)
-        ? prev.platforms.filter(p => p !== value)
-        : [...prev.platforms, value]
+      platforms: value
     }));
   };
 
@@ -83,28 +81,16 @@ export function Generate() {
 
             <div className="space-y-2">
               <Label>Platforms to Target</Label>
-              <div className="flex gap-4">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="instagram"
-                    checked={formData.platforms.includes("instagram")}
-                    onChange={() => handlePlatformChange("instagram")}
-                    className="rounded border-border"
-                  />
-                  <Label htmlFor="instagram">Instagram</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="linkedin"
-                    checked={formData.platforms.includes("linkedin")}
-                    onChange={() => handlePlatformChange("linkedin")}
-                    className="rounded border-border"
-                  />
-                  <Label htmlFor="linkedin">LinkedIn</Label>
-                </div>
-              </div>
+              <Select value={formData.platforms} onValueChange={handlePlatformChange}>
+                <SelectTrigger className="w-full bg-background">
+                  <SelectValue placeholder="Select platform(s)" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border-border z-50">
+                  <SelectItem value="instagram">Instagram</SelectItem>
+                  <SelectItem value="linkedin">LinkedIn</SelectItem>
+                  <SelectItem value="both">Both Instagram & LinkedIn</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
