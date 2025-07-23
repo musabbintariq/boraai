@@ -36,7 +36,7 @@ export function Analytics() {
 
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-card border-border">
+        <Card className="bg-card border-border shadow-butter-glow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-sans font-medium">Total Followers</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -50,7 +50,7 @@ export function Analytics() {
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border">
+        <Card className="bg-card border-border shadow-butter-glow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-sans font-medium">Avg. Engagement</CardTitle>
             <Heart className="h-4 w-4 text-muted-foreground" />
@@ -64,7 +64,7 @@ export function Analytics() {
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border">
+        <Card className="bg-card border-border shadow-butter-glow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-sans font-medium">Total Likes</CardTitle>
             <Heart className="h-4 w-4 text-muted-foreground" />
@@ -78,7 +78,7 @@ export function Analytics() {
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border">
+        <Card className="bg-card border-border shadow-butter-glow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-sans font-medium">Total Views</CardTitle>
             <Eye className="h-4 w-4 text-muted-foreground" />
@@ -95,7 +95,7 @@ export function Analytics() {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-card border-border">
+        <Card className="bg-card border-border shadow-butter-glow">
           <CardHeader>
             <CardTitle className="font-sans font-bold">Followers Growth</CardTitle>
             <CardDescription>Monthly followers growth over the last 6 months</CardDescription>
@@ -119,7 +119,7 @@ export function Analytics() {
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border">
+        <Card className="bg-card border-border shadow-butter-glow">
           <CardHeader>
             <CardTitle className="font-sans font-bold">Engagement Metrics</CardTitle>
             <CardDescription>Likes, comments, and views over the last 6 months</CardDescription>

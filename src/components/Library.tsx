@@ -72,7 +72,7 @@ export function Library() {
       </div>
 
       {likedIdeas.length === 0 ? (
-        <Card className="bg-card border-border text-center py-12">
+        <Card className="bg-card border-border text-center py-12 shadow-butter-glow">
           <CardContent>
             <Heart className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
             <CardTitle className="font-serif mb-2">No Liked Ideas Yet</CardTitle>
@@ -84,7 +84,7 @@ export function Library() {
       ) : (
         <div className="grid gap-6">
           {likedIdeas.map((idea) => (
-            <Card key={idea.id} className="bg-card border-border">
+            <Card key={idea.id} className="bg-card border-border shadow-butter-glow">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div>

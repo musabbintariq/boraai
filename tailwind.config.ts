@@ -78,7 +78,8 @@ export default {
 			boxShadow: {
 				'primary': 'var(--shadow-primary)',
 				'glow': 'var(--shadow-glow)',
-				'soft': 'var(--shadow-soft)'
+				'soft': 'var(--shadow-soft)',
+				'butter-glow': 'var(--shadow-butter-glow)'
 			},
 			transitionProperty: {
 				'all': 'var(--transition-all)',

@@ -39,7 +39,7 @@ export function Generate() {
         </p>
       </div>
 
-      <Card className="bg-card border-border">
+      <Card className="bg-card border-border shadow-butter-glow">
         <CardHeader>
           <CardTitle className="font-sans font-bold">Content Generator</CardTitle>
           <CardDescription>
