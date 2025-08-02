@@ -10,10 +10,10 @@ import { toast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
 const Auth = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user is already logged in
@@ -122,7 +122,12 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
       {/* Bora AI branding in top left */}
       <div className="absolute top-8 left-8 z-20">
-        <h1 className="text-2xl font-serif text-foreground">Bora AI</h1>
+        <button 
+          onClick={() => navigate('/')}
+          className="text-2xl font-serif text-foreground hover:opacity-70 transition-opacity"
+        >
+          Bora AI
+        </button>
       </div>
 
       {/* Background gradient overlay */}
