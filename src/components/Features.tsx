@@ -4,27 +4,27 @@ const Features = () => {
   const features = [{
     icon: Brain,
     title: "AI-Powered Ideas",
-    description: "Advanced AI analyzes your niche and generates personalized content ideas that resonate with your audience."
+    description: "Personalized content ideas for your niche"
   }, {
     icon: Target,
     title: "Niche-Specific",
-    description: "Get ideas tailored to your specific industry, audience, and brand voice for maximum engagement."
+    description: "Tailored ideas for your audience"
   }, {
     icon: TrendingUp,
     title: "Trending Topics",
-    description: "Stay ahead with content ideas based on current trends and what's performing well in your space."
+    description: "Stay ahead with trending content"
   }, {
     icon: Heart,
     title: "Save & Organize",
-    description: "Like your favorite ideas and build a personal library of content concepts you can return to anytime."
+    description: "Build your personal content library"
   }, {
     icon: Zap,
     title: "Instant Generation",
-    description: "Get fresh content ideas in seconds, not hours. Perfect for busy content creators and marketers."
+    description: "Fresh ideas in seconds"
   }, {
     icon: Library,
     title: "Content Library",
-    description: "Edit, organize, and manage all your saved ideas in one place. Never lose a great concept again."
+    description: "Organize ideas in one place"
   }];
   return <section id="features" className="py-16 sm:py-24 lg:py-32 bg-background">
       <div className="max-w-7xl mx-auto px-6">
