@@ -47,7 +47,12 @@ const CTA = () => {
             Get Started Free
             <ArrowRight className="w-5 h-5 ml-2" style={{ color: 'hsl(45 93% 58%)' }} />
           </Button>
-          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 rounded-xl text-base font-light">
+          <Button 
+            variant="outline" 
+            size="lg" 
+            className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 rounded-xl text-base font-light"
+            onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+          >
             Learn More
           </Button>
         </div>
