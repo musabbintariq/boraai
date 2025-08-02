@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ export const AuthForm = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleAuth = async (isSignUp: boolean) => {
+  const handleAuth = useCallback(async (isSignUp: boolean) => {
     setLoading(true);
     try {
       let error;
@@ -52,7 +52,15 @@ export const AuthForm = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [email, password]);
+
+  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }, []);
+
+  const handlePasswordChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }, []);
 
   const authFields = (
     <>
@@ -63,7 +71,7 @@ export const AuthForm = () => {
           type="email"
           placeholder="Enter your email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
           required
         />
       </div>
@@ -74,7 +82,7 @@ export const AuthForm = () => {
           type="password"
           placeholder="Enter your password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
           required
           minLength={6}
         />
