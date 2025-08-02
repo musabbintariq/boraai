@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -120,6 +120,11 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+      {/* Bora AI branding in top left */}
+      <div className="absolute top-8 left-8 z-20">
+        <h1 className="text-2xl font-serif text-foreground">Bora AI</h1>
+      </div>
+
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/20" />
       
@@ -129,23 +134,6 @@ const Auth = () => {
       </div>
       
       <div className="relative z-10 w-full max-w-md">
-        {/* Bora AI Branding */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-2">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                Bora AI
-              </h1>
-            </div>
-          </div>
-          <p className="text-muted-foreground text-sm">
-            Intelligent Content Creation Platform
-          </p>
-        </div>
-
         <Card className="w-full shadow-butter-glow border-border/50 backdrop-blur-sm bg-card/80">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center">Welcome Back</CardTitle>
