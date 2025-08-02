@@ -5,7 +5,7 @@ import { Copy, Edit, Trash2, LucideIcon } from "lucide-react";
 
 interface ItemCardProps {
   item: {
-    id: number;
+    id: string;
     title: string;
     content: string;
     platform: string;
@@ -14,7 +14,7 @@ interface ItemCardProps {
   };
   onCopy: (content: string) => void;
   onEdit: (item: any) => void;
-  onRemove: (id: number) => void;
+  onRemove: (id: string) => void;
   primaryAction?: {
     label: string;
     icon: LucideIcon;

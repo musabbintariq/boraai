@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, Plus, FileText } from "lucide-react";
+import { Heart, Plus, FileText, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -9,32 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { ItemCard } from "@/components/common/ItemCard";
 import { EmptyState } from "@/components/common/EmptyState";
-
-// Mock data for liked ideas
-const mockLikedIdeas = [{
-  id: 1,
-  title: "Summer Fashion Trends",
-  content: "Discover the hottest summer fashion trends that will make you stand out. From vibrant colors to sustainable fabrics...",
-  platform: "Instagram",
-  createdAt: "2024-01-15",
-  tags: ["fashion", "summer", "trends"]
-}, {
-  id: 2,
-  title: "Professional LinkedIn Post",
-  content: "How to write compelling LinkedIn posts that engage your professional network and drive meaningful conversations...",
-  platform: "LinkedIn",
-  createdAt: "2024-01-14",
-  tags: ["professional", "networking", "content"]
-}, {
-  id: 3,
-  title: "Brand Storytelling Ideas",
-  content: "Transform your brand narrative with these powerful storytelling techniques that resonate with your audience...",
-  platform: "Instagram",
-  createdAt: "2024-01-13",
-  tags: ["storytelling", "branding", "engagement"]
-}];
+import { useContentIdeas } from "@/hooks/useContentIdeas";
 export function Library() {
-  const [likedIdeas, setLikedIdeas] = useState(mockLikedIdeas);
+  const { ideas, loading, updateIdea, removeIdea } = useContentIdeas();
   const [editingIdea, setEditingIdea] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
@@ -52,9 +29,8 @@ export function Library() {
     toast({ title: "Copied to clipboard", description: "Content has been copied to your clipboard." });
   };
 
-  const handleRemove = (id: number) => {
-    setLikedIdeas(prev => prev.filter(idea => idea.id !== id));
-    toast({ title: "Idea removed", description: "The idea has been removed from your library." });
+  const handleRemove = (id: string) => {
+    removeIdea(id);
   };
 
   const handleScriptIt = (idea: any) => {
@@ -68,17 +44,15 @@ export function Library() {
   };
   const handleSaveEdit = () => {
     if (!editingIdea) return;
-    const updatedIdea = {
-      ...editingIdea,
+    const updates = {
+      title: editingIdea.title,
+      content: editingIdea.content,
+      platform: editingIdea.platform,
       tags: editingIdea.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag.length > 0)
     };
-    setLikedIdeas(prev => prev.map(idea => idea.id === updatedIdea.id ? updatedIdea : idea));
+    updateIdea(editingIdea.id, updates);
     setIsEditDialogOpen(false);
     setEditingIdea(null);
-    toast({
-      title: "Idea updated",
-      description: "Your idea has been successfully updated."
-    });
   };
   const handleCancelEdit = () => {
     setIsEditDialogOpen(false);
@@ -121,7 +95,11 @@ export function Library() {
         </div>
       </div>
 
-      {likedIdeas.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      ) : ideas.length === 0 ? (
         <EmptyState 
           icon={Heart}
           title="No Liked Ideas Yet"
@@ -129,7 +107,7 @@ export function Library() {
         />
       ) : (
         <div className="grid gap-6">
-          {likedIdeas.map(idea => (
+          {ideas.map(idea => (
             <ItemCard
               key={idea.id}
               item={idea}

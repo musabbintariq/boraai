@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileText, Download, Eye, Copy } from "lucide-react";
+import { FileText, Download, Eye, Copy, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -9,48 +9,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ItemCard } from "@/components/common/ItemCard";
 import { EmptyState } from "@/components/common/EmptyState";
-
-// Mock data for saved scripts
-const mockScripts = [{
-  id: 1,
-  title: "Summer Fashion Trends Script",
-  script: "Hey everyone! 👋 Summer is here and it's time to refresh your wardrobe with the hottest trends. Today I'm sharing my top 5 picks that will make you stand out this season...",
-  duration: "45 seconds",
-  platform: "Instagram",
-  createdAt: "2024-01-15",
-  tags: ["fashion", "summer", "trends"]
-}, {
-  id: 2,
-  title: "Professional LinkedIn Script",
-  script: "The key to writing compelling LinkedIn posts isn't about being perfect - it's about being authentic. Here are 3 strategies I've learned that transformed my professional presence...",
-  duration: "1 minute",
-  platform: "LinkedIn",
-  createdAt: "2024-01-14",
-  tags: ["professional", "networking", "content"]
-}, {
-  id: 3,
-  title: "Brand Storytelling Script",
-  script: "Every brand has a story, but not every story connects. Today I want to share how we transformed our brand narrative and saw a 300% increase in engagement...",
-  duration: "2 minutes",
-  platform: "YouTube",
-  createdAt: "2024-01-13",
-  tags: ["storytelling", "branding", "engagement"]
-}];
+import { useScripts } from "@/hooks/useScripts";
 export function Scripts() {
-  const [scripts, setScripts] = useState(mockScripts);
+  const { scripts, loading, updateScript, removeScript } = useScripts();
   const [editingScript, setEditingScript] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [previewScript, setPreviewScript] = useState<any>(null);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
   const { toast } = useToast();
+  
   const handleCopy = (script: string) => {
     navigator.clipboard.writeText(script);
     toast({ title: "Script copied to clipboard", description: "The script has been copied to your clipboard." });
   };
 
-  const handleRemove = (id: number) => {
-    setScripts(prev => prev.filter(script => script.id !== id));
-    toast({ title: "Script removed", description: "The script has been removed from your library." });
+  const handleRemove = (id: string) => {
+    removeScript(id);
   };
 
   const handleEdit = (script: any) => {
@@ -76,14 +50,16 @@ export function Scripts() {
   
   const handleSaveEdit = () => {
     if (!editingScript) return;
-    const updatedScript = {
-      ...editingScript,
+    const updates = {
+      title: editingScript.title,
+      script: editingScript.script,
+      duration: editingScript.duration,
+      platform: editingScript.platform,
       tags: editingScript.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag.length > 0)
     };
-    setScripts(prev => prev.map(script => script.id === updatedScript.id ? updatedScript : script));
+    updateScript(editingScript.id, updates);
     setIsEditDialogOpen(false);
     setEditingScript(null);
-    toast({ title: "Script updated", description: "Your script has been successfully updated." });
   };
 
   const handleCancelEdit = () => {
@@ -99,7 +75,11 @@ export function Scripts() {
         </p>
       </div>
 
-      {scripts.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      ) : scripts.length === 0 ? (
         <EmptyState
           icon={FileText}
           title="No Scripts Yet"
