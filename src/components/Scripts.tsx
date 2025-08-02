@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { FileText, Copy, Trash2, Edit, Play, Download, Eye } from "lucide-react";
+import { FileText, Download, Eye, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { ItemCard } from "@/components/common/ItemCard";
+import { EmptyState } from "@/components/common/EmptyState";
 
 // Mock data for saved scripts
 const mockScripts = [{
@@ -41,30 +42,38 @@ export function Scripts() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [previewScript, setPreviewScript] = useState<any>(null);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const handleCopy = (script: string) => {
     navigator.clipboard.writeText(script);
-    toast({
-      title: "Script copied to clipboard",
-      description: "The script has been copied to your clipboard."
-    });
+    toast({ title: "Script copied to clipboard", description: "The script has been copied to your clipboard." });
   };
+
   const handleRemove = (id: number) => {
     setScripts(prev => prev.filter(script => script.id !== id));
-    toast({
-      title: "Script removed",
-      description: "The script has been removed from your library."
-    });
+    toast({ title: "Script removed", description: "The script has been removed from your library." });
   };
+
   const handleEdit = (script: any) => {
-    setEditingScript({
-      ...script,
-      tags: script.tags.join(', ')
-    });
+    setEditingScript({ ...script, tags: script.tags.join(', ') });
     setIsEditDialogOpen(true);
   };
+
+  const handlePreview = (script: any) => {
+    setPreviewScript(script);
+    setIsPreviewDialogOpen(true);
+  };
+
+  const handleDownload = (script: any) => {
+    const element = document.createElement("a");
+    const file = new Blob([script.script], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = `${script.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    toast({ title: "Script downloaded", description: "The script has been downloaded to your device." });
+  };
+  
   const handleSaveEdit = () => {
     if (!editingScript) return;
     const updatedScript = {
@@ -74,35 +83,14 @@ export function Scripts() {
     setScripts(prev => prev.map(script => script.id === updatedScript.id ? updatedScript : script));
     setIsEditDialogOpen(false);
     setEditingScript(null);
-    toast({
-      title: "Script updated",
-      description: "Your script has been successfully updated."
-    });
+    toast({ title: "Script updated", description: "Your script has been successfully updated." });
   };
+
   const handleCancelEdit = () => {
     setIsEditDialogOpen(false);
     setEditingScript(null);
   };
-  const handleDownload = (script: any) => {
-    const element = document.createElement("a");
-    const file = new Blob([script.script], {
-      type: 'text/plain'
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = `${script.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-    toast({
-      title: "Script downloaded",
-      description: "The script has been downloaded to your device."
-    });
-  };
 
-  const handlePreview = (script: any) => {
-    setPreviewScript(script);
-    setIsPreviewDialogOpen(true);
-  };
   return <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="text-4xl font-serif font-bold mb-2">Your Scripts</h1>
@@ -111,73 +99,48 @@ export function Scripts() {
         </p>
       </div>
 
-      {scripts.length === 0 ? <Card className="bg-card border-border text-center py-12 shadow-butter-glow">
-          <CardContent>
-            <FileText className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-            <CardTitle className="font-serif mb-2">No Scripts Yet</CardTitle>
-            <CardDescription>
-              Generate scripts from your ideas to see them here.
-            </CardDescription>
-          </CardContent>
-        </Card> : <div className="grid gap-6">
-          {scripts.map(script => <Card key={script.id} className="bg-card border-border shadow-butter-glow">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="font-sans font-bold text-xl mb-2">{script.title}</CardTitle>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="secondary">{script.platform}</Badge>
-                      <Badge variant="outline">{script.duration}</Badge>
-                      <span className="text-sm text-muted-foreground">{script.createdAt}</span>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handlePreview(script)}
-                      className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90 border-[hsl(var(--butter-yellow))]"
-                    >
-                      <Eye className="h-4 w-4 mr-1" />
-                      Preview
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleRemove(script.id)} className="h-8 w-8 p-0 hover:bg-destructive/10">
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-muted/50 rounded-lg p-4 mb-4">
-                  <p className="text-sm font-mono leading-relaxed line-clamp-2 break-words overflow-hidden">{script.script}</p>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-2">
-                    {script.tags.map(tag => <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>)}
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => handleCopy(script.script)}>
-                      <Copy className="h-4 w-4 mr-1" />
-                      Copy
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleDownload(script)}>
-                      <Download className="h-4 w-4 mr-1" />
-                      Download
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(script)}>
-                      <Edit className="h-4 w-4 mr-1" />
-                      Edit
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>)}
-        </div>}
+      {scripts.length === 0 ? (
+        <EmptyState
+          icon={FileText}
+          title="No Scripts Yet"
+          description="Generate scripts from your ideas to see them here."
+        />
+      ) : (
+        <div className="grid gap-6">
+          {scripts.map(script => {
+            // Create enhanced item with content as script
+            const enhancedScript = {
+              ...script,
+              content: script.script, // Map script to content for ItemCard
+              platform: `${script.platform} • ${script.duration}`
+            };
+            
+            return (
+              <ItemCard
+                key={script.id}
+                item={enhancedScript}
+                onCopy={(content) => handleCopy(script.script)}
+                onEdit={handleEdit}
+                onRemove={handleRemove}
+                primaryAction={{
+                  label: "Preview",
+                  icon: Eye,
+                  onClick: handlePreview
+                }}
+                additionalActions={[
+                  {
+                    label: "Download",
+                    icon: Download,
+                    onClick: handleDownload
+                  }
+                ]}
+              />
+            );
+          })}
+        </div>
+      )}
 
+      
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[600px] bg-card border-border shadow-butter-glow">

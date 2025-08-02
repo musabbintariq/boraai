@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Heart, Copy, Trash2, FileText, Edit, Plus } from "lucide-react";
+import { Heart, Plus, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { ItemCard } from "@/components/common/ItemCard";
+import { EmptyState } from "@/components/common/EmptyState";
 
 // Mock data for liked ideas
 const mockLikedIdeas = [{
@@ -45,36 +45,25 @@ export function Library() {
     platforms: "",
     competitorsPlatformLinks: "",
   });
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+  
   const handleCopy = (content: string) => {
     navigator.clipboard.writeText(content);
-    toast({
-      title: "Copied to clipboard",
-      description: "Content has been copied to your clipboard."
-    });
+    toast({ title: "Copied to clipboard", description: "Content has been copied to your clipboard." });
   };
+
   const handleRemove = (id: number) => {
     setLikedIdeas(prev => prev.filter(idea => idea.id !== id));
-    toast({
-      title: "Idea removed",
-      description: "The idea has been removed from your library."
-    });
+    toast({ title: "Idea removed", description: "The idea has been removed from your library." });
   };
+
   const handleScriptIt = (idea: any) => {
-    // TODO: Implement script it functionality
-    toast({
-      title: "Script it",
-      description: `Creating script for: ${idea.title}`
-    });
+    toast({ title: "Script it", description: `Creating script for: ${idea.title}` });
     console.log("Scripting idea:", idea.title);
   };
+
   const handleEdit = (idea: any) => {
-    setEditingIdea({
-      ...idea,
-      tags: idea.tags.join(', ')
-    }); // Convert tags array to string for editing
+    setEditingIdea({ ...idea, tags: idea.tags.join(', ') });
     setIsEditDialogOpen(true);
   };
   const handleSaveEdit = () => {
@@ -132,63 +121,30 @@ export function Library() {
         </div>
       </div>
 
-      {likedIdeas.length === 0 ? <Card className="bg-card border-border text-center py-12 shadow-butter-glow">
-          <CardContent>
-            <Heart className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-            <CardTitle className="font-serif mb-2">No Liked Ideas Yet</CardTitle>
-            <CardDescription>
-              Start generating content and like your favorite ideas to see them here.
-            </CardDescription>
-          </CardContent>
-        </Card> : <div className="grid gap-6">
-          {likedIdeas.map(idea => <Card key={idea.id} className="bg-card border-border shadow-butter-glow">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="font-sans font-bold text-xl mb-2">{idea.title}</CardTitle>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="secondary">{idea.platform}</Badge>
-                      <span className="text-sm text-muted-foreground">{idea.createdAt}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Heart className="h-5 w-5 fill-current" style={{
-                color: 'hsl(var(--butter-yellow))'
-              }} />
-                    <Button variant="ghost" size="sm" onClick={() => handleRemove(idea.id)} className="h-8 w-8 p-0 hover:bg-destructive/10">
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">{idea.content}</p>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-2">
-                    {idea.tags.map(tag => <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>)}
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => handleCopy(idea.content)}>
-                      <Copy className="h-4 w-4 mr-1" />
-                      Copy
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(idea)}>
-                      <Edit className="h-4 w-4 mr-1" />
-                      Edit
-                    </Button>
-                    <Button size="sm" onClick={() => handleScriptIt(idea)} className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90">
-                      <FileText className="h-4 w-4 mr-1" />
-                      Script it
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>)}
-        </div>}
+      {likedIdeas.length === 0 ? (
+        <EmptyState 
+          icon={Heart}
+          title="No Liked Ideas Yet"
+          description="Start generating content and like your favorite ideas to see them here."
+        />
+      ) : (
+        <div className="grid gap-6">
+          {likedIdeas.map(idea => (
+            <ItemCard
+              key={idea.id}
+              item={idea}
+              onCopy={handleCopy}
+              onEdit={handleEdit}
+              onRemove={handleRemove}
+              primaryAction={{
+                label: "Script it",
+                icon: FileText,
+                onClick: handleScriptIt
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

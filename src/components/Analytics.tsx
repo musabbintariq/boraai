@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, Users, Heart, Eye } from "lucide-react";
+import { Users, Heart, Eye } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { StatCard } from "@/components/common/StatCard";
 
 // Mock data for demonstration
 const followersData = [
@@ -22,8 +23,12 @@ const engagementData = [
 ];
 
 export function Analytics() {
-  const followersIncrease = 42.5; // percentage
-  const engagementIncrease = 18.3; // percentage
+  const statsData = [
+    { title: "Total Followers", value: "2,100", trend: "+42.5% from last month", icon: Users },
+    { title: "Avg. Engagement", value: "7.2%", trend: "+18.3% from last month", icon: Heart },
+    { title: "Total Likes", value: "3,750", trend: "+24.1% from last month", icon: Heart },
+    { title: "Total Views", value: "23.8K", trend: "+12.5% from last month", icon: Eye },
+  ];
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -36,61 +41,15 @@ export function Analytics() {
 
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card className="bg-card border-border shadow-butter-glow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-sans font-medium">Total Followers</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2,100</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1" style={{ color: 'hsl(var(--butter-yellow))' }} />
-              +{followersIncrease}% from last month
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-card border-border shadow-butter-glow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-sans font-medium">Avg. Engagement</CardTitle>
-            <Heart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">7.2%</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1" style={{ color: 'hsl(var(--butter-yellow))' }} />
-              +{engagementIncrease}% from last month
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-card border-border shadow-butter-glow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-sans font-medium">Total Likes</CardTitle>
-            <Heart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">3,750</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1" style={{ color: 'hsl(var(--butter-yellow))' }} />
-              +24.1% from last month
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-card border-border shadow-butter-glow">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-sans font-medium">Total Views</CardTitle>
-            <Eye className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">23.8K</div>
-            <div className="flex items-center text-xs text-muted-foreground">
-              <TrendingUp className="h-3 w-3 mr-1" style={{ color: 'hsl(var(--butter-yellow))' }} />
-              +12.5% from last month
-            </div>
-          </CardContent>
-        </Card>
+        {statsData.map((stat) => (
+          <StatCard
+            key={stat.title}
+            title={stat.title}
+            value={stat.value}
+            trend={stat.trend}
+            icon={stat.icon}
+          />
+        ))}
       </div>
 
       {/* Charts */}
