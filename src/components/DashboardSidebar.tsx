@@ -11,6 +11,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 interface DashboardSidebarProps {
   activeView: "analytics" | "library" | "scripts";
@@ -21,6 +22,7 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const menuItems = [
     {
@@ -40,9 +42,9 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
     },
   ];
 
-  const handleLogout = () => {
-    // TODO: Add actual logout logic when authentication is implemented
-    navigate('/');
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/auth');
   };
 
   return (
