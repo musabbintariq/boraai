@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { SidebarUserProfile } from "./dashboard/SidebarUserProfile";
 
 interface DashboardSidebarProps {
   activeView: "analytics" | "library" | "scripts";
@@ -75,8 +76,13 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
           </SidebarGroupContent>
         </SidebarGroup>
         
+        {/* User Profile Section */}
+        <div className="mt-auto p-2">
+          <SidebarUserProfile />
+        </div>
+        
         {/* Logout Button */}
-        <div className="mt-8 p-2">
+        <div className="p-2">
           <SidebarMenuButton
             onClick={handleLogout}
             className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10"

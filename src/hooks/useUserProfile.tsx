@@ -6,6 +6,7 @@ interface UserProfile {
   id: string;
   user_id: string;
   display_name: string | null;
+  full_name: string | null;
   plan: string;
   created_at: string;
   updated_at: string;

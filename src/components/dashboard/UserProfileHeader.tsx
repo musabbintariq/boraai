@@ -28,7 +28,7 @@ export const UserProfileHeader = () => {
     return null;
   }
 
-  const displayName = profile.display_name || user.email?.split('@')[0] || 'User';
+  const displayName = profile.full_name || profile.display_name || user.email?.split('@')[0] || 'User';
   const planDisplay = profile.plan.charAt(0).toUpperCase() + profile.plan.slice(1);
 
   return (

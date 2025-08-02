@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 export const AuthForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleAuth = useCallback(async (isSignUp: boolean) => {
@@ -23,7 +24,13 @@ export const AuthForm = () => {
         ({ error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: redirectUrl }
+          options: { 
+            emailRedirectTo: redirectUrl,
+            data: {
+              full_name: fullName,
+              display_name: fullName
+            }
+          }
         }));
         
         if (!error) {
@@ -52,7 +59,7 @@ export const AuthForm = () => {
     } finally {
       setLoading(false);
     }
-  }, [email, password]);
+  }, [email, password, fullName]);
 
   const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -62,8 +69,51 @@ export const AuthForm = () => {
     setPassword(e.target.value);
   }, []);
 
+  const handleFullNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setFullName(e.target.value);
+  }, []);
+
   const authFields = (
     <>
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={handleEmailChange}
+          required
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          type="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={handlePasswordChange}
+          required
+          minLength={6}
+        />
+      </div>
+    </>
+  );
+
+  const signUpFields = (
+    <>
+      <div className="space-y-2">
+        <Label htmlFor="fullName">Full Name</Label>
+        <Input
+          id="fullName"
+          type="text"
+          placeholder="Enter your full name"
+          value={fullName}
+          onChange={handleFullNameChange}
+          required
+        />
+      </div>
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
@@ -117,7 +167,7 @@ export const AuthForm = () => {
           
           <TabsContent value="signup" className="space-y-4">
             <form onSubmit={(e) => { e.preventDefault(); handleAuth(true); }} className="space-y-4">
-              {authFields}
+              {signUpFields}
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign Up
