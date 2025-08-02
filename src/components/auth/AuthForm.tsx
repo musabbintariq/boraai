@@ -54,7 +54,7 @@ export const AuthForm = () => {
     }
   };
 
-  const AuthFields = () => (
+  const authFields = (
     <>
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
@@ -99,7 +99,7 @@ export const AuthForm = () => {
           
           <TabsContent value="signin" className="space-y-4">
             <form onSubmit={(e) => { e.preventDefault(); handleAuth(false); }} className="space-y-4">
-              <AuthFields />
+              {authFields}
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign In
@@ -109,7 +109,7 @@ export const AuthForm = () => {
           
           <TabsContent value="signup" className="space-y-4">
             <form onSubmit={(e) => { e.preventDefault(); handleAuth(true); }} className="space-y-4">
-              <AuthFields />
+              {authFields}
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign Up
