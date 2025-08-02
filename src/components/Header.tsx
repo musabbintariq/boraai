@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Menu, X } from "lucide-react";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleNavClick = (elementId: string) => {
     document.getElementById(elementId)?.scrollIntoView({ behavior: 'smooth' });
@@ -58,7 +60,7 @@ const Header = () => {
 
           {/* CTA Buttons - Lovable style */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" className="font-medium">Sign In</Button>
+            <Button variant="ghost" className="font-medium" onClick={() => navigate('/auth')}>Sign In</Button>
             <Button variant="default" className="font-semibold shadow-soft rounded-xl">Get Started</Button>
           </div>
 
@@ -112,7 +114,7 @@ const Header = () => {
                 Pricing
               </a>
               <div className="pt-4 space-y-3 border-t border-border/30">
-                <Button variant="ghost" className="w-full font-medium">Sign In</Button>
+                <Button variant="ghost" className="w-full font-medium" onClick={() => navigate('/auth')}>Sign In</Button>
                 <Button variant="default" className="w-full font-semibold shadow-soft rounded-xl">Get Started</Button>
               </div>
             </div>
