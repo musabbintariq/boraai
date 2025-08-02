@@ -56,12 +56,6 @@ const HowItWorks = () => {
         })}
         </div>
 
-        <div className="text-center px-4">
-          <Button variant="gradient" size="lg" className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 shadow-soft rounded-xl font-light text-base bg-white text-black hover:bg-white/90">
-            Start Creating Content Ideas
-            <ArrowRight className="w-5 h-5 ml-2" style={{ color: 'hsl(45 93% 58%)' }} />
-          </Button>
-        </div>
       </div>
     </section>;
 };
