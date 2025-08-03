@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,15 +21,19 @@ export const EditIdeaDialog = ({
 }: EditIdeaDialogProps) => {
   const [editingIdea, setEditingIdea] = useState<any>(null);
 
-  const handleOpen = (open: boolean) => {
-    if (open && idea) {
+  // Update editingIdea when idea prop changes and dialog is open
+  useEffect(() => {
+    if (isOpen && idea) {
       setEditingIdea({ 
         ...idea, 
         tags: idea.tags.join(', ') 
       });
-    } else if (!open) {
+    } else if (!isOpen) {
       setEditingIdea(null);
     }
+  }, [isOpen, idea]);
+
+  const handleOpen = (open: boolean) => {
     onOpenChange(open);
   };
 

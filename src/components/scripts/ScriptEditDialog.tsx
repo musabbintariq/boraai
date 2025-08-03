@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,15 +21,19 @@ export const ScriptEditDialog = ({
 }: ScriptEditDialogProps) => {
   const [editingScript, setEditingScript] = useState<any>(null);
 
-  const handleOpen = (open: boolean) => {
-    if (open && script) {
+  // Update editingScript when script prop changes and dialog is open
+  useEffect(() => {
+    if (isOpen && script) {
       setEditingScript({ 
         ...script, 
         tags: script.tags.join(', ') 
       });
-    } else if (!open) {
+    } else if (!isOpen) {
       setEditingScript(null);
     }
+  }, [isOpen, script]);
+
+  const handleOpen = (open: boolean) => {
     onOpenChange(open);
   };
 
