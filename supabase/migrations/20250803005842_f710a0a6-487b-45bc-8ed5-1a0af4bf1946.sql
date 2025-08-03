@@ -1,0 +1,41 @@
+-- Insert mockup generated ideas for testing
+INSERT INTO public.generated_ideas (user_id, title, content, platform, tags, feedback_status, generation_context) VALUES
+(auth.uid(), 
+ 'Morning Routine Transformation', 
+ 'Document your morning routine and show how small changes can lead to big productivity gains. Share before/after comparisons and practical tips your audience can implement immediately.',
+ 'instagram',
+ ARRAY['morning-routine', 'productivity', 'lifestyle'],
+ 'pending',
+ '{"brandName": "Test Brand", "niche": "Lifestyle", "timestamp": "2024-01-15T10:00:00Z"}'::jsonb),
+
+(auth.uid(),
+ 'Industry Myth Busting', 
+ 'Address common misconceptions in your industry. Create engaging content that educates while positioning you as a knowledgeable authority. Use data and real examples to support your points.',
+ 'linkedin',
+ ARRAY['education', 'industry-insights', 'myth-busting'],
+ 'pending',
+ '{"brandName": "Test Brand", "niche": "Business", "timestamp": "2024-01-15T10:05:00Z"}'::jsonb),
+
+(auth.uid(),
+ 'Behind-the-Scenes: Failed Attempts',
+ 'Show your audience that success isn''t always linear. Share a project or idea that didn''t work out as planned and the valuable lessons learned. Authenticity builds stronger connections.',
+ 'youtube',
+ ARRAY['behind-the-scenes', 'authentic', 'lessons-learned'],
+ 'pending',
+ '{"brandName": "Test Brand", "niche": "Entrepreneurship", "timestamp": "2024-01-15T10:10:00Z"}'::jsonb),
+
+(auth.uid(),
+ 'Quick Win Tutorial Series',
+ 'Create bite-sized tutorials that solve specific problems your audience faces. Focus on actionable content that delivers immediate value and can be consumed in under 60 seconds.',
+ 'instagram',
+ ARRAY['tutorial', 'quick-tips', 'value-driven'],
+ 'pending',
+ '{"brandName": "Test Brand", "niche": "Education", "timestamp": "2024-01-15T10:15:00Z"}'::jsonb),
+
+(auth.uid(),
+ 'Client Transformation Story',
+ 'Feature a detailed case study of how you helped a client achieve their goals. Include specific metrics, challenges overcome, and the step-by-step process. Social proof at its finest.',
+ 'linkedin',
+ ARRAY['case-study', 'social-proof', 'results'],
+ 'pending',
+ '{"brandName": "Test Brand", "niche": "Consulting", "timestamp": "2024-01-15T10:20:00Z"}'::jsonb);

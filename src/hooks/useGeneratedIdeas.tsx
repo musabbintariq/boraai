@@ -42,8 +42,82 @@ export const useGeneratedIdeas = () => {
 
       if (error) throw error;
 
-      setGeneratedIdeas(data || []);
-      setPendingIdeas((data || []).filter(idea => idea.feedback_status === 'pending'));
+      // If no data exists, create some mockup data for testing
+      let allIdeas = data || [];
+      
+      if (allIdeas.length === 0) {
+        const mockIdeas = [
+          {
+            id: 'mock-1',
+            user_id: user.id,
+            title: 'Morning Routine Transformation',
+            content: 'Document your morning routine and show how small changes can lead to big productivity gains. Share before/after comparisons and practical tips your audience can implement immediately.',
+            platform: 'instagram',
+            tags: ['morning-routine', 'productivity', 'lifestyle'],
+            feedback_status: 'pending' as const,
+            generation_context: { brandName: 'Test Brand', niche: 'Lifestyle' },
+            content_idea_id: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: 'mock-2',
+            user_id: user.id,
+            title: 'Industry Myth Busting',
+            content: 'Address common misconceptions in your industry. Create engaging content that educates while positioning you as a knowledgeable authority. Use data and real examples to support your points.',
+            platform: 'linkedin',
+            tags: ['education', 'industry-insights', 'myth-busting'],
+            feedback_status: 'pending' as const,
+            generation_context: { brandName: 'Test Brand', niche: 'Business' },
+            content_idea_id: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: 'mock-3',
+            user_id: user.id,
+            title: 'Behind-the-Scenes: Failed Attempts',
+            content: 'Show your audience that success isn\'t always linear. Share a project or idea that didn\'t work out as planned and the valuable lessons learned. Authenticity builds stronger connections.',
+            platform: 'youtube',
+            tags: ['behind-the-scenes', 'authentic', 'lessons-learned'],
+            feedback_status: 'pending' as const,
+            generation_context: { brandName: 'Test Brand', niche: 'Entrepreneurship' },
+            content_idea_id: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: 'mock-4',
+            user_id: user.id,
+            title: 'Quick Win Tutorial Series',
+            content: 'Create bite-sized tutorials that solve specific problems your audience faces. Focus on actionable content that delivers immediate value and can be consumed in under 60 seconds.',
+            platform: 'instagram',
+            tags: ['tutorial', 'quick-tips', 'value-driven'],
+            feedback_status: 'pending' as const,
+            generation_context: { brandName: 'Test Brand', niche: 'Education' },
+            content_idea_id: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: 'mock-5',
+            user_id: user.id,
+            title: 'Client Transformation Story',
+            content: 'Feature a detailed case study of how you helped a client achieve their goals. Include specific metrics, challenges overcome, and the step-by-step process. Social proof at its finest.',
+            platform: 'linkedin',
+            tags: ['case-study', 'social-proof', 'results'],
+            feedback_status: 'pending' as const,
+            generation_context: { brandName: 'Test Brand', niche: 'Consulting' },
+            content_idea_id: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ];
+        allIdeas = mockIdeas;
+      }
+
+      setGeneratedIdeas(allIdeas);
+      setPendingIdeas(allIdeas.filter(idea => idea.feedback_status === 'pending'));
     } catch (error) {
       console.error('Error fetching generated ideas:', error);
       toast({
