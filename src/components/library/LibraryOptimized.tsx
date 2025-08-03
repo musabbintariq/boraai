@@ -78,8 +78,10 @@ export function LibraryOptimized() {
   };
 
   const handleEdit = (idea: any) => {
+    console.log('Editing idea:', idea);
     // Ensure we have the original idea object with the correct structure
     const originalIdea = ideas.find(i => i.id === idea.id) || idea;
+    console.log('Original idea:', originalIdea);
     setEditingIdea(originalIdea);
     setIsEditDialogOpen(true);
   };
