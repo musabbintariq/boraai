@@ -1,17 +1,22 @@
 import { useState } from "react";
-import { Heart, Plus, FileText, Loader2 } from "lucide-react";
+import { Heart, Plus, FileText, Loader2, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { ItemCard } from "@/components/common/ItemCard";
 import { EmptyState } from "@/components/common/EmptyState";
+import { IdeaFeedback } from "@/components/IdeaFeedback";
 import { useContentIdeas } from "@/hooks/useContentIdeas";
+import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
+
 export function Library() {
   const { ideas, loading, updateIdea, removeIdea } = useContentIdeas();
+  const { saveGeneratedIdea, pendingIdeas } = useGeneratedIdeas();
   const [editingIdea, setEditingIdea] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
@@ -42,6 +47,7 @@ export function Library() {
     setEditingIdea({ ...idea, tags: idea.tags.join(', ') });
     setIsEditDialogOpen(true);
   };
+  
   const handleSaveEdit = () => {
     if (!editingIdea) return;
     const updates = {
@@ -54,20 +60,51 @@ export function Library() {
     setIsEditDialogOpen(false);
     setEditingIdea(null);
   };
+  
   const handleCancelEdit = () => {
     setIsEditDialogOpen(false);
     setEditingIdea(null);
   };
 
-  const handleGenerateIdeas = (e: React.FormEvent) => {
+  const handleGenerateIdeas = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Generating content with:", generateFormData);
+    
+    // Mock generation - in real app this would call an AI service
+    const mockIdeas = [
+      {
+        title: "Behind the Scenes Content",
+        content: `Show your audience what goes on behind the scenes of your ${generateFormData.niche.toLowerCase()} business. People love authentic content that gives them a peek into your process.`,
+        platform: generateFormData.platforms,
+        tags: ["behind-the-scenes", "authentic", "process"],
+        generation_context: { ...generateFormData, timestamp: new Date().toISOString() }
+      },
+      {
+        title: "Industry Tips & Tricks",
+        content: `Share valuable tips and tricks specific to the ${generateFormData.niche.toLowerCase()} industry. Position yourself as an expert while providing genuine value to your audience.`,
+        platform: generateFormData.platforms,
+        tags: ["tips", "expert", "value"],
+        generation_context: { ...generateFormData, timestamp: new Date().toISOString() }
+      },
+      {
+        title: "Customer Success Story",
+        content: `Feature a customer success story showing how your ${generateFormData.brandName} products or services made a difference. Social proof is powerful content.`,
+        platform: generateFormData.platforms,
+        tags: ["testimonial", "success-story", "social-proof"],
+        generation_context: { ...generateFormData, timestamp: new Date().toISOString() }
+      }
+    ];
+
+    // Save generated ideas to the database
+    for (const idea of mockIdeas) {
+      await saveGeneratedIdea(idea);
+    }
+
     toast({
-      title: "Generating ideas",
-      description: "Content ideas are being generated based on your inputs."
+      title: "Ideas generated!",
+      description: `${mockIdeas.length} content ideas are ready for your review.`
     });
+    
     setIsGenerateDialogOpen(false);
-    // TODO: Implement content generation logic
   };
 
   const handlePlatformChange = (value: string) => {
@@ -76,7 +113,9 @@ export function Library() {
       platforms: value
     }));
   };
-  return <div className="max-w-4xl mx-auto">
+
+  return (
+    <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -95,34 +134,58 @@ export function Library() {
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin" />
-        </div>
-      ) : ideas.length === 0 ? (
-        <EmptyState 
-          icon={Heart}
-          title="No Liked Ideas Yet"
-          description="Start generating content and like your favorite ideas to see them here."
-        />
-      ) : (
-        <div className="grid gap-6">
-          {ideas.map(idea => (
-            <ItemCard
-              key={idea.id}
-              item={idea}
-              onCopy={handleCopy}
-              onEdit={handleEdit}
-              onRemove={handleRemove}
-              primaryAction={{
-                label: "Script it",
-                icon: FileText,
-                onClick: handleScriptIt
-              }}
+      <Tabs defaultValue="library" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="library" className="flex items-center gap-2">
+            <Heart className="h-4 w-4" />
+            Saved Ideas ({ideas.length})
+          </TabsTrigger>
+          <TabsTrigger value="feedback" className="flex items-center gap-2">
+            <ThumbsUp className="h-4 w-4" />
+            Review Ideas ({pendingIdeas.length})
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="library" className="mt-6">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+          ) : ideas.length === 0 ? (
+            <EmptyState 
+              icon={Heart}
+              title="No Liked Ideas Yet"
+              description="Start generating content and like your favorite ideas to see them here."
             />
-          ))}
-        </div>
-      )}
+          ) : (
+            <div className="grid gap-6">
+              {ideas.map(idea => (
+                <ItemCard
+                  key={idea.id}
+                  item={idea}
+                  onCopy={handleCopy}
+                  onEdit={handleEdit}
+                  onRemove={handleRemove}
+                  primaryAction={{
+                    label: "Script it",
+                    icon: FileText,
+                    onClick: handleScriptIt
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </TabsContent>
+        
+        <TabsContent value="feedback" className="mt-6">
+          <IdeaFeedback onComplete={() => {
+            toast({
+              title: "All done!",
+              description: "You've reviewed all pending ideas."
+            });
+          }} />
+        </TabsContent>
+      </Tabs>
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
@@ -134,31 +197,49 @@ export function Library() {
             </DialogDescription>
           </DialogHeader>
           
-          {editingIdea && <div className="grid gap-4 py-4">
+          {editingIdea && (
+            <div className="grid gap-4 py-4">
               <div className="space-y-2">
                 <Label htmlFor="edit-title">Title</Label>
-                <Input id="edit-title" value={editingIdea.title} onChange={e => setEditingIdea(prev => ({
-              ...prev,
-              title: e.target.value
-            }))} className="col-span-3" />
+                <Input 
+                  id="edit-title" 
+                  value={editingIdea.title} 
+                  onChange={e => setEditingIdea(prev => ({
+                    ...prev,
+                    title: e.target.value
+                  }))} 
+                  className="col-span-3" 
+                />
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="edit-content">Description</Label>
-                <Textarea id="edit-content" value={editingIdea.content} onChange={e => setEditingIdea(prev => ({
-              ...prev,
-              content: e.target.value
-            }))} className="col-span-3 min-h-[120px]" />
+                <Textarea 
+                  id="edit-content" 
+                  value={editingIdea.content} 
+                  onChange={e => setEditingIdea(prev => ({
+                    ...prev,
+                    content: e.target.value
+                  }))} 
+                  className="col-span-3 min-h-[120px]" 
+                />
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="edit-tags">Tags (comma separated)</Label>
-                <Input id="edit-tags" value={editingIdea.tags} onChange={e => setEditingIdea(prev => ({
-              ...prev,
-              tags: e.target.value
-            }))} placeholder="fashion, summer, trends" className="col-span-3" />
+                <Input 
+                  id="edit-tags" 
+                  value={editingIdea.tags} 
+                  onChange={e => setEditingIdea(prev => ({
+                    ...prev,
+                    tags: e.target.value
+                  }))} 
+                  placeholder="fashion, summer, trends" 
+                  className="col-span-3" 
+                />
               </div>
-            </div>}
+            </div>
+          )}
           
           <DialogFooter>
             <Button variant="outline" onClick={handleCancelEdit}>
@@ -254,5 +335,6 @@ export function Library() {
           </form>
         </DialogContent>
       </Dialog>
-    </div>;
+    </div>
+  );
 }

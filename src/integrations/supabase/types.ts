@@ -47,6 +47,56 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_ideas: {
+        Row: {
+          content: string
+          content_idea_id: string | null
+          created_at: string
+          feedback_status: Database["public"]["Enums"]["feedback_status_enum"]
+          generation_context: Json | null
+          id: string
+          platform: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          content_idea_id?: string | null
+          created_at?: string
+          feedback_status?: Database["public"]["Enums"]["feedback_status_enum"]
+          generation_context?: Json | null
+          id?: string
+          platform: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          content_idea_id?: string | null
+          created_at?: string
+          feedback_status?: Database["public"]["Enums"]["feedback_status_enum"]
+          generation_context?: Json | null
+          id?: string
+          platform?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_ideas_content_idea_id_fkey"
+            columns: ["content_idea_id"]
+            isOneToOne: false
+            referencedRelation: "content_ideas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -121,7 +171,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      feedback_status_enum: "pending" | "liked" | "disliked"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -248,6 +298,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      feedback_status_enum: ["pending", "liked", "disliked"],
+    },
   },
 } as const
