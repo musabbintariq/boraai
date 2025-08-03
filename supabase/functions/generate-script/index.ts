@@ -23,7 +23,8 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Generate a random script for demonstration
+    // Generate a random script for demonstration (replace with n8n webhook when ready)
+    // const n8nWebhookUrl = Deno.env.get('N8N_SCRIPT_GENERATION_WEBHOOK_URL')
     const scriptTemplates = [
       "Hook: Did you know that {topic}? Let me share why this matters to you...\n\nProblem: Many people struggle with {challenge}.\n\nSolution: Here's what actually works: {solution}\n\nCall to Action: Try this today and let me know how it goes!",
       "Start with a question: What if I told you {topic}?\n\nShare the story: {backstory}\n\nReveal the insight: The key is {insight}\n\nEnd with impact: This changed everything for me, and it can for you too.",
