@@ -96,16 +96,6 @@ export const GenerateIdeasDialog = ({
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4 py-2">
-          <div className="space-y-2">
-            <Label htmlFor="brandName">Brand Name</Label>
-            <Input
-              id="brandName"
-              placeholder="Enter your brand name"
-              value={formData.brandName}
-              onChange={(e) => setFormData(prev => ({ ...prev, brandName: e.target.value }))}
-              required
-            />
-          </div>
 
           <div className="space-y-2">
             <Label htmlFor="niche">Niche</Label>
