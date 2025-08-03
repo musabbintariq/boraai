@@ -91,7 +91,7 @@ export const IdeaFeedback = ({ onComplete }: IdeaFeedbackProps) => {
         <CardContent className="pt-6">
           <div className="text-center py-12">
             <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2 font-serif">No ideas to review</h3>
+            <h3 className="text-xl font-semibold mb-2 font-serif">No ideas to review</h3>
             <p className="text-muted-foreground">
               Generate some new content ideas to start reviewing them here.
             </p>
