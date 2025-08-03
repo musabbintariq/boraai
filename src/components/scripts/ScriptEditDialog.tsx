@@ -92,19 +92,6 @@ export const ScriptEditDialog = ({
               />
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="edit-duration">Duration</Label>
-              <Input 
-                id="edit-duration" 
-                value={editingScript.duration || ""} 
-                onChange={e => setEditingScript(prev => ({
-                  ...prev,
-                  duration: e.target.value
-                }))} 
-                placeholder="e.g., 30s, 1 min" 
-                className="col-span-3" 
-              />
-            </div>
             
             <div className="space-y-2">
               <Label htmlFor="edit-tags">Tags (comma separated)</Label>
