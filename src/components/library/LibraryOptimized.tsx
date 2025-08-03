@@ -10,10 +10,15 @@ import { EditIdeaDialog } from "./EditIdeaDialog";
 import { GenerateIdeasDialog } from "./GenerateIdeasDialog";
 import { useContentIdeasOptimized } from "@/hooks/optimized/useContentIdeasOptimized";
 import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
+import { useScriptsOptimized } from "@/hooks/optimized/useScriptsOptimized";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 export function LibraryOptimized() {
   const { ideas, loading, updateIdea, removeIdea } = useContentIdeasOptimized();
   const { pendingIdeas } = useGeneratedIdeas();
+  const { addScript } = useScriptsOptimized();
+  const { user } = useAuth();
   const [editingIdea, setEditingIdea] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
@@ -31,12 +36,45 @@ export function LibraryOptimized() {
     removeIdea(id);
   };
 
-  const handleScriptIt = (idea: any) => {
+  const handleScriptIt = async (idea: any) => {
+    if (!user) return;
+    
     toast({ 
-      title: "Script it", 
+      title: "Generating script...", 
       description: `Creating script for: ${idea.title}` 
     });
-    console.log("Scripting idea:", idea.title);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-script', {
+        body: {
+          idea: {
+            title: idea.title,
+            content: idea.content,
+            platform: idea.platform,
+            tags: idea.tags
+          },
+          userId: user.id
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.success) {
+        toast({
+          title: "Script generated!",
+          description: "Your script has been created and saved."
+        });
+      } else {
+        throw new Error(data.error || 'Failed to generate script');
+      }
+    } catch (error) {
+      console.error('Error generating script:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate script. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleEdit = (idea: any) => {
