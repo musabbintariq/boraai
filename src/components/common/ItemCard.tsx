@@ -7,11 +7,13 @@ interface ItemCardProps {
   item: {
     id: string;
     title: string;
-    content: string;
     platform: string;
     createdAt: string;
     tags: string[];
+    [key: string]: any;
   };
+  contentKey?: string;
+  extraData?: Record<string, any>;
   onCopy: (content: string) => void;
   onEdit: (item: any) => void;
   onRemove: (id: string) => void;
@@ -20,6 +22,11 @@ interface ItemCardProps {
     icon: LucideIcon;
     onClick: (item: any) => void;
   };
+  secondaryActions?: Array<{
+    label: string;
+    icon: LucideIcon;
+    onClick: (item: any) => void;
+  }>;
   additionalActions?: Array<{
     label: string;
     icon: LucideIcon;
@@ -27,7 +34,19 @@ interface ItemCardProps {
   }>;
 }
 
-export const ItemCard = ({ item, onCopy, onEdit, onRemove, primaryAction, additionalActions = [] }: ItemCardProps) => {
+export const ItemCard = ({ 
+  item, 
+  contentKey = "content", 
+  extraData = {}, 
+  onCopy, 
+  onEdit, 
+  onRemove, 
+  primaryAction, 
+  secondaryActions = [],
+  additionalActions = [] 
+}: ItemCardProps) => {
+  const content = extraData.content || item[contentKey] || item.content || "";
+  const combinedItem = { ...item, ...extraData };
   return (
     <Card className="bg-card border-border shadow-butter-glow">
       <CardHeader>
@@ -53,7 +72,7 @@ export const ItemCard = ({ item, onCopy, onEdit, onRemove, primaryAction, additi
       <CardContent>
         <div className="bg-muted/50 rounded-lg p-4 mb-4">
           <p className="text-sm leading-relaxed line-clamp-2 break-words overflow-hidden">
-            {item.content}
+            {content}
           </p>
         </div>
         
@@ -67,24 +86,33 @@ export const ItemCard = ({ item, onCopy, onEdit, onRemove, primaryAction, additi
           </div>
           
           <div className="flex gap-2">
-            <ActionButton onClick={() => onCopy(item.content)} icon={Copy}>
+            <ActionButton onClick={() => onCopy(content)} icon={Copy}>
               Copy
             </ActionButton>
-            {additionalActions.map((action, index) => (
+            {secondaryActions.map((action, index) => (
               <ActionButton 
-                key={index}
-                onClick={() => action.onClick(item)} 
+                key={`secondary-${index}`}
+                onClick={() => action.onClick(combinedItem)} 
                 icon={action.icon}
               >
                 {action.label}
               </ActionButton>
             ))}
-            <ActionButton onClick={() => onEdit(item)} icon={Edit}>
+            {additionalActions.map((action, index) => (
+              <ActionButton 
+                key={`additional-${index}`}
+                onClick={() => action.onClick(combinedItem)} 
+                icon={action.icon}
+              >
+                {action.label}
+              </ActionButton>
+            ))}
+            <ActionButton onClick={() => onEdit(combinedItem)} icon={Edit}>
               Edit
             </ActionButton>
             {primaryAction && (
               <ActionButton
-                onClick={() => primaryAction.onClick(item)}
+                onClick={() => primaryAction.onClick(combinedItem)}
                 icon={primaryAction.icon}
                 className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
               >
