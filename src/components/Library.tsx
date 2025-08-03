@@ -310,16 +310,6 @@ export function Library() {
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="competitorsPlatformLinks">Competitor's Platform Links</Label>
-              <Textarea
-                id="competitorsPlatformLinks"
-                placeholder="Enter specific competitor platform links"
-                value={generateFormData.competitorsPlatformLinks}
-                onChange={(e) => setGenerateFormData(prev => ({ ...prev, competitorsPlatformLinks: e.target.value }))}
-                className="min-h-[60px]"
-              />
-            </div>
 
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsGenerateDialogOpen(false)}>
