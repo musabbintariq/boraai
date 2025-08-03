@@ -25,7 +25,9 @@ export function ScriptsOptimized() {
   };
 
   const handleEdit = (script: any) => {
-    setEditingScript(script);
+    // Ensure we have the original script object with the correct structure
+    const originalScript = scripts.find(s => s.id === script.id) || script;
+    setEditingScript(originalScript);
     setIsEditDialogOpen(true);
   };
 
