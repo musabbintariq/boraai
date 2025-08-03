@@ -256,10 +256,6 @@ export const useGeneratedIdeas = () => {
     return await updateFeedback(id, 'disliked');
   };
 
-  const getNextPendingIdea = (): GeneratedIdea | null => {
-    return pendingIdeas[0] || null;
-  };
-
   useEffect(() => {
     fetchGeneratedIdeas();
   }, [user]);
@@ -271,7 +267,6 @@ export const useGeneratedIdeas = () => {
     saveGeneratedIdea,
     likeIdea,
     dislikeIdea,
-    getNextPendingIdea,
     refetch: fetchGeneratedIdeas
   };
 };

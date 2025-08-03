@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,9 +10,16 @@ interface IdeaFeedbackProps {
 }
 
 export const IdeaFeedback = ({ onComplete }: IdeaFeedbackProps) => {
-  const { pendingIdeas, likeIdea, dislikeIdea, getNextPendingIdea } = useGeneratedIdeas();
-  const [currentIdea, setCurrentIdea] = useState<GeneratedIdea | null>(getNextPendingIdea());
+  const { pendingIdeas, likeIdea, dislikeIdea, loading } = useGeneratedIdeas();
+  const [currentIdea, setCurrentIdea] = useState<GeneratedIdea | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Update current idea when pending ideas change
+  useEffect(() => {
+    if (pendingIdeas.length > 0 && !currentIdea) {
+      setCurrentIdea(pendingIdeas[0]);
+    }
+  }, [pendingIdeas, currentIdea]);
 
   const handleLike = async () => {
     if (!currentIdea || isProcessing) return;
@@ -21,7 +28,9 @@ export const IdeaFeedback = ({ onComplete }: IdeaFeedbackProps) => {
     const success = await likeIdea(currentIdea);
     
     if (success) {
-      const nextIdea = getNextPendingIdea();
+      // Find next pending idea
+      const currentIndex = pendingIdeas.findIndex(idea => idea.id === currentIdea.id);
+      const nextIdea = pendingIdeas[currentIndex + 1] || null;
       setCurrentIdea(nextIdea);
       
       if (!nextIdea) {
@@ -38,7 +47,9 @@ export const IdeaFeedback = ({ onComplete }: IdeaFeedbackProps) => {
     const success = await dislikeIdea(currentIdea.id);
     
     if (success) {
-      const nextIdea = getNextPendingIdea();
+      // Find next pending idea
+      const currentIndex = pendingIdeas.findIndex(idea => idea.id === currentIdea.id);
+      const nextIdea = pendingIdeas[currentIndex + 1] || null;
       setCurrentIdea(nextIdea);
       
       if (!nextIdea) {
@@ -51,13 +62,28 @@ export const IdeaFeedback = ({ onComplete }: IdeaFeedbackProps) => {
   const handleSkip = () => {
     if (!currentIdea) return;
     
-    const nextIdea = getNextPendingIdea();
+    // Find next pending idea
+    const currentIndex = pendingIdeas.findIndex(idea => idea.id === currentIdea.id);
+    const nextIdea = pendingIdeas[currentIndex + 1] || null;
     setCurrentIdea(nextIdea);
     
     if (!nextIdea) {
       onComplete?.();
     }
   };
+
+  if (loading) {
+    return (
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardContent className="pt-6">
+          <div className="text-center py-12">
+            <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4 animate-spin" />
+            <h3 className="text-lg font-semibold mb-2">Loading ideas...</h3>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (!currentIdea) {
     return (
