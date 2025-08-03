@@ -23,36 +23,36 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Send webhook to n8n
-    const n8nWebhookUrl = Deno.env.get('N8N_WEBHOOK_URL')
-    if (!n8nWebhookUrl) {
-      throw new Error('N8N_WEBHOOK_URL not configured')
-    }
+    // Generate a random script for demonstration
+    const scriptTemplates = [
+      "Hook: Did you know that {topic}? Let me share why this matters to you...\n\nProblem: Many people struggle with {challenge}.\n\nSolution: Here's what actually works: {solution}\n\nCall to Action: Try this today and let me know how it goes!",
+      "Start with a question: What if I told you {topic}?\n\nShare the story: {backstory}\n\nReveal the insight: The key is {insight}\n\nEnd with impact: This changed everything for me, and it can for you too.",
+      "Bold statement: {topic} is not what you think it is.\n\nExplain why: Here's the truth most people miss: {truth}\n\nProvide value: Instead, do this: {actionable_tip}\n\nEngage: What's your experience with this?",
+      "Personal story: Last week, {personal_experience}\n\nLesson learned: This taught me {lesson}\n\nHow to apply: You can use this by {application}\n\nQuestion: Have you experienced something similar?"
+    ];
 
-    console.log('Sending request to n8n webhook...')
+    const randomTemplate = scriptTemplates[Math.floor(Math.random() * scriptTemplates.length)];
     
-    const n8nResponse = await fetch(n8nWebhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        idea: {
-          title: idea.title,
-          content: idea.content,
-          platform: idea.platform,
-          tags: idea.tags
-        },
-        userId
-      })
-    })
+    // Replace placeholders with content from the idea
+    const generatedScript = randomTemplate
+      .replace(/{topic}/g, idea.title)
+      .replace(/{challenge}/g, `understanding ${idea.platform} content`)
+      .replace(/{solution}/g, idea.content.substring(0, 100) + "...")
+      .replace(/{backstory}/g, `I was working on ${idea.platform} content`)
+      .replace(/{insight}/g, idea.content.substring(0, 80) + "...")
+      .replace(/{truth}/g, `${idea.platform} success requires authenticity`)
+      .replace(/{actionable_tip}/g, idea.content.substring(0, 120) + "...")
+      .replace(/{personal_experience}/g, `I discovered something about ${idea.title.toLowerCase()}`)
+      .replace(/{lesson}/g, idea.content.substring(0, 90) + "...")
+      .replace(/{application}/g, `focusing on ${idea.platform} best practices`);
 
-    if (!n8nResponse.ok) {
-      throw new Error(`n8n webhook failed: ${n8nResponse.statusText}`)
-    }
+    const scriptData = {
+      script: generatedScript,
+      duration: ['30s', '60s', '90s', '2min'][Math.floor(Math.random() * 4)],
+      content: generatedScript
+    };
 
-    const scriptData = await n8nResponse.json()
-    console.log('Received script from n8n:', scriptData)
+    console.log('Generated random script:', scriptData);
 
     // Save the generated script to database
     const { data: savedScript, error } = await supabase
