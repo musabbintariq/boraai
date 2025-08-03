@@ -15,8 +15,7 @@ interface GenerateIdeasDialogProps {
 }
 
 interface GenerateFormData {
-  brandName: string;
-  niche: string;
+  topic?: string;
   competitorsSocialLinks: string;
   platforms: string;
 }
@@ -26,8 +25,7 @@ export const GenerateIdeasDialog = ({
   onOpenChange 
 }: GenerateIdeasDialogProps) => {
   const [formData, setFormData] = useState<GenerateFormData>({
-    brandName: "",
-    niche: "",
+    topic: "",
     competitorsSocialLinks: "",
     platforms: "",
   });
@@ -41,21 +39,21 @@ export const GenerateIdeasDialog = ({
     const mockIdeas = [
       {
         title: "Behind the Scenes Content",
-        content: `Show your audience what goes on behind the scenes of your ${formData.niche.toLowerCase()} business. People love authentic content that gives them a peek into your process.`,
+        content: `Show your audience what goes on behind the scenes of your business. People love authentic content that gives them a peek into your process.`,
         platform: formData.platforms,
         tags: ["behind-the-scenes", "authentic", "process"],
         generation_context: { ...formData, timestamp: new Date().toISOString() }
       },
       {
         title: "Industry Tips & Tricks",
-        content: `Share valuable tips and tricks specific to the ${formData.niche.toLowerCase()} industry. Position yourself as an expert while providing genuine value to your audience.`,
+        content: `Share valuable tips and tricks${formData.topic ? ` about ${formData.topic}` : ''}. Position yourself as an expert while providing genuine value to your audience.`,
         platform: formData.platforms,
         tags: ["tips", "expert", "value"],
         generation_context: { ...formData, timestamp: new Date().toISOString() }
       },
       {
         title: "Customer Success Story",
-        content: `Feature a customer success story showing how your ${formData.brandName} products or services made a difference. Social proof is powerful content.`,
+        content: `Feature a customer success story showing how your products or services made a difference. Social proof is powerful content.`,
         platform: formData.platforms,
         tags: ["testimonial", "success-story", "social-proof"],
         generation_context: { ...formData, timestamp: new Date().toISOString() }
@@ -74,8 +72,7 @@ export const GenerateIdeasDialog = ({
     
     onOpenChange(false);
     setFormData({
-      brandName: "",
-      niche: "",
+      topic: "",
       competitorsSocialLinks: "",
       platforms: "",
     });
@@ -98,13 +95,12 @@ export const GenerateIdeasDialog = ({
         <form onSubmit={handleSubmit} className="space-y-4 py-2">
 
           <div className="space-y-2">
-            <Label htmlFor="niche">Niche</Label>
+            <Label htmlFor="topic">Any topic in mind</Label>
             <Input
-              id="niche"
-              placeholder="e.g., Fashion, Technology, Food & Beverage"
-              value={formData.niche}
-              onChange={(e) => setFormData(prev => ({ ...prev, niche: e.target.value }))}
-              required
+              id="topic"
+              placeholder="e.g., Summer fashion, AI trends, Healthy recipes"
+              value={formData.topic || ""}
+              onChange={(e) => setFormData(prev => ({ ...prev, topic: e.target.value }))}
             />
           </div>
 
