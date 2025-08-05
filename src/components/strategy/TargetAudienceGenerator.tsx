@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { Loader2, Sparkles, Send, User, Target, Heart, DollarSign, MapPin, Calendar } from "lucide-react";
+import { Loader2, Sparkles, User, Target, Heart, DollarSign, MapPin, Calendar } from "lucide-react";
 
 interface TargetAudience {
   niche_description: string;
@@ -32,7 +32,6 @@ interface TargetAudience {
   content_preferences: string[];
   buying_behavior: string;
   communication_style: string;
-  webhook_url?: string;
 }
 
 export function TargetAudienceGenerator() {
@@ -41,10 +40,8 @@ export function TargetAudienceGenerator() {
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [sendingWebhook, setSendingWebhook] = useState(false);
   
   const [nicheDescription, setNicheDescription] = useState("");
-  const [webhookUrl, setWebhookUrl] = useState("");
   const [targetAudience, setTargetAudience] = useState<TargetAudience | null>(null);
 
   useEffect(() => {
@@ -68,7 +65,6 @@ export function TargetAudienceGenerator() {
 
       if (data) {
         setNicheDescription((data as any).niche_description || "");
-        setWebhookUrl((data as any).webhook_url || "");
         setTargetAudience({
           niche_description: (data as any).niche_description || "",
           demographics: (data as any).demographics || {},
@@ -78,8 +74,7 @@ export function TargetAudienceGenerator() {
           preferred_platforms: (data as any).preferred_platforms || [],
           content_preferences: (data as any).content_preferences || [],
           buying_behavior: (data as any).buying_behavior || "",
-          communication_style: (data as any).communication_style || "",
-          webhook_url: (data as any).webhook_url || ""
+          communication_style: (data as any).communication_style || ""
         });
       }
     } catch (error) {
@@ -140,17 +135,16 @@ export function TargetAudienceGenerator() {
           "Create financial stability and growth"
         ],
         preferred_platforms: ["Instagram", "LinkedIn", "YouTube", "Email", "Podcasts"],
-        content_preferences: [
-          "How-to guides and tutorials",
-          "Behind-the-scenes content",
-          "Success stories and case studies",
-          "Quick tips and actionable advice",
-          "Tool and resource recommendations"
-        ],
-        buying_behavior: "Research-driven, values quality over quantity, prefers brands that align with their values",
-        communication_style: "Prefers clear, actionable communication with personal touches",
-        webhook_url: webhookUrl
-      };
+          content_preferences: [
+            "How-to guides and tutorials",
+            "Behind-the-scenes content",
+            "Success stories and case studies",
+            "Quick tips and actionable advice",
+            "Tool and resource recommendations"
+          ],
+          buying_behavior: "Research-driven, values quality over quantity, prefers brands that align with their values",
+          communication_style: "Prefers clear, actionable communication with personal touches"
+        };
 
       setTargetAudience(mockPersona);
       
@@ -188,7 +182,7 @@ export function TargetAudienceGenerator() {
           content_preferences: targetAudience.content_preferences,
           buying_behavior: targetAudience.buying_behavior,
           communication_style: targetAudience.communication_style,
-          webhook_url: webhookUrl,
+          webhook_url: "", // Keep for backend use but not exposed in UI
           updated_at: new Date().toISOString()
         });
 
@@ -207,57 +201,6 @@ export function TargetAudienceGenerator() {
       });
     } finally {
       setSaving(false);
-    }
-  };
-
-  const sendToWebhook = async () => {
-    if (!webhookUrl) {
-      toast({
-        title: "Webhook URL Required",
-        description: "Please enter a webhook URL first",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!targetAudience) {
-      toast({
-        title: "No Persona Generated",
-        description: "Please generate a target audience persona first",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setSendingWebhook(true);
-    try {
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "no-cors",
-        body: JSON.stringify({
-          type: "target_audience_profile",
-          data: targetAudience,
-          timestamp: new Date().toISOString(),
-          user_id: user?.id
-        }),
-      });
-
-      toast({
-        title: "Sent to Webhook",
-        description: "Target audience profile has been sent to your webhook URL"
-      });
-    } catch (error) {
-      console.error('Error sending webhook:', error);
-      toast({
-        title: "Error",
-        description: "Failed to send data to webhook",
-        variant: "destructive"
-      });
-    } finally {
-      setSendingWebhook(false);
     }
   };
 
@@ -291,19 +234,6 @@ export function TargetAudienceGenerator() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="webhook">Webhook URL (Optional)</Label>
-              <Input
-                id="webhook"
-                value={webhookUrl}
-                onChange={(e) => setWebhookUrl(e.target.value)}
-                placeholder="https://your-webhook-url.com/audience-persona"
-                type="url"
-              />
-              <p className="text-sm text-muted-foreground">
-                This audience persona will be sent to this webhook URL for use in your automations
-              </p>
-            </div>
 
             <Button 
               onClick={generatePersona} 
@@ -470,17 +400,6 @@ export function TargetAudienceGenerator() {
               {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               Save Persona
             </Button>
-            
-            {webhookUrl && (
-              <Button 
-                onClick={sendToWebhook} 
-                disabled={sendingWebhook}
-                variant="outline"
-              >
-                {sendingWebhook ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
-                Send to Webhook
-              </Button>
-            )}
           </div>
         </div>
       )}

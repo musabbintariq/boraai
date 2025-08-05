@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { Loader2, Plus, X, Send } from "lucide-react";
+import { Loader2, Plus, X } from "lucide-react";
 
 interface BrandVoice {
   brand_name: string;
@@ -20,7 +20,6 @@ interface BrandVoice {
   voice_description: string;
   do_use: string[];
   dont_use: string[];
-  webhook_url?: string;
 }
 
 const toneOptions = [
@@ -38,7 +37,6 @@ export function BrandVoiceProfile() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [sendingWebhook, setSendingWebhook] = useState(false);
   
   const [brandVoice, setBrandVoice] = useState<BrandVoice>({
     brand_name: "",
@@ -48,8 +46,7 @@ export function BrandVoiceProfile() {
     values: "",
     voice_description: "",
     do_use: [],
-    dont_use: [],
-    webhook_url: ""
+    dont_use: []
   });
 
   const [newTrait, setNewTrait] = useState("");
@@ -84,8 +81,7 @@ export function BrandVoiceProfile() {
           values: (data as any).values || "",
           voice_description: (data as any).voice_description || "",
           do_use: (data as any).do_use || [],
-          dont_use: (data as any).dont_use || [],
-          webhook_url: (data as any).webhook_url || ""
+          dont_use: (data as any).dont_use || []
         });
       }
     } catch (error) {
@@ -110,6 +106,7 @@ export function BrandVoiceProfile() {
         .upsert({
           user_id: user.id,
           ...brandVoice,
+          webhook_url: "", // Keep for backend use but not exposed in UI
           updated_at: new Date().toISOString()
         });
 
@@ -128,48 +125,6 @@ export function BrandVoiceProfile() {
       });
     } finally {
       setSaving(false);
-    }
-  };
-
-  const sendToWebhook = async () => {
-    if (!brandVoice.webhook_url) {
-      toast({
-        title: "Webhook URL Required",
-        description: "Please enter a webhook URL first",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setSendingWebhook(true);
-    try {
-      const response = await fetch(brandVoice.webhook_url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "no-cors",
-        body: JSON.stringify({
-          type: "brand_voice_profile",
-          data: brandVoice,
-          timestamp: new Date().toISOString(),
-          user_id: user?.id
-        }),
-      });
-
-      toast({
-        title: "Sent to Webhook",
-        description: "Brand voice profile has been sent to your webhook URL"
-      });
-    } catch (error) {
-      console.error('Error sending webhook:', error);
-      toast({
-        title: "Error",
-        description: "Failed to send data to webhook",
-        variant: "destructive"
-      });
-    } finally {
-      setSendingWebhook(false);
     }
   };
 
@@ -376,19 +331,6 @@ export function BrandVoiceProfile() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="webhook">Webhook URL (Optional)</Label>
-              <Input
-                id="webhook"
-                value={brandVoice.webhook_url}
-                onChange={(e) => setBrandVoice(prev => ({ ...prev, webhook_url: e.target.value }))}
-                placeholder="https://your-webhook-url.com/brand-voice"
-                type="url"
-              />
-              <p className="text-sm text-muted-foreground">
-                This brand voice profile will be sent to this webhook URL for use in your automations
-              </p>
-            </div>
           </div>
 
           <div className="flex gap-3 pt-4">
@@ -400,17 +342,6 @@ export function BrandVoiceProfile() {
               {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               Save Profile
             </Button>
-            
-            {brandVoice.webhook_url && (
-              <Button 
-                onClick={sendToWebhook} 
-                disabled={sendingWebhook}
-                variant="outline"
-              >
-                {sendingWebhook ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Send className="h-4 w-4 mr-2" />}
-                Send to Webhook
-              </Button>
-            )}
           </div>
         </CardContent>
       </Card>
