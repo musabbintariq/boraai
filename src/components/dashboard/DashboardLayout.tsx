@@ -4,8 +4,8 @@ import { DashboardSidebar } from "@/components/DashboardSidebar";
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  activeView: "analytics" | "library" | "scripts";
-  setActiveView: (view: "analytics" | "library" | "scripts") => void;
+  activeView: "analytics" | "library" | "scripts" | "strategy";
+  setActiveView: (view: "analytics" | "library" | "scripts" | "strategy") => void;
 }
 
 export const DashboardLayout = ({ children, activeView, setActiveView }: DashboardLayoutProps) => {

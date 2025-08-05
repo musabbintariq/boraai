@@ -57,29 +57,29 @@ export function TargetAudienceGenerator() {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from('target_audience_profiles')
+        .from('target_audience_profiles' as any)
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
         throw error;
       }
 
       if (data) {
-        setNicheDescription(data.niche_description || "");
-        setWebhookUrl(data.webhook_url || "");
+        setNicheDescription((data as any).niche_description || "");
+        setWebhookUrl((data as any).webhook_url || "");
         setTargetAudience({
-          niche_description: data.niche_description || "",
-          demographics: data.demographics || {},
-          psychographics: data.psychographics || {},
-          pain_points: data.pain_points || [],
-          goals: data.goals || [],
-          preferred_platforms: data.preferred_platforms || [],
-          content_preferences: data.content_preferences || [],
-          buying_behavior: data.buying_behavior || "",
-          communication_style: data.communication_style || "",
-          webhook_url: data.webhook_url || ""
+          niche_description: (data as any).niche_description || "",
+          demographics: (data as any).demographics || {},
+          psychographics: (data as any).psychographics || {},
+          pain_points: (data as any).pain_points || [],
+          goals: (data as any).goals || [],
+          preferred_platforms: (data as any).preferred_platforms || [],
+          content_preferences: (data as any).content_preferences || [],
+          buying_behavior: (data as any).buying_behavior || "",
+          communication_style: (data as any).communication_style || "",
+          webhook_url: (data as any).webhook_url || ""
         });
       }
     } catch (error) {
@@ -176,7 +176,7 @@ export function TargetAudienceGenerator() {
     setSaving(true);
     try {
       const { error } = await supabase
-        .from('target_audience_profiles')
+        .from('target_audience_profiles' as any)
         .upsert({
           user_id: user.id,
           niche_description: nicheDescription,

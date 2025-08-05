@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      brand_voice_profiles: {
+        Row: {
+          brand_name: string | null
+          communication_style: string | null
+          created_at: string
+          do_use: string[] | null
+          dont_use: string[] | null
+          id: string
+          personality_traits: string[] | null
+          tone: string | null
+          updated_at: string
+          user_id: string
+          values: string | null
+          voice_description: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          brand_name?: string | null
+          communication_style?: string | null
+          created_at?: string
+          do_use?: string[] | null
+          dont_use?: string[] | null
+          id?: string
+          personality_traits?: string[] | null
+          tone?: string | null
+          updated_at?: string
+          user_id: string
+          values?: string | null
+          voice_description?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          brand_name?: string | null
+          communication_style?: string | null
+          created_at?: string
+          do_use?: string[] | null
+          dont_use?: string[] | null
+          id?: string
+          personality_traits?: string[] | null
+          tone?: string | null
+          updated_at?: string
+          user_id?: string
+          values?: string | null
+          voice_description?: string | null
+          webhook_url?: string | null
+        }
+        Relationships: []
+      }
       content_ideas: {
         Row: {
           content: string
@@ -160,6 +208,57 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      target_audience_profiles: {
+        Row: {
+          buying_behavior: string | null
+          communication_style: string | null
+          content_preferences: string[] | null
+          created_at: string
+          demographics: Json | null
+          goals: string[] | null
+          id: string
+          niche_description: string | null
+          pain_points: string[] | null
+          preferred_platforms: string[] | null
+          psychographics: Json | null
+          updated_at: string
+          user_id: string
+          webhook_url: string | null
+        }
+        Insert: {
+          buying_behavior?: string | null
+          communication_style?: string | null
+          content_preferences?: string[] | null
+          created_at?: string
+          demographics?: Json | null
+          goals?: string[] | null
+          id?: string
+          niche_description?: string | null
+          pain_points?: string[] | null
+          preferred_platforms?: string[] | null
+          psychographics?: Json | null
+          updated_at?: string
+          user_id: string
+          webhook_url?: string | null
+        }
+        Update: {
+          buying_behavior?: string | null
+          communication_style?: string | null
+          content_preferences?: string[] | null
+          created_at?: string
+          demographics?: Json | null
+          goals?: string[] | null
+          id?: string
+          niche_description?: string | null
+          pain_points?: string[] | null
+          preferred_platforms?: string[] | null
+          psychographics?: Json | null
+          updated_at?: string
+          user_id?: string
+          webhook_url?: string | null
         }
         Relationships: []
       }

@@ -66,10 +66,10 @@ export function BrandVoiceProfile() {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from('brand_voice_profiles')
+        .from('brand_voice_profiles' as any)
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
         throw error;
@@ -77,15 +77,15 @@ export function BrandVoiceProfile() {
 
       if (data) {
         setBrandVoice({
-          brand_name: data.brand_name || "",
-          tone: data.tone || "",
-          personality_traits: data.personality_traits || [],
-          communication_style: data.communication_style || "",
-          values: data.values || "",
-          voice_description: data.voice_description || "",
-          do_use: data.do_use || [],
-          dont_use: data.dont_use || [],
-          webhook_url: data.webhook_url || ""
+          brand_name: (data as any).brand_name || "",
+          tone: (data as any).tone || "",
+          personality_traits: (data as any).personality_traits || [],
+          communication_style: (data as any).communication_style || "",
+          values: (data as any).values || "",
+          voice_description: (data as any).voice_description || "",
+          do_use: (data as any).do_use || [],
+          dont_use: (data as any).dont_use || [],
+          webhook_url: (data as any).webhook_url || ""
         });
       }
     } catch (error) {
@@ -106,7 +106,7 @@ export function BrandVoiceProfile() {
     setSaving(true);
     try {
       const { error } = await supabase
-        .from('brand_voice_profiles')
+        .from('brand_voice_profiles' as any)
         .upsert({
           user_id: user.id,
           ...brandVoice,
