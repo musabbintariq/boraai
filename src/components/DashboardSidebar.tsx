@@ -15,8 +15,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { SidebarUserProfile } from "./dashboard/SidebarUserProfile";
 
 interface DashboardSidebarProps {
-  activeView: "analytics" | "library" | "scripts" | "strategy";
-  setActiveView: (view: "analytics" | "library" | "scripts" | "strategy") => void;
+  activeView: "dashboard" | "library" | "scripts";
+  setActiveView: (view: "dashboard" | "library" | "scripts") => void;
 }
 
 export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebarProps) {
@@ -27,9 +27,9 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
 
   const menuItems = [
     {
-      title: "Analytics",
+      title: "Dashboard",
       icon: BarChart3,
-      value: "analytics" as const,
+      value: "dashboard" as const,
     },
     {
       title: "Ideas",
@@ -40,11 +40,6 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
       title: "Scripts",
       icon: FileText,
       value: "scripts" as const,
-    },
-    {
-      title: "Strategy Lab",
-      icon: Zap,
-      value: "strategy" as const,
     },
   ];
 
@@ -59,7 +54,7 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
         <SidebarGroup>
           <SidebarGroupLabel 
             className="text-3xl font-serif text-primary py-6 px-4 cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={() => setActiveView("analytics")}
+            onClick={() => setActiveView("dashboard")}
           >
             {!collapsed && "Bora AI"}
           </SidebarGroupLabel>

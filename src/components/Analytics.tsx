@@ -1,7 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Heart, Eye } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Users, Heart, Eye, Zap } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { StatCard } from "@/components/common/StatCard";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { StrategyLabModal } from "@/components/strategy/StrategyLabModal";
+import { useState } from "react";
 
 // Mock data for demonstration
 const followersData = [
@@ -22,7 +26,10 @@ const engagementData = [
   { month: "Jun", likes: 850, comments: 280, views: 5200 },
 ];
 
-export function Analytics() {
+export function Dashboard() {
+  const { profile } = useUserProfile();
+  const [strategyLabOpen, setStrategyLabOpen] = useState(false);
+  
   const statsData = [
     { title: "Total Followers", value: "2,100", trend: "+42.5% from last month", icon: Users },
     { title: "Avg. Engagement", value: "7.2%", trend: "+18.3% from last month", icon: Heart },
@@ -30,10 +37,28 @@ export function Analytics() {
     { title: "Total Views", value: "23.8K", trend: "+12.5% from last month", icon: Eye },
   ];
 
+  const firstName = profile?.display_name?.split(' ')[0] || profile?.full_name?.split(' ')[0] || 'there';
+
   return (
     <div className="max-w-6xl mx-auto">
+      {/* Greeting Section */}
       <div className="mb-8">
-        <h1 className="text-4xl font-serif font-bold mb-4">Analytics Dashboard</h1>
+        <h1 className="text-4xl font-serif font-bold mb-2">Hi {firstName}! 👋</h1>
+        <p className="text-muted-foreground mb-4">
+          Welcome to your content creation dashboard.
+        </p>
+        <Button 
+          onClick={() => setStrategyLabOpen(true)}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+        >
+          <Zap className="h-4 w-4 mr-2" />
+          Your Strategy Lab
+        </Button>
+      </div>
+
+      {/* Analytics Section */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-serif font-bold mb-4">Analytics Dashboard</h2>
         <p className="text-muted-foreground">
           Track your social media performance and growth metrics.
         </p>
@@ -98,6 +123,12 @@ export function Analytics() {
           </CardContent>
         </Card>
       </div>
+      
+      {/* Strategy Lab Modal */}
+      <StrategyLabModal 
+        open={strategyLabOpen} 
+        onOpenChange={setStrategyLabOpen}
+      />
     </div>
   );
 }
