@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { Loader2, Sparkles, User, Target, Heart, DollarSign, MapPin, Calendar } from "lucide-react";
+import { Loader2, Sparkles, User, Target, Heart, DollarSign, MapPin, Calendar, Edit } from "lucide-react";
 
 interface TargetAudience {
   niche_description: string;
@@ -40,6 +40,8 @@ export function TargetAudienceGenerator() {
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [hasPersona, setHasPersona] = useState(false);
   
   const [nicheDescription, setNicheDescription] = useState("");
   const [targetAudienceInput, setTargetAudienceInput] = useState("");
@@ -78,6 +80,11 @@ export function TargetAudienceGenerator() {
           buying_behavior: (data as any).buying_behavior || "",
           communication_style: (data as any).communication_style || ""
         });
+        setHasPersona(true);
+        setIsEditing(false);
+      } else {
+        setIsEditing(true);
+        setHasPersona(false);
       }
     } catch (error) {
       console.error('Error fetching target audience:', error);
@@ -195,6 +202,9 @@ export function TargetAudienceGenerator() {
         title: "Saved!",
         description: "Target audience profile has been saved successfully"
       });
+      
+      setHasPersona(true);
+      setIsEditing(false);
     } catch (error) {
       console.error('Error saving target audience:', error);
       toast({
@@ -215,7 +225,172 @@ export function TargetAudienceGenerator() {
     );
   }
 
-  return (
+  // View mode component (existing saved persona)
+  const PersonaView = () => (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-2xl font-serif">Your Target Audience Persona</CardTitle>
+            <p className="text-muted-foreground">Generated persona based on your niche</p>
+          </div>
+          <Button 
+            onClick={() => setIsEditing(true)}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <Edit className="h-4 w-4" />
+            Edit Persona
+          </Button>
+        </CardHeader>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            Demographics
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label className="text-sm font-medium">Age Range</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.demographics.age_range}</p>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Gender</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.demographics.gender}</p>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Location</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.demographics.location}</p>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Income Level</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.demographics.income_level}</p>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Education</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.demographics.education}</p>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Occupation</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.demographics.occupation}</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Heart className="h-5 w-5" />
+            Psychographics
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label className="text-sm font-medium">Interests</Label>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {targetAudience?.psychographics.interests.map(interest => (
+                <Badge key={interest} variant="secondary">{interest}</Badge>
+              ))}
+            </div>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Values</Label>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {targetAudience?.psychographics.values.map(value => (
+                <Badge key={value} variant="outline">{value}</Badge>
+              ))}
+            </div>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Lifestyle</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.psychographics.lifestyle}</p>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Personality</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.psychographics.personality}</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="h-5 w-5" />
+              Pain Points
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2">
+              {targetAudience?.pain_points.map((point, index) => (
+                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="text-destructive mt-1">•</span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="h-5 w-5" />
+              Goals
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2">
+              {targetAudience?.goals.map((goal, index) => (
+                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="text-primary mt-1">•</span>
+                  {goal}
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Content & Communication Preferences</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label className="text-sm font-medium">Preferred Platforms</Label>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {targetAudience?.preferred_platforms.map(platform => (
+                <Badge key={platform} variant="secondary">{platform}</Badge>
+              ))}
+            </div>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Content Preferences</Label>
+            <div className="flex flex-wrap gap-2 mt-1">
+              {targetAudience?.content_preferences.map(pref => (
+                <Badge key={pref} variant="outline">{pref}</Badge>
+              ))}
+            </div>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Communication Style</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.communication_style}</p>
+          </div>
+          <div>
+            <Label className="text-sm font-medium">Buying Behavior</Label>
+            <p className="text-sm text-muted-foreground">{targetAudience?.buying_behavior}</p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  // Edit mode component (input form + generated persona if any)
+  const PersonaEdit = () => (
     <div className="space-y-6">
       <Card>
         <CardHeader>
@@ -247,7 +422,6 @@ export function TargetAudienceGenerator() {
                 className="min-h-[80px]"
               />
             </div>
-
 
             <Button 
               onClick={generatePersona} 
@@ -414,9 +588,23 @@ export function TargetAudienceGenerator() {
               {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               Save Persona
             </Button>
+            {hasPersona && (
+              <Button 
+                onClick={() => setIsEditing(false)}
+                variant="outline"
+              >
+                Cancel
+              </Button>
+            )}
           </div>
         </div>
       )}
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      {hasPersona && !isEditing ? <PersonaView /> : <PersonaEdit />}
     </div>
   );
 }

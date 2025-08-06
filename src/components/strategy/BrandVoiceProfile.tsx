@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { Loader2, Plus, X } from "lucide-react";
+import { Loader2, Plus, X, Edit, Eye } from "lucide-react";
 
 interface BrandVoice {
   brand_name: string;
@@ -37,6 +37,8 @@ export function BrandVoiceProfile() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [hasProfile, setHasProfile] = useState(false);
   
   const [brandVoice, setBrandVoice] = useState<BrandVoice>({
     brand_name: "",
@@ -83,6 +85,11 @@ export function BrandVoiceProfile() {
           do_use: (data as any).do_use || [],
           dont_use: (data as any).dont_use || []
         });
+        setHasProfile(true);
+        setIsEditing(false);
+      } else {
+        setIsEditing(true);
+        setHasProfile(false);
       }
     } catch (error) {
       console.error('Error fetching brand voice:', error);
@@ -116,6 +123,9 @@ export function BrandVoiceProfile() {
         title: "Saved!",
         description: "Brand voice profile has been saved successfully"
       });
+      
+      setHasProfile(true);
+      setIsEditing(false);
     } catch (error) {
       console.error('Error saving brand voice:', error);
       toast({
@@ -187,164 +197,258 @@ export function BrandVoiceProfile() {
     );
   }
 
-  return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-serif">Brand Voice Profile</CardTitle>
-          <p className="text-muted-foreground">
-            Define your brand's unique personality and tone that will be used across all content generation
-          </p>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid gap-6">
+  // View mode component
+  const BrandVoiceView = () => (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle className="text-2xl font-serif">{brandVoice.brand_name || "Brand Voice Profile"}</CardTitle>
+          <p className="text-muted-foreground">Your brand voice profile summary</p>
+        </div>
+        <Button 
+          onClick={() => setIsEditing(true)}
+          variant="outline"
+          className="flex items-center gap-2"
+        >
+          <Edit className="h-4 w-4" />
+          Edit Profile
+        </Button>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 className="font-semibold text-foreground mb-2">Tone</h4>
+            <p className="text-muted-foreground">{brandVoice.tone || "Not specified"}</p>
+          </div>
+          <div>
+            <h4 className="font-semibold text-foreground mb-2">Communication Style</h4>
+            <p className="text-muted-foreground">{brandVoice.communication_style || "Not specified"}</p>
+          </div>
+        </div>
+
+        {brandVoice.personality_traits.length > 0 && (
+          <div>
+            <h4 className="font-semibold text-foreground mb-2">Personality Traits</h4>
+            <div className="flex flex-wrap gap-2">
+              {brandVoice.personality_traits.map(trait => (
+                <Badge key={trait} variant="secondary">{trait}</Badge>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {brandVoice.values && (
+          <div>
+            <h4 className="font-semibold text-foreground mb-2">Brand Values</h4>
+            <p className="text-muted-foreground">{brandVoice.values}</p>
+          </div>
+        )}
+
+        {brandVoice.voice_description && (
+          <div>
+            <h4 className="font-semibold text-foreground mb-2">Voice Description</h4>
+            <p className="text-muted-foreground">{brandVoice.voice_description}</p>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {brandVoice.do_use.length > 0 && (
+            <div>
+              <h4 className="font-semibold text-foreground mb-2">Words to Use</h4>
+              <div className="flex flex-wrap gap-2">
+                {brandVoice.do_use.map(item => (
+                  <Badge key={item} variant="secondary">{item}</Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {brandVoice.dont_use.length > 0 && (
+            <div>
+              <h4 className="font-semibold text-foreground mb-2">Words to Avoid</h4>
+              <div className="flex flex-wrap gap-2">
+                {brandVoice.dont_use.map(item => (
+                  <Badge key={item} variant="destructive">{item}</Badge>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  // Edit mode component  
+  const BrandVoiceEdit = () => (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-2xl font-serif">Brand Voice Profile</CardTitle>
+        <p className="text-muted-foreground">
+          Define your brand's unique personality and tone that will be used across all content generation
+        </p>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="grid gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="brand-name">Brand Name</Label>
+            <Input
+              id="brand-name"
+              value={brandVoice.brand_name}
+              onChange={(e) => setBrandVoice(prev => ({ ...prev, brand_name: e.target.value }))}
+              placeholder="Enter your brand name"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="brand-name">Brand Name</Label>
+              <Label htmlFor="tone">Tone</Label>
+              <Select value={brandVoice.tone} onValueChange={(value) => setBrandVoice(prev => ({ ...prev, tone: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your brand tone" />
+                </SelectTrigger>
+                <SelectContent>
+                  {toneOptions.map(tone => (
+                    <SelectItem key={tone} value={tone}>{tone}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="style">Communication Style</Label>
+              <Select value={brandVoice.communication_style} onValueChange={(value) => setBrandVoice(prev => ({ ...prev, communication_style: value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select communication style" />
+                </SelectTrigger>
+                <SelectContent>
+                  {styleOptions.map(style => (
+                    <SelectItem key={style} value={style}>{style}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Personality Traits</Label>
+            <div className="flex gap-2 mb-2">
               <Input
-                id="brand-name"
-                value={brandVoice.brand_name}
-                onChange={(e) => setBrandVoice(prev => ({ ...prev, brand_name: e.target.value }))}
-                placeholder="Enter your brand name"
+                value={newTrait}
+                onChange={(e) => setNewTrait(e.target.value)}
+                placeholder="Add a personality trait"
+                onKeyPress={(e) => e.key === 'Enter' && addTrait()}
               />
+              <Button onClick={addTrait} size="sm">
+                <Plus className="h-4 w-4" />
+              </Button>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="tone">Tone</Label>
-                <Select value={brandVoice.tone} onValueChange={(value) => setBrandVoice(prev => ({ ...prev, tone: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your brand tone" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {toneOptions.map(tone => (
-                      <SelectItem key={tone} value={tone}>{tone}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="style">Communication Style</Label>
-                <Select value={brandVoice.communication_style} onValueChange={(value) => setBrandVoice(prev => ({ ...prev, communication_style: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select communication style" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {styleOptions.map(style => (
-                      <SelectItem key={style} value={style}>{style}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="flex flex-wrap gap-2">
+              {brandVoice.personality_traits.map(trait => (
+                <Badge key={trait} variant="secondary" className="flex items-center gap-1">
+                  {trait}
+                  <X className="h-3 w-3 cursor-pointer" onClick={() => removeTrait(trait)} />
+                </Badge>
+              ))}
             </div>
+          </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="values">Brand Values</Label>
+            <Textarea
+              id="values"
+              value={brandVoice.values}
+              onChange={(e) => setBrandVoice(prev => ({ ...prev, values: e.target.value }))}
+              placeholder="Describe your brand's core values and beliefs"
+              className="min-h-[100px]"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="description">Voice Description</Label>
+            <Textarea
+              id="description"
+              value={brandVoice.voice_description}
+              onChange={(e) => setBrandVoice(prev => ({ ...prev, voice_description: e.target.value }))}
+              placeholder="Describe how your brand sounds and communicates (e.g., 'We speak like a knowledgeable friend who's always ready to help...')"
+              className="min-h-[100px]"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Personality Traits</Label>
+              <Label>Words/Phrases to Use</Label>
               <div className="flex gap-2 mb-2">
                 <Input
-                  value={newTrait}
-                  onChange={(e) => setNewTrait(e.target.value)}
-                  placeholder="Add a personality trait"
-                  onKeyPress={(e) => e.key === 'Enter' && addTrait()}
+                  value={newDoUse}
+                  onChange={(e) => setNewDoUse(e.target.value)}
+                  placeholder="Add words to use"
+                  onKeyPress={(e) => e.key === 'Enter' && addDoUse()}
                 />
-                <Button onClick={addTrait} size="sm">
+                <Button onClick={addDoUse} size="sm">
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2">
-                {brandVoice.personality_traits.map(trait => (
-                  <Badge key={trait} variant="secondary" className="flex items-center gap-1">
-                    {trait}
-                    <X className="h-3 w-3 cursor-pointer" onClick={() => removeTrait(trait)} />
+                {brandVoice.do_use.map(item => (
+                  <Badge key={item} variant="secondary" className="flex items-center gap-1">
+                    {item}
+                    <X className="h-3 w-3 cursor-pointer" onClick={() => removeDoUse(item)} />
                   </Badge>
                 ))}
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="values">Brand Values</Label>
-              <Textarea
-                id="values"
-                value={brandVoice.values}
-                onChange={(e) => setBrandVoice(prev => ({ ...prev, values: e.target.value }))}
-                placeholder="Describe your brand's core values and beliefs"
-                className="min-h-[100px]"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="description">Voice Description</Label>
-              <Textarea
-                id="description"
-                value={brandVoice.voice_description}
-                onChange={(e) => setBrandVoice(prev => ({ ...prev, voice_description: e.target.value }))}
-                placeholder="Describe how your brand sounds and communicates (e.g., 'We speak like a knowledgeable friend who's always ready to help...')"
-                className="min-h-[100px]"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label>Words/Phrases to Use</Label>
-                <div className="flex gap-2 mb-2">
-                  <Input
-                    value={newDoUse}
-                    onChange={(e) => setNewDoUse(e.target.value)}
-                    placeholder="Add words to use"
-                    onKeyPress={(e) => e.key === 'Enter' && addDoUse()}
-                  />
-                  <Button onClick={addDoUse} size="sm">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {brandVoice.do_use.map(item => (
-                    <Badge key={item} variant="secondary" className="flex items-center gap-1">
-                      {item}
-                      <X className="h-3 w-3 cursor-pointer" onClick={() => removeDoUse(item)} />
-                    </Badge>
-                  ))}
-                </div>
+              <Label>Words/Phrases to Avoid</Label>
+              <div className="flex gap-2 mb-2">
+                <Input
+                  value={newDontUse}
+                  onChange={(e) => setNewDontUse(e.target.value)}
+                  placeholder="Add words to avoid"
+                  onKeyPress={(e) => e.key === 'Enter' && addDontUse()}
+                />
+                <Button onClick={addDontUse} size="sm">
+                  <Plus className="h-4 w-4" />
+                </Button>
               </div>
-
-              <div className="space-y-2">
-                <Label>Words/Phrases to Avoid</Label>
-                <div className="flex gap-2 mb-2">
-                  <Input
-                    value={newDontUse}
-                    onChange={(e) => setNewDontUse(e.target.value)}
-                    placeholder="Add words to avoid"
-                    onKeyPress={(e) => e.key === 'Enter' && addDontUse()}
-                  />
-                  <Button onClick={addDontUse} size="sm">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {brandVoice.dont_use.map(item => (
-                    <Badge key={item} variant="destructive" className="flex items-center gap-1">
-                      {item}
-                      <X className="h-3 w-3 cursor-pointer" onClick={() => removeDontUse(item)} />
-                    </Badge>
-                  ))}
-                </div>
+              <div className="flex flex-wrap gap-2">
+                {brandVoice.dont_use.map(item => (
+                  <Badge key={item} variant="destructive" className="flex items-center gap-1">
+                    {item}
+                    <X className="h-3 w-3 cursor-pointer" onClick={() => removeDontUse(item)} />
+                  </Badge>
+                ))}
               </div>
             </div>
-
           </div>
 
-          <div className="flex gap-3 pt-4">
+        </div>
+
+        <div className="flex gap-3 pt-4">
+          <Button 
+            onClick={saveBrandVoice} 
+            disabled={saving}
+            className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
+          >
+            {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+            Save Profile
+          </Button>
+          {hasProfile && (
             <Button 
-              onClick={saveBrandVoice} 
-              disabled={saving}
-              className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
+              onClick={() => setIsEditing(false)}
+              variant="outline"
             >
-              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-              Save Profile
+              Cancel
             </Button>
-          </div>
-        </CardContent>
-      </Card>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  return (
+    <div className="space-y-6">
+      {hasProfile && !isEditing ? <BrandVoiceView /> : <BrandVoiceEdit />}
     </div>
   );
 }
