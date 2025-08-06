@@ -224,6 +224,7 @@ export type Database = {
           pain_points: string[] | null
           preferred_platforms: string[] | null
           psychographics: Json | null
+          target_audience_input: string | null
           updated_at: string
           user_id: string
           webhook_url: string | null
@@ -240,6 +241,7 @@ export type Database = {
           pain_points?: string[] | null
           preferred_platforms?: string[] | null
           psychographics?: Json | null
+          target_audience_input?: string | null
           updated_at?: string
           user_id: string
           webhook_url?: string | null
@@ -256,6 +258,7 @@ export type Database = {
           pain_points?: string[] | null
           preferred_platforms?: string[] | null
           psychographics?: Json | null
+          target_audience_input?: string | null
           updated_at?: string
           user_id?: string
           webhook_url?: string | null

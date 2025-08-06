@@ -42,6 +42,7 @@ export function TargetAudienceGenerator() {
   const [saving, setSaving] = useState(false);
   
   const [nicheDescription, setNicheDescription] = useState("");
+  const [targetAudienceInput, setTargetAudienceInput] = useState("");
   const [targetAudience, setTargetAudience] = useState<TargetAudience | null>(null);
 
   useEffect(() => {
@@ -65,6 +66,7 @@ export function TargetAudienceGenerator() {
 
       if (data) {
         setNicheDescription((data as any).niche_description || "");
+        setTargetAudienceInput((data as any).target_audience_input || "");
         setTargetAudience({
           niche_description: (data as any).niche_description || "",
           demographics: (data as any).demographics || {},
@@ -174,6 +176,7 @@ export function TargetAudienceGenerator() {
         .upsert({
           user_id: user.id,
           niche_description: nicheDescription,
+          target_audience_input: targetAudienceInput,
           demographics: targetAudience.demographics,
           psychographics: targetAudience.psychographics,
           pain_points: targetAudience.pain_points,
@@ -231,6 +234,17 @@ export function TargetAudienceGenerator() {
                 onChange={(e) => setNicheDescription(e.target.value)}
                 placeholder="Describe your niche in detail (e.g., 'I help busy professionals learn productivity strategies and time management techniques to achieve work-life balance')"
                 className="min-h-[100px]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="target-audience-input">Target Audience in Mind (Optional)</Label>
+              <Textarea
+                id="target-audience-input"
+                value={targetAudienceInput}
+                onChange={(e) => setTargetAudienceInput(e.target.value)}
+                placeholder="If you already have a specific target audience in mind, describe them here (e.g., 'Working mothers aged 30-45 who struggle with time management')"
+                className="min-h-[80px]"
               />
             </div>
 
