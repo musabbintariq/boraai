@@ -402,9 +402,9 @@ export function TargetAudienceGenerator() {
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="niche">Niche Description</Label>
+              <Label htmlFor="ta-niche">Niche Description</Label>
               <Textarea
-                id="niche"
+                id="ta-niche"
                 value={nicheDescription}
                 onChange={(e) => setNicheDescription(e.target.value)}
                 placeholder="Describe your niche in detail (e.g., 'I help busy professionals learn productivity strategies and time management techniques to achieve work-life balance')"
@@ -413,9 +413,9 @@ export function TargetAudienceGenerator() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="target-audience-input">Target Audience in Mind (Optional)</Label>
+              <Label htmlFor="ta-target-audience-input">Target Audience in Mind (Optional)</Label>
               <Textarea
-                id="target-audience-input"
+                id="ta-target-audience-input"
                 value={targetAudienceInput}
                 onChange={(e) => setTargetAudienceInput(e.target.value)}
                 placeholder="If you already have a specific target audience in mind, describe them here (e.g., 'Working mothers aged 30-45 who struggle with time management')"

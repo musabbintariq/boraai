@@ -290,9 +290,9 @@ export function BrandVoiceProfile() {
       <CardContent className="space-y-6">
         <div className="grid gap-6">
           <div className="space-y-2">
-            <Label htmlFor="brand-name">Brand Name</Label>
+            <Label htmlFor="bv-brand-name">Brand Name</Label>
             <Input
-              id="brand-name"
+              id="bv-brand-name"
               value={brandVoice.brand_name}
               onChange={(e) => setBrandVoice(prev => ({ ...prev, brand_name: e.target.value }))}
               placeholder="Enter your brand name"
@@ -353,9 +353,9 @@ export function BrandVoiceProfile() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="brand-values">Brand Values</Label>
+            <Label htmlFor="bv-values">Brand Values</Label>
             <Textarea
-              id="brand-values"
+              id="bv-values"
               value={brandVoice.values}
               onChange={(e) => setBrandVoice(prev => ({ ...prev, values: e.target.value }))}
               placeholder="Describe your brand's core values and beliefs"
@@ -364,9 +364,9 @@ export function BrandVoiceProfile() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="voice-description">Voice Description</Label>
+            <Label htmlFor="bv-voice-description">Voice Description</Label>
             <Textarea
-              id="voice-description"
+              id="bv-voice-description"
               value={brandVoice.voice_description}
               onChange={(e) => setBrandVoice(prev => ({ ...prev, voice_description: e.target.value }))}
               placeholder="Describe how your brand sounds and communicates (e.g., 'We speak like a knowledgeable friend who's always ready to help...')"

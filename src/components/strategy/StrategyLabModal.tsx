@@ -13,7 +13,13 @@ export function StrategyLabModal({ open, onOpenChange }: StrategyLabModalProps) 
   const [tab, setTab] = useState("brand-voice");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} onCloseAutoFocus={(e) => e.preventDefault()} className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} onCloseAutoFocus={(e) => e.preventDefault()} onKeyDownCapture={(e) => {
+          const t = e.target as HTMLElement;
+          const tag = t.tagName;
+          if (tag === 'INPUT' || tag === 'TEXTAREA' || t.getAttribute('contenteditable') === 'true') {
+            e.stopPropagation();
+          }
+        }} className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-serif font-bold">Strategy Lab</DialogTitle>
           <DialogDescription>
