@@ -353,9 +353,9 @@ export function BrandVoiceProfile() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="values">Brand Values</Label>
+            <Label htmlFor="brand-values">Brand Values</Label>
             <Textarea
-              id="values"
+              id="brand-values"
               value={brandVoice.values}
               onChange={(e) => setBrandVoice(prev => ({ ...prev, values: e.target.value }))}
               placeholder="Describe your brand's core values and beliefs"
@@ -364,9 +364,9 @@ export function BrandVoiceProfile() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Voice Description</Label>
+            <Label htmlFor="voice-description">Voice Description</Label>
             <Textarea
-              id="description"
+              id="voice-description"
               value={brandVoice.voice_description}
               onChange={(e) => setBrandVoice(prev => ({ ...prev, voice_description: e.target.value }))}
               placeholder="Describe how your brand sounds and communicates (e.g., 'We speak like a knowledgeable friend who's always ready to help...')"

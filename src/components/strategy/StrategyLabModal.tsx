@@ -13,7 +13,7 @@ export function StrategyLabModal({ open, onOpenChange }: StrategyLabModalProps) 
   const [tab, setTab] = useState("brand-voice");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} onCloseAutoFocus={(e) => e.preventDefault()} className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-serif font-bold">Strategy Lab</DialogTitle>
           <DialogDescription>
@@ -32,11 +32,11 @@ export function StrategyLabModal({ open, onOpenChange }: StrategyLabModalProps) 
               </TabsTrigger>
             </TabsList>
             
-            <TabsContent value="brand-voice" forceMount className="space-y-6">
+            <TabsContent value="brand-voice" className="space-y-6">
               <BrandVoiceProfile />
             </TabsContent>
             
-            <TabsContent value="audience-persona" forceMount className="space-y-6">
+            <TabsContent value="audience-persona" className="space-y-6">
               <TargetAudienceGenerator />
             </TabsContent>
           </Tabs>
