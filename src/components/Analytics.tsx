@@ -43,17 +43,24 @@ export function Dashboard() {
     <div className="max-w-6xl mx-auto">
       {/* Greeting Section */}
       <div className="mb-8">
-        <h1 className="text-4xl font-serif font-bold mb-2">Hi {firstName}! 👋</h1>
-        <p className="text-muted-foreground mb-4">
-          Welcome to your content creation dashboard.
-        </p>
-        <Button 
-          onClick={() => setStrategyLabOpen(true)}
-          className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
-        >
-          <Zap className="h-4 w-4 mr-2" />
-          Your Strategy Lab
-        </Button>
+        <div className="rounded-lg p-[1px] bg-gradient-lovable shadow-glow">
+          <Card className="bg-card border border-border">
+            <CardContent className="p-6">
+              <h1 className="text-4xl font-serif font-bold mb-2">Hi {firstName}! 👋</h1>
+              <p className="text-muted-foreground mb-4">
+                Welcome to your content creation dashboard.
+              </p>
+              <Button 
+                onClick={() => setStrategyLabOpen(true)}
+                variant="gradient"
+                className="font-medium"
+              >
+                <Zap className="h-4 w-4 mr-2" />
+                Your Strategy Lab
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Analytics Section */}
