@@ -241,7 +241,12 @@ export function BrandVoiceProfile() {
         <div className="grid gap-6">
           <div className="space-y-2">
             <Label htmlFor="bv-brand-name">Brand Name</Label>
-            
+            <Input
+              id="bv-brand-name"
+              value={brandVoice.brand_name}
+              onChange={(e) => setBrandVoice(prev => ({ ...prev, brand_name: e.target.value }))}
+              placeholder="Enter your brand name"
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
