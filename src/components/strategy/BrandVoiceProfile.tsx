@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,6 +46,27 @@ export function BrandVoiceProfile() {
   const [newTrait, setNewTrait] = useState("");
   const [newDoUse, setNewDoUse] = useState("");
   const [newDontUse, setNewDontUse] = useState("");
+
+  // Memoized handlers to prevent input focus loss
+  const handleBrandNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setBrandVoice(prev => ({ ...prev, brand_name: e.target.value }));
+  }, []);
+
+  const handleValuesChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setBrandVoice(prev => ({ ...prev, values: e.target.value }));
+  }, []);
+
+  const handleVoiceDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setBrandVoice(prev => ({ ...prev, voice_description: e.target.value }));
+  }, []);
+
+  const handleToneChange = useCallback((value: string) => {
+    setBrandVoice(prev => ({ ...prev, tone: value }));
+  }, []);
+
+  const handleStyleChange = useCallback((value: string) => {
+    setBrandVoice(prev => ({ ...prev, communication_style: value }));
+  }, []);
   useEffect(() => {
     fetchBrandVoice();
   }, [user]);
@@ -244,7 +265,7 @@ export function BrandVoiceProfile() {
             <Input
               id="bv-brand-name"
               value={brandVoice.brand_name}
-              onChange={(e) => setBrandVoice(prev => ({ ...prev, brand_name: e.target.value }))}
+              onChange={handleBrandNameChange}
               placeholder="Enter your brand name"
             />
           </div>
@@ -252,10 +273,7 @@ export function BrandVoiceProfile() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="tone">Tone</Label>
-              <Select value={brandVoice.tone} onValueChange={value => setBrandVoice(prev => ({
-              ...prev,
-              tone: value
-            }))}>
+              <Select value={brandVoice.tone} onValueChange={handleToneChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select your brand tone" />
                 </SelectTrigger>
@@ -267,10 +285,7 @@ export function BrandVoiceProfile() {
 
             <div className="space-y-2">
               <Label htmlFor="style">Communication Style</Label>
-              <Select value={brandVoice.communication_style} onValueChange={value => setBrandVoice(prev => ({
-              ...prev,
-              communication_style: value
-            }))}>
+              <Select value={brandVoice.communication_style} onValueChange={handleStyleChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select communication style" />
                 </SelectTrigger>
@@ -299,18 +314,12 @@ export function BrandVoiceProfile() {
 
           <div className="space-y-2">
             <Label htmlFor="bv-values">Brand Values</Label>
-            <Textarea id="bv-values" value={brandVoice.values} onChange={e => setBrandVoice(prev => ({
-            ...prev,
-            values: e.target.value
-          }))} placeholder="Describe your brand's core values and beliefs" className="min-h-[100px]" />
+            <Textarea id="bv-values" value={brandVoice.values} onChange={handleValuesChange} placeholder="Describe your brand's core values and beliefs" className="min-h-[100px]" />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="bv-voice-description">Voice Description</Label>
-            <Textarea id="bv-voice-description" value={brandVoice.voice_description} onChange={e => setBrandVoice(prev => ({
-            ...prev,
-            voice_description: e.target.value
-          }))} placeholder="Describe how your brand sounds and communicates (e.g., 'We speak like a knowledgeable friend who's always ready to help...')" className="min-h-[100px]" />
+            <Textarea id="bv-voice-description" value={brandVoice.voice_description} onChange={handleVoiceDescriptionChange} placeholder="Describe how your brand sounds and communicates (e.g., 'We speak like a knowledgeable friend who's always ready to help...')" className="min-h-[100px]" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
