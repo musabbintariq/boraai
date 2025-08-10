@@ -67,6 +67,19 @@ export function BrandVoiceProfile() {
   const handleStyleChange = useCallback((value: string) => {
     setBrandVoice(prev => ({ ...prev, communication_style: value }));
   }, []);
+
+  const handleNewTraitChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTrait(e.target.value);
+  }, []);
+
+  const handleNewDoUseChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewDoUse(e.target.value);
+  }, []);
+
+  const handleNewDontUseChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewDontUse(e.target.value);
+  }, []);
+
   useEffect(() => {
     fetchBrandVoice();
   }, [user]);
@@ -299,7 +312,7 @@ export function BrandVoiceProfile() {
           <div className="space-y-2">
             <Label>Personality Traits</Label>
             <div className="flex gap-2 mb-2">
-              <Input value={newTrait} onChange={e => setNewTrait(e.target.value)} placeholder="Add a personality trait" onKeyPress={e => e.key === 'Enter' && addTrait()} />
+              <Input value={newTrait} onChange={handleNewTraitChange} placeholder="Add a personality trait" onKeyPress={e => e.key === 'Enter' && addTrait()} />
               <Button onClick={addTrait} size="sm">
                 <Plus className="h-4 w-4" />
               </Button>
@@ -326,7 +339,7 @@ export function BrandVoiceProfile() {
             <div className="space-y-2">
               <Label>Words/Phrases to Use</Label>
               <div className="flex gap-2 mb-2">
-                <Input value={newDoUse} onChange={e => setNewDoUse(e.target.value)} placeholder="Add words to use" onKeyPress={e => e.key === 'Enter' && addDoUse()} />
+                <Input value={newDoUse} onChange={handleNewDoUseChange} placeholder="Add words to use" onKeyPress={e => e.key === 'Enter' && addDoUse()} />
                 <Button onClick={addDoUse} size="sm">
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -342,7 +355,7 @@ export function BrandVoiceProfile() {
             <div className="space-y-2">
               <Label>Words/Phrases to Avoid</Label>
               <div className="flex gap-2 mb-2">
-                <Input value={newDontUse} onChange={e => setNewDontUse(e.target.value)} placeholder="Add words to avoid" onKeyPress={e => e.key === 'Enter' && addDontUse()} />
+                <Input value={newDontUse} onChange={handleNewDontUseChange} placeholder="Add words to avoid" onKeyPress={e => e.key === 'Enter' && addDontUse()} />
                 <Button onClick={addDontUse} size="sm">
                   <Plus className="h-4 w-4" />
                 </Button>

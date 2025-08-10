@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,6 +46,15 @@ export function TargetAudienceGenerator() {
   const [nicheDescription, setNicheDescription] = useState("");
   const [targetAudienceInput, setTargetAudienceInput] = useState("");
   const [targetAudience, setTargetAudience] = useState<TargetAudience | null>(null);
+
+  // Memoized handlers to prevent input focus loss
+  const handleNicheDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNicheDescription(e.target.value);
+  }, []);
+
+  const handleTargetAudienceInputChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTargetAudienceInput(e.target.value);
+  }, []);
 
   useEffect(() => {
     fetchTargetAudience();
@@ -406,7 +415,7 @@ export function TargetAudienceGenerator() {
               <Textarea
                 id="ta-niche"
                 value={nicheDescription}
-                onChange={(e) => setNicheDescription(e.target.value)}
+                onChange={handleNicheDescriptionChange}
                 placeholder="Describe your niche in detail (e.g., 'I help busy professionals learn productivity strategies and time management techniques to achieve work-life balance')"
                 className="min-h-[100px]"
               />
@@ -417,7 +426,7 @@ export function TargetAudienceGenerator() {
               <Textarea
                 id="ta-target-audience-input"
                 value={targetAudienceInput}
-                onChange={(e) => setTargetAudienceInput(e.target.value)}
+                onChange={handleTargetAudienceInputChange}
                 placeholder="If you already have a specific target audience in mind, describe them here (e.g., 'Working mothers aged 30-45 who struggle with time management')"
                 className="min-h-[80px]"
               />
