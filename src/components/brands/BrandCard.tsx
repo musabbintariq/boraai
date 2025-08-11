@@ -1,10 +1,22 @@
-import { Building2, ExternalLink, Globe, Calendar } from "lucide-react";
+import { Building2, ExternalLink, Globe, Calendar, Trash2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { BrandStrategyModal } from "./BrandStrategyModal";
+import { useBrands } from "@/hooks/useBrands";
 
 interface Brand {
   brand_id: string;
@@ -24,6 +36,7 @@ interface BrandCardProps {
 export function BrandCard({ brand }: BrandCardProps) {
   const navigate = useNavigate();
   const [isStrategyModalOpen, setIsStrategyModalOpen] = useState(false);
+  const { deleteBrand } = useBrands();
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -44,6 +57,10 @@ export function BrandCard({ brand }: BrandCardProps) {
     }
   };
 
+  const handleDeleteBrand = async () => {
+    await deleteBrand(brand.brand_id);
+  };
+
   return (
     <Card className="cursor-pointer hover:shadow-md transition-shadow">
       <CardHeader className="pb-3">
@@ -52,16 +69,46 @@ export function BrandCard({ brand }: BrandCardProps) {
             <Building2 className="h-5 w-5 text-primary" />
             <CardTitle className="text-xl">{brand.name}</CardTitle>
           </div>
-          {brand.website_url && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleWebsiteClick}
-              className="h-8 w-8 p-0"
-            >
-              <ExternalLink className="h-4 w-4" />
-            </Button>
-          )}
+          <div className="flex items-center gap-1">
+            {brand.website_url && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleWebsiteClick}
+                className="h-8 w-8 p-0"
+              >
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            )}
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete Brand</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete "{brand.name}"? This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction 
+                    onClick={handleDeleteBrand}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
         {brand.description && (
           <CardDescription className="line-clamp-2">

@@ -70,7 +70,6 @@ export function Dashboard() {
   const { profile } = useUserProfile();
   const { brands } = useBrands();
   const { selectedBrandId, setSelectedBrandId } = useBrandContext();
-  console.log('Brands:', brands, 'Selected brand ID:', selectedBrandId);
   const statsData = [{
     title: "Total Followers",
     value: "2,100",
@@ -106,24 +105,20 @@ export function Dashboard() {
                     Welcome to your content creation dashboard.
                   </p>
                 </div>
-                {/* Always show dropdown for testing, remove brands.length check temporarily */}
-                <Select value={selectedBrandId || ""} onValueChange={setSelectedBrandId}>
-                  <SelectTrigger className="w-[200px]">
-                    <SelectValue placeholder="Select a brand" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {brands.length === 0 && (
-                      <SelectItem value="no-brands" disabled>
-                        No brands available
-                      </SelectItem>
-                    )}
-                    {brands.map((brand) => (
-                      <SelectItem key={brand.brand_id} value={brand.brand_id}>
-                        {brand.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {brands.length > 0 && (
+                  <Select value={selectedBrandId || ""} onValueChange={setSelectedBrandId}>
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="Select a brand" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {brands.map((brand) => (
+                        <SelectItem key={brand.brand_id} value={brand.brand_id}>
+                          {brand.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
             </CardContent>
           </Card>
