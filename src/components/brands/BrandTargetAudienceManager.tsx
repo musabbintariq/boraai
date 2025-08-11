@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +19,6 @@ interface TargetAudience {
   psychographics: any;
   preferred_platforms: string[];
   content_preferences: string[];
-  communication_style: string;
 }
 
 interface BrandTargetAudienceManagerProps {
@@ -33,6 +33,7 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
   const [isEditing, setIsEditing] = useState(false);
   const [hasPersona, setHasPersona] = useState(false);
   const [nicheInput, setNicheInput] = useState("");
+  const [webhookUrl, setWebhookUrl] = useState("");
   
   const [persona, setPersona] = useState<TargetAudience>({
     brand_id: brandId,
@@ -51,8 +52,7 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
       lifestyle: ""
     },
     preferred_platforms: [],
-    content_preferences: [],
-    communication_style: ""
+    content_preferences: []
   });
 
   useEffect(() => {
@@ -96,47 +96,67 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
       return;
     }
 
+    if (!webhookUrl.trim()) {
+      toast.error('Please enter your n8n webhook URL');
+      return;
+    }
+
     setGenerating(true);
     try {
-      // Simulate AI generation with realistic data
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Call n8n webhook
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          niche_description: nicheInput,
+          timestamp: new Date().toISOString(),
+        }),
+      });
 
+      if (!response.ok) {
+        throw new Error('Failed to connect to n8n workflow');
+      }
+
+      const result = await response.json();
+      
+      // Use the response from n8n workflow to populate the persona
       const generatedPersona: TargetAudience = {
         brand_id: brandId,
-        niche_description: nicheInput,
-        demographics: {
+        niche_description: result.niche_description || nicheInput,
+        demographics: result.demographics || {
           ageRange: "25-45",
-          gender: "All genders",
+          gender: "All genders", 
           location: "Urban areas, North America & Europe",
           income: "$50,000 - $150,000"
         },
-        pain_points: [
+        pain_points: result.pain_points || [
           "Lack of time for content creation",
           "Difficulty staying consistent",
           "Struggling with engagement",
           "Limited design skills"
         ],
-        goals: [
+        goals: result.goals || [
           "Build authentic brand presence",
-          "Increase online engagement",
+          "Increase online engagement", 
           "Save time on content creation",
           "Grow their audience"
         ],
-        psychographics: {
+        psychographics: result.psychographics || {
           interests: ["Digital marketing", "Entrepreneurship", "Social media trends", "Business growth"],
           values: ["Authenticity", "Quality", "Innovation", "Efficiency"],
           lifestyle: "Busy professionals seeking work-life balance"
         },
-        preferred_platforms: ["Instagram", "LinkedIn", "TikTok", "Twitter"],
-        content_preferences: ["Visual content", "Quick tips", "Behind-the-scenes", "Success stories"],
-        communication_style: "Professional yet approachable, clear and actionable"
+        preferred_platforms: result.preferred_platforms || ["Instagram", "LinkedIn", "TikTok", "Twitter"],
+        content_preferences: result.content_preferences || ["Visual content", "Quick tips", "Behind-the-scenes", "Success stories"]
       };
 
       setPersona(generatedPersona);
-      toast.success('Target audience persona generated successfully!');
+      toast.success('Target audience persona generated successfully using n8n workflow!');
     } catch (error) {
       console.error('Error generating persona:', error);
-      toast.error('Failed to generate persona');
+      toast.error('Failed to generate persona. Please check your n8n webhook URL and try again.');
     } finally {
       setGenerating(false);
     }
@@ -253,22 +273,39 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
       </CardHeader>
       <CardContent className="space-y-6">
         {!hasPersona && (
-          <div>
-            <Label htmlFor="niche">Describe your niche/target market</Label>
-            <Textarea
-              id="niche"
-              placeholder="E.g., Small business owners who need help with social media marketing, fitness enthusiasts looking for home workout solutions..."
-              value={nicheInput}
-              onChange={(e) => setNicheInput(e.target.value)}
-              rows={3}
-              className="mt-2"
-            />
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="webhookUrl">n8n Webhook URL</Label>
+              <Input
+                id="webhookUrl"
+                placeholder="https://your-n8n-instance.com/webhook/your-webhook-id"
+                value={webhookUrl}
+                onChange={(e) => setWebhookUrl(e.target.value)}
+                className="mt-2"
+              />
+              <p className="text-sm text-muted-foreground mt-1">
+                Enter your n8n webhook URL that will generate the target audience persona
+              </p>
+            </div>
+            
+            <div>
+              <Label htmlFor="niche">Describe your niche/target market</Label>
+              <Textarea
+                id="niche"
+                placeholder="E.g., Small business owners who need help with social media marketing, fitness enthusiasts looking for home workout solutions..."
+                value={nicheInput}
+                onChange={(e) => setNicheInput(e.target.value)}
+                rows={3}
+                className="mt-2"
+              />
+            </div>
+            
             <Button 
               onClick={generatePersona} 
-              disabled={!nicheInput.trim() || generating}
-              className="mt-3 w-full"
+              disabled={!nicheInput.trim() || !webhookUrl.trim() || generating}
+              className="w-full"
             >
-              {generating ? "Generating Persona..." : "Generate Target Audience Persona"}
+              {generating ? "Generating Persona via n8n..." : "Generate Target Audience Persona"}
             </Button>
           </div>
         )}
@@ -281,17 +318,6 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
                 value={persona.niche_description}
                 onChange={(e) => setPersona(prev => ({ ...prev, niche_description: e.target.value }))}
                 rows={3}
-                className="mt-2"
-              />
-            </div>
-
-            <div>
-              <Label>Communication Style</Label>
-              <Textarea
-                placeholder="How should this brand communicate with its audience?"
-                value={persona.communication_style}
-                onChange={(e) => setPersona(prev => ({ ...prev, communication_style: e.target.value }))}
-                rows={2}
                 className="mt-2"
               />
             </div>
