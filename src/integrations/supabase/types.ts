@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       brand_voice_profiles: {
         Row: {
+          brand_id: string | null
           brand_name: string | null
           communication_style: string | null
           created_at: string
@@ -28,9 +29,9 @@ export type Database = {
           user_id: string
           values: string | null
           voice_description: string | null
-          webhook_url: string | null
         }
         Insert: {
+          brand_id?: string | null
           brand_name?: string | null
           communication_style?: string | null
           created_at?: string
@@ -43,9 +44,9 @@ export type Database = {
           user_id: string
           values?: string | null
           voice_description?: string | null
-          webhook_url?: string | null
         }
         Update: {
+          brand_id?: string | null
           brand_name?: string | null
           communication_style?: string | null
           created_at?: string
@@ -58,7 +59,47 @@ export type Database = {
           user_id?: string
           values?: string | null
           voice_description?: string | null
-          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brand_voice_profiles_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      brands: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          industry: string | null
+          name: string
+          updated_at: string
+          user_id: string
+          website_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          industry?: string | null
+          name: string
+          updated_at?: string
+          user_id: string
+          website_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          industry?: string | null
+          name?: string
+          updated_at?: string
+          user_id?: string
+          website_url?: string | null
         }
         Relationships: []
       }
@@ -213,6 +254,7 @@ export type Database = {
       }
       target_audience_profiles: {
         Row: {
+          brand_id: string | null
           buying_behavior: string | null
           communication_style: string | null
           content_preferences: string[] | null
@@ -230,6 +272,7 @@ export type Database = {
           webhook_url: string | null
         }
         Insert: {
+          brand_id?: string | null
           buying_behavior?: string | null
           communication_style?: string | null
           content_preferences?: string[] | null
@@ -247,6 +290,7 @@ export type Database = {
           webhook_url?: string | null
         }
         Update: {
+          brand_id?: string | null
           buying_behavior?: string | null
           communication_style?: string | null
           content_preferences?: string[] | null
@@ -263,14 +307,25 @@ export type Database = {
           user_id?: string
           webhook_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "target_audience_profiles_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_brand_owner: {
+        Args: { brand_uuid: string }
+        Returns: string
+      }
     }
     Enums: {
       feedback_status_enum: "pending" | "liked" | "disliked"
