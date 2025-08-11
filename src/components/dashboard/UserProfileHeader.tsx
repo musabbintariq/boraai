@@ -22,13 +22,20 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { useBrands } from "@/hooks/useBrands";
 import { useBrandContext } from "@/contexts/BrandContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export const UserProfileHeader = () => {
   const { user, signOut } = useAuth();
   const { profile } = useUserProfile();
   const { brands } = useBrands();
-  const { selectedBrandId, setSelectedBrandId } = useBrandContext();
+  const { selectedBrandId, setSelectedBrandId, autoSelectBrand } = useBrandContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (brands.length > 0) {
+      autoSelectBrand(brands);
+    }
+  }, [brands, autoSelectBrand]);
 
   const handleSignOut = async () => {
     await signOut();
