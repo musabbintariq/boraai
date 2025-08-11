@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { BrandStrategyModal } from "./BrandStrategyModal";
 
 interface Brand {
   id: string;
@@ -21,6 +23,7 @@ interface BrandCardProps {
 
 export function BrandCard({ brand }: BrandCardProps) {
   const navigate = useNavigate();
+  const [isStrategyModalOpen, setIsStrategyModalOpen] = useState(false);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -31,7 +34,7 @@ export function BrandCard({ brand }: BrandCardProps) {
   };
 
   const handleManageClick = () => {
-    navigate(`/dashboard/brands/${brand.id}`);
+    setIsStrategyModalOpen(true);
   };
 
   const handleWebsiteClick = (e: React.MouseEvent) => {
@@ -92,6 +95,13 @@ export function BrandCard({ brand }: BrandCardProps) {
           </Button>
         </div>
       </CardContent>
+
+      <BrandStrategyModal 
+        open={isStrategyModalOpen} 
+        onOpenChange={setIsStrategyModalOpen}
+        brandId={brand.id}
+        brandName={brand.name}
+      />
     </Card>
   );
 }
