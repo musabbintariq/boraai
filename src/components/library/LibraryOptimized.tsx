@@ -37,7 +37,13 @@ export function LibraryOptimized() {
   };
 
   const handleScriptIt = async (idea: any) => {
-    if (!user) return;
+    console.log('Scripting idea:', idea.title);
+    if (!user) {
+      console.log('No user found, aborting script generation');
+      return;
+    }
+    
+    console.log('Starting script generation for idea:', idea);
     
     toast({ 
       title: "Generating script...", 
