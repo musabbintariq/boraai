@@ -15,6 +15,8 @@ serve(async (req) => {
   try {
     const { idea, userId } = await req.json()
     
+    console.log('Request payload:', { idea, userId })
+    
     console.log('Generating script for idea:', idea.title)
     
     // Initialize Supabase client
@@ -64,7 +66,8 @@ serve(async (req) => {
         script: scriptData.script || scriptData.content,
         platform: idea.platform,
         duration: scriptData.duration || '60s',
-        tags: [...(idea.tags || []), 'generated']
+        tags: [...(idea.tags || []), 'generated'],
+        brand_id: idea.brand_id || null
       })
       .select()
       .single()

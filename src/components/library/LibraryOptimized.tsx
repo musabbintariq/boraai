@@ -51,7 +51,8 @@ export function LibraryOptimized() {
             title: idea.title,
             content: idea.content,
             platform: idea.platform,
-            tags: idea.tags
+            tags: idea.tags,
+            brand_id: idea.brand_id
           },
           userId: user.id
         }
