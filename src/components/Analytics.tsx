@@ -1,9 +1,18 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Users, Heart, Eye, Zap } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { StatCard } from "@/components/common/StatCard";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { useBrands } from "@/hooks/useBrands";
+import { useBrandContext } from "@/contexts/BrandContext";
 import { useState } from "react";
 
 // Mock data for demonstration
@@ -58,9 +67,9 @@ const engagementData = [{
   views: 5200
 }];
 export function Dashboard() {
-  const {
-    profile
-  } = useUserProfile();
+  const { profile } = useUserProfile();
+  const { brands } = useBrands();
+  const { selectedBrandId, setSelectedBrandId } = useBrandContext();
   const statsData = [{
     title: "Total Followers",
     value: "2,100",
@@ -89,11 +98,28 @@ export function Dashboard() {
         <div className="rounded-lg p-[1px] bg-gradient-lovable shadow-glow">
           <Card className="bg-card border border-border">
             <CardContent className="p-6">
-              <h1 className="text-4xl font-serif font-bold mb-2">Hi {firstName}! 👋</h1>
-              <p className="text-muted-foreground mb-4">
-                Welcome to your content creation dashboard.
-              </p>
-              
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h1 className="text-4xl font-serif font-bold mb-2">Hi {firstName}! 👋</h1>
+                  <p className="text-muted-foreground">
+                    Welcome to your content creation dashboard.
+                  </p>
+                </div>
+                {brands.length > 0 && (
+                  <Select value={selectedBrandId || ""} onValueChange={setSelectedBrandId}>
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="Select a brand" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {brands.map((brand) => (
+                        <SelectItem key={brand.brand_id} value={brand.brand_id}>
+                          {brand.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
