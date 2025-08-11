@@ -11,9 +11,10 @@ export interface Script {
   platform: string;
   tags: string[];
   createdAt: string;
+  brandId?: string;
 }
 
-export const useScripts = () => {
+export const useScripts = (brandId?: string | null) => {
   const [scripts, setScripts] = useState<Script[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
@@ -24,10 +25,16 @@ export const useScripts = () => {
     
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from("scripts")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("*");
+      
+      // Filter by brand if brandId is provided
+      if (brandId) {
+        query = query.eq("brand_id", brandId);
+      }
+      
+      const { data, error } = await query.order("created_at", { ascending: false });
 
       if (error) throw error;
 
@@ -38,7 +45,8 @@ export const useScripts = () => {
         duration: item.duration,
         platform: item.platform,
         tags: item.tags || [],
-        createdAt: item.created_at
+        createdAt: item.created_at,
+        brandId: item.brand_id
       }));
 
       setScripts(formattedScripts);
@@ -62,6 +70,7 @@ export const useScripts = () => {
         .from("scripts")
         .insert({
           user_id: user.id,
+          brand_id: scriptData.brandId || null,
           title: scriptData.title,
           script: scriptData.script,
           duration: scriptData.duration,
@@ -80,7 +89,8 @@ export const useScripts = () => {
         duration: data.duration,
         platform: data.platform,
         tags: data.tags || [],
-        createdAt: data.created_at
+        createdAt: data.created_at,
+        brandId: data.brand_id
       };
 
       setScripts(prev => [newScript, ...prev]);
@@ -166,7 +176,7 @@ export const useScripts = () => {
       setScripts([]);
       setLoading(false);
     }
-  }, [user]);
+  }, [user, brandId]);
 
   return {
     scripts,

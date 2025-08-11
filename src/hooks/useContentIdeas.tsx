@@ -10,9 +10,10 @@ export interface ContentIdea {
   platform: string;
   tags: string[];
   createdAt: string;
+  brandId?: string;
 }
 
-export const useContentIdeas = () => {
+export const useContentIdeas = (brandId?: string | null) => {
   const [ideas, setIdeas] = useState<ContentIdea[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
@@ -23,10 +24,16 @@ export const useContentIdeas = () => {
     
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from("content_ideas")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("*");
+      
+      // Filter by brand if brandId is provided
+      if (brandId) {
+        query = query.eq("brand_id", brandId);
+      }
+      
+      const { data, error } = await query.order("created_at", { ascending: false });
 
       if (error) throw error;
 
@@ -36,7 +43,8 @@ export const useContentIdeas = () => {
         content: item.content,
         platform: item.platform,
         tags: item.tags || [],
-        createdAt: item.created_at
+        createdAt: item.created_at,
+        brandId: item.brand_id
       }));
 
       setIdeas(formattedIdeas);
@@ -60,6 +68,7 @@ export const useContentIdeas = () => {
         .from("content_ideas")
         .insert({
           user_id: user.id,
+          brand_id: ideaData.brandId || null,
           title: ideaData.title,
           content: ideaData.content,
           platform: ideaData.platform,
@@ -76,7 +85,8 @@ export const useContentIdeas = () => {
         content: data.content,
         platform: data.platform,
         tags: data.tags || [],
-        createdAt: data.created_at
+        createdAt: data.created_at,
+        brandId: data.brand_id
       };
 
       setIdeas(prev => [newIdea, ...prev]);
@@ -161,7 +171,7 @@ export const useContentIdeas = () => {
       setIdeas([]);
       setLoading(false);
     }
-  }, [user]);
+  }, [user, brandId]);
 
   return {
     ideas,

@@ -12,6 +12,7 @@ import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
 interface GenerateIdeasDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  selectedBrandId?: string | null;
 }
 
 interface GenerateFormData {
@@ -22,7 +23,8 @@ interface GenerateFormData {
 
 export const GenerateIdeasDialog = ({ 
   isOpen, 
-  onOpenChange 
+  onOpenChange,
+  selectedBrandId 
 }: GenerateIdeasDialogProps) => {
   const [formData, setFormData] = useState<GenerateFormData>({
     topic: "",
@@ -42,21 +44,24 @@ export const GenerateIdeasDialog = ({
         content: `Show your audience what goes on behind the scenes of your business. People love authentic content that gives them a peek into your process.`,
         platform: formData.platforms,
         tags: ["behind-the-scenes", "authentic", "process"],
-        generation_context: { ...formData, timestamp: new Date().toISOString() }
+        generation_context: { ...formData, timestamp: new Date().toISOString() },
+        brandId: selectedBrandId || undefined
       },
       {
         title: "Industry Tips & Tricks",
         content: `Share valuable tips and tricks${formData.topic ? ` about ${formData.topic}` : ''}. Position yourself as an expert while providing genuine value to your audience.`,
         platform: formData.platforms,
         tags: ["tips", "expert", "value"],
-        generation_context: { ...formData, timestamp: new Date().toISOString() }
+        generation_context: { ...formData, timestamp: new Date().toISOString() },
+        brandId: selectedBrandId || undefined
       },
       {
         title: "Customer Success Story",
         content: `Feature a customer success story showing how your products or services made a difference. Social proof is powerful content.`,
         platform: formData.platforms,
         tags: ["testimonial", "success-story", "social-proof"],
-        generation_context: { ...formData, timestamp: new Date().toISOString() }
+        generation_context: { ...formData, timestamp: new Date().toISOString() },
+        brandId: selectedBrandId || undefined
       }
     ];
 

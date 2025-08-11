@@ -14,8 +14,12 @@ import { IdeaFeedback } from "@/components/IdeaFeedback";
 import { useContentIdeas } from "@/hooks/useContentIdeas";
 import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
 
-export function Library() {
-  const { ideas, loading, updateIdea, removeIdea } = useContentIdeas();
+interface LibraryProps {
+  selectedBrandId?: string | null;
+}
+
+export function Library({ selectedBrandId }: LibraryProps) {
+  const { ideas, loading, updateIdea, removeIdea } = useContentIdeas(selectedBrandId);
   const { saveGeneratedIdea, pendingIdeas } = useGeneratedIdeas();
   const [editingIdea, setEditingIdea] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -96,7 +100,10 @@ export function Library() {
 
     // Save generated ideas to the database
     for (const idea of mockIdeas) {
-      await saveGeneratedIdea(idea);
+      await saveGeneratedIdea({
+        ...idea,
+        brandId: selectedBrandId || undefined
+      });
     }
 
     toast({
@@ -121,16 +128,21 @@ export function Library() {
           <div>
             <h1 className="text-4xl font-serif font-bold mb-2">The Library of Ideas</h1>
             <p className="text-muted-foreground">
-              Your collection of liked content ideas, ready to use whenever you need inspiration.
+              {selectedBrandId 
+                ? "Your collection of content ideas for the selected brand, ready to use whenever you need inspiration."
+                : "Your collection of content ideas, ready to use whenever you need inspiration. Select a brand to filter ideas."
+              }
             </p>
           </div>
-          <Button 
-            onClick={() => setIsGenerateDialogOpen(true)}
-            className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Generate Ideas
-          </Button>
+          {selectedBrandId && (
+            <Button 
+              onClick={() => setIsGenerateDialogOpen(true)}
+              className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Generate Ideas
+            </Button>
+          )}
         </div>
       </div>
 
@@ -151,11 +163,17 @@ export function Library() {
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-8 w-8 animate-spin" />
             </div>
+          ) : ideas.length === 0 && selectedBrandId ? (
+            <EmptyState 
+              icon={Heart}
+              title="No Ideas for This Brand Yet"
+              description="Generate content ideas for this brand to see them here."
+            />
           ) : ideas.length === 0 ? (
             <EmptyState 
               icon={Heart}
-              title="No Liked Ideas Yet"
-              description="Start generating content and like your favorite ideas to see them here."
+              title="No Ideas Yet"
+              description="Select a brand and start generating content ideas to see them here."
             />
           ) : (
             <div className="grid gap-6">

@@ -15,6 +15,7 @@ export interface GeneratedIdea {
   content_idea_id?: string;
   created_at: string;
   updated_at: string;
+  brandId?: string;
 }
 
 export interface GenerateIdeaData {
@@ -23,6 +24,7 @@ export interface GenerateIdeaData {
   platform: string;
   tags?: string[];
   generation_context?: any;
+  brandId?: string;
 }
 
 export const useGeneratedIdeas = () => {
@@ -208,6 +210,7 @@ export const useGeneratedIdeas = () => {
         .from('content_ideas')
         .insert({
           user_id: user.id,
+          brand_id: generatedIdea.brandId || null,
           title: generatedIdea.title,
           content: generatedIdea.content,
           platform: generatedIdea.platform,

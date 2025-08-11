@@ -10,8 +10,12 @@ import { useToast } from "@/hooks/use-toast";
 import { ItemCard } from "@/components/common/ItemCard";
 import { EmptyState } from "@/components/common/EmptyState";
 import { useScripts } from "@/hooks/useScripts";
-export function Scripts() {
-  const { scripts, loading, updateScript, removeScript } = useScripts();
+interface ScriptsProps {
+  selectedBrandId?: string | null;
+}
+
+export function Scripts({ selectedBrandId }: ScriptsProps) {
+  const { scripts, loading, updateScript, removeScript } = useScripts(selectedBrandId);
   const [editingScript, setEditingScript] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [previewScript, setPreviewScript] = useState<any>(null);
@@ -71,7 +75,10 @@ export function Scripts() {
       <div className="mb-8">
         <h1 className="text-4xl font-serif font-bold mb-2">Your Scripts</h1>
         <p className="text-muted-foreground">
-          Your collection of generated scripts, ready to use for your content creation.
+          {selectedBrandId 
+            ? "Your collection of scripts for the selected brand, ready to use for your content creation."
+            : "Your collection of scripts, ready to use for your content creation. Select a brand to filter scripts."
+          }
         </p>
       </div>
 
@@ -79,11 +86,17 @@ export function Scripts() {
         <div className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
+      ) : scripts.length === 0 && selectedBrandId ? (
+        <EmptyState
+          icon={FileText}
+          title="No Scripts for This Brand Yet"
+          description="Create scripts for this brand to see them here."
+        />
       ) : scripts.length === 0 ? (
         <EmptyState
           icon={FileText}
           title="No Scripts Yet"
-          description="Generate scripts from your ideas to see them here."
+          description="Select a brand and generate scripts from your ideas to see them here."
         />
       ) : (
         <div className="grid gap-6">
