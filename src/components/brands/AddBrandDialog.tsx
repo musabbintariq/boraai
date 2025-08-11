@@ -39,8 +39,9 @@ export function AddBrandDialog({ open, onOpenChange }: AddBrandDialogProps) {
       if (brand) {
         setFormData({ name: "", description: "", industry: "", website_url: "" });
         onOpenChange(false);
-        // Navigate to brand strategy setup
-        navigate(`/dashboard/brands/${brand.brand_id}/setup`);
+        // Navigate to manage brands page in dashboard
+        navigate("/dashboard");
+        // Note: We could also trigger a state change to show brands view specifically
       }
     } finally {
       setIsSubmitting(false);
