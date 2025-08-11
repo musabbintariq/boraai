@@ -102,7 +102,7 @@ export function Library({ selectedBrandId }: LibraryProps) {
     for (const idea of mockIdeas) {
       await saveGeneratedIdea({
         ...idea,
-        brandId: selectedBrandId || undefined
+        brand_id: selectedBrandId || undefined
       });
     }
 

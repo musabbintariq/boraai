@@ -15,7 +15,7 @@ export interface GeneratedIdea {
   content_idea_id?: string;
   created_at: string;
   updated_at: string;
-  brandId?: string;
+  brand_id?: string;
 }
 
 export interface GenerateIdeaData {
@@ -24,7 +24,7 @@ export interface GenerateIdeaData {
   platform: string;
   tags?: string[];
   generation_context?: any;
-  brandId?: string;
+  brand_id?: string;
 }
 
 export const useGeneratedIdeas = () => {
@@ -59,6 +59,7 @@ export const useGeneratedIdeas = () => {
             feedback_status: 'pending' as const,
             generation_context: { brandName: 'Test Brand', niche: 'Lifestyle' },
             content_idea_id: null,
+            brand_id: null,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           },
@@ -72,6 +73,7 @@ export const useGeneratedIdeas = () => {
             feedback_status: 'pending' as const,
             generation_context: { brandName: 'Test Brand', niche: 'Business' },
             content_idea_id: null,
+            brand_id: null,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           },
@@ -85,6 +87,7 @@ export const useGeneratedIdeas = () => {
             feedback_status: 'pending' as const,
             generation_context: { brandName: 'Test Brand', niche: 'Entrepreneurship' },
             content_idea_id: null,
+            brand_id: null,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           },
@@ -98,6 +101,7 @@ export const useGeneratedIdeas = () => {
             feedback_status: 'pending' as const,
             generation_context: { brandName: 'Test Brand', niche: 'Education' },
             content_idea_id: null,
+            brand_id: null,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           },
@@ -111,6 +115,7 @@ export const useGeneratedIdeas = () => {
             feedback_status: 'pending' as const,
             generation_context: { brandName: 'Test Brand', niche: 'Consulting' },
             content_idea_id: null,
+            brand_id: null,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           }
@@ -210,7 +215,7 @@ export const useGeneratedIdeas = () => {
         .from('content_ideas')
         .insert({
           user_id: user.id,
-          brand_id: generatedIdea.brandId || null,
+          brand_id: generatedIdea.brand_id || null,
           title: generatedIdea.title,
           content: generatedIdea.content,
           platform: generatedIdea.platform,
