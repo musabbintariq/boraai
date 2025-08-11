@@ -4,7 +4,6 @@ import { Users, Heart, Eye, Zap } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { StatCard } from "@/components/common/StatCard";
 import { useUserProfile } from "@/hooks/useUserProfile";
-import { StrategyLabModal } from "@/components/strategy/StrategyLabModal";
 import { useState } from "react";
 
 // Mock data for demonstration
@@ -28,7 +27,6 @@ const engagementData = [
 
 export function Dashboard() {
   const { profile } = useUserProfile();
-  const [strategyLabOpen, setStrategyLabOpen] = useState(false);
   
   const statsData = [
     { title: "Total Followers", value: "2,100", trend: "+42.5% from last month", icon: Users },
@@ -51,12 +49,12 @@ export function Dashboard() {
                 Welcome to your content creation dashboard.
               </p>
               <Button 
-                onClick={() => setStrategyLabOpen(true)}
+                onClick={() => window.location.href = '/dashboard'}
                 variant="gradient"
                 className="font-medium"
               >
                 <Zap className="h-4 w-4 mr-2" />
-                Your Strategy Lab
+                View Dashboard
               </Button>
             </CardContent>
           </Card>
@@ -130,12 +128,6 @@ export function Dashboard() {
           </CardContent>
         </Card>
       </div>
-      
-      {/* Strategy Lab Modal */}
-      <StrategyLabModal 
-        open={strategyLabOpen} 
-        onOpenChange={setStrategyLabOpen}
-      />
     </div>
   );
 }

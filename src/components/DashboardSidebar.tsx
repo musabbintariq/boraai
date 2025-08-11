@@ -1,4 +1,4 @@
-import { Lightbulb, BarChart3, LogOut, FileText, Zap } from "lucide-react";
+import { Lightbulb, BarChart3, LogOut, FileText, Zap, Building2 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -15,8 +15,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { SidebarUserProfile } from "./dashboard/SidebarUserProfile";
 
 interface DashboardSidebarProps {
-  activeView: "dashboard" | "library" | "scripts";
-  setActiveView: (view: "dashboard" | "library" | "scripts") => void;
+  activeView: "dashboard" | "library" | "scripts" | "brands";
+  setActiveView: (view: "dashboard" | "library" | "scripts" | "brands") => void;
 }
 
 export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebarProps) {
@@ -30,6 +30,11 @@ export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebar
       title: "Dashboard",
       icon: BarChart3,
       value: "dashboard" as const,
+    },
+    {
+      title: "Manage Brands",
+      icon: Building2,
+      value: "brands" as const,
     },
     {
       title: "Ideas",

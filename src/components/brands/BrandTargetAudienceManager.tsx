@@ -12,19 +12,10 @@ interface TargetAudience {
   id?: string;
   brand_id: string;
   niche_description: string;
-  demographics: {
-    ageRange: string;
-    gender: string;
-    location: string;
-    income: string;
-  };
+  demographics: any;
   pain_points: string[];
   goals: string[];
-  psychographics: {
-    interests: string[];
-    values: string[];
-    lifestyle: string;
-  };
+  psychographics: any;
   preferred_platforms: string[];
   content_preferences: string[];
   communication_style: string;
@@ -200,16 +191,16 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
             <div>
               <Label className="text-sm font-medium text-muted-foreground">DEMOGRAPHICS</Label>
               <div className="mt-2 space-y-1 text-sm">
-                <p><span className="font-medium">Age:</span> {persona.demographics.ageRange}</p>
-                <p><span className="font-medium">Gender:</span> {persona.demographics.gender}</p>
-                <p><span className="font-medium">Location:</span> {persona.demographics.location}</p>
-                <p><span className="font-medium">Income:</span> {persona.demographics.income}</p>
+                <p><span className="font-medium">Age:</span> {persona.demographics?.ageRange || "Not specified"}</p>
+                <p><span className="font-medium">Gender:</span> {persona.demographics?.gender || "Not specified"}</p>
+                <p><span className="font-medium">Location:</span> {persona.demographics?.location || "Not specified"}</p>
+                <p><span className="font-medium">Income:</span> {persona.demographics?.income || "Not specified"}</p>
               </div>
             </div>
 
             <div>
               <Label className="text-sm font-medium text-muted-foreground">LIFESTYLE</Label>
-              <p className="mt-2 text-sm">{persona.psychographics.lifestyle}</p>
+              <p className="mt-2 text-sm">{persona.psychographics?.lifestyle || "Not specified"}</p>
             </div>
           </div>
 
