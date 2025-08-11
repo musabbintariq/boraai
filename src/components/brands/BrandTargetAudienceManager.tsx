@@ -35,7 +35,6 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
   const [isEditing, setIsEditing] = useState(false);
   const [hasPersona, setHasPersona] = useState(false);
   const [nicheInput, setNicheInput] = useState("");
-  const [webhookUrl, setWebhookUrl] = useState("");
   
   const [persona, setPersona] = useState<TargetAudience>({
     brand_id: brandId,
@@ -98,15 +97,11 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
       return;
     }
 
-    if (!webhookUrl.trim()) {
-      toast.error('Please enter your n8n webhook URL');
-      return;
-    }
 
     setGenerating(true);
     try {
-      // Call n8n webhook
-      const response = await fetch(webhookUrl, {
+      // Call backend endpoint which will trigger n8n webhook
+      const response = await fetch('/api/generate-persona', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +153,7 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
       toast.success('Target audience persona generated successfully using n8n workflow!');
     } catch (error) {
       console.error('Error generating persona:', error);
-      toast.error('Failed to generate persona. Please check your n8n webhook URL and try again.');
+      toast.error('Failed to generate persona. Please try again.');
     } finally {
       setGenerating(false);
     }
@@ -277,20 +272,6 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
         {!hasPersona && (
           <div className="space-y-4">
             <div>
-              <Label htmlFor="webhookUrl">n8n Webhook URL</Label>
-              <Input
-                id="webhookUrl"
-                placeholder="https://your-n8n-instance.com/webhook/your-webhook-id"
-                value={webhookUrl}
-                onChange={(e) => setWebhookUrl(e.target.value)}
-                className="mt-2"
-              />
-              <p className="text-sm text-muted-foreground mt-1">
-                Enter your n8n webhook URL that will generate the target audience persona
-              </p>
-            </div>
-            
-            <div>
               <Label htmlFor="niche">Describe your niche/target market</Label>
               <Textarea
                 id="niche"
@@ -304,7 +285,7 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
             
             <Button 
               onClick={generatePersona} 
-              disabled={!nicheInput.trim() || !webhookUrl.trim() || generating}
+              disabled={!nicheInput.trim() || generating}
               className="w-full"
             >
               {generating ? "Generating Persona via n8n..." : "Generate Target Audience Persona"}
