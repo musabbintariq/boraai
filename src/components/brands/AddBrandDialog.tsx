@@ -40,7 +40,7 @@ export function AddBrandDialog({ open, onOpenChange }: AddBrandDialogProps) {
         setFormData({ name: "", description: "", industry: "", website_url: "" });
         onOpenChange(false);
         // Navigate to brand strategy setup
-        navigate(`/dashboard/brands/${brand.id}/setup`);
+        navigate(`/dashboard/brands/${brand.brand_id}/setup`);
       }
     } finally {
       setIsSubmitting(false);

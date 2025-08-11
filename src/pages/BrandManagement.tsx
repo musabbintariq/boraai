@@ -13,7 +13,7 @@ export default function BrandManagement() {
   const { brands, loading } = useBrands();
   const [isStrategyModalOpen, setIsStrategyModalOpen] = useState(false);
   
-  const brand = brands.find(b => b.id === brandId);
+  const brand = brands.find(b => b.brand_id === brandId);
 
   useEffect(() => {
     if (!loading && !brand && brandId) {
@@ -146,7 +146,7 @@ export default function BrandManagement() {
       <BrandStrategyModal 
         open={isStrategyModalOpen} 
         onOpenChange={setIsStrategyModalOpen}
-        brandId={brand.id}
+        brandId={brand.brand_id}
         brandName={brand.name}
       />
     </div>

@@ -4,7 +4,7 @@ import { useAuth } from "./useAuth";
 import { toast } from "sonner";
 
 interface Brand {
-  id: string;
+  brand_id: string;
   user_id: string;
   name: string;
   description: string | null;
@@ -86,14 +86,14 @@ export const useBrands = () => {
       const { data, error } = await supabase
         .from('brands')
         .update(updates)
-        .eq('id', id)
+        .eq('brand_id', id)
         .select()
         .single();
 
       if (error) throw error;
 
       setBrands(prev => prev.map(brand => 
-        brand.id === id ? data : brand
+        brand.brand_id === id ? data : brand
       ));
       toast.success('Brand updated successfully');
       return data;
@@ -109,11 +109,11 @@ export const useBrands = () => {
       const { error } = await supabase
         .from('brands')
         .delete()
-        .eq('id', id);
+        .eq('brand_id', id);
 
       if (error) throw error;
 
-      setBrands(prev => prev.filter(brand => brand.id !== id));
+      setBrands(prev => prev.filter(brand => brand.brand_id !== id));
       toast.success('Brand deleted successfully');
       return true;
     } catch (error) {

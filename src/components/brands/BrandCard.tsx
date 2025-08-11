@@ -7,7 +7,7 @@ import { useState } from "react";
 import { BrandStrategyModal } from "./BrandStrategyModal";
 
 interface Brand {
-  id: string;
+  brand_id: string;
   user_id: string;
   name: string;
   description: string | null;
@@ -99,7 +99,7 @@ export function BrandCard({ brand }: BrandCardProps) {
       <BrandStrategyModal 
         open={isStrategyModalOpen} 
         onOpenChange={setIsStrategyModalOpen}
-        brandId={brand.id}
+        brandId={brand.brand_id}
         brandName={brand.name}
       />
     </Card>

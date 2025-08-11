@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { BrandProvider } from "@/contexts/BrandContext";
 import { LibraryOptimized } from "@/components/library/LibraryOptimized";
 import { Dashboard as DashboardComponent } from "@/components/Analytics";
 import { ScriptsOptimized } from "@/components/scripts/ScriptsOptimized";
@@ -18,9 +19,11 @@ const Dashboard = () => {
   };
 
   return (
-    <DashboardLayout activeView={activeView} setActiveView={setActiveView}>
-      {renderContent()}
-    </DashboardLayout>
+    <BrandProvider>
+      <DashboardLayout activeView={activeView} setActiveView={setActiveView}>
+        {renderContent()}
+      </DashboardLayout>
+    </BrandProvider>
   );
 };
 
