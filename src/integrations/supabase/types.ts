@@ -26,7 +26,6 @@ export type Database = {
           personality_traits: string[] | null
           tone: string | null
           updated_at: string
-          user_id: string | null
           values: string | null
           voice_description: string | null
         }
@@ -41,7 +40,6 @@ export type Database = {
           personality_traits?: string[] | null
           tone?: string | null
           updated_at?: string
-          user_id?: string | null
           values?: string | null
           voice_description?: string | null
         }
@@ -56,7 +54,6 @@ export type Database = {
           personality_traits?: string[] | null
           tone?: string | null
           updated_at?: string
-          user_id?: string | null
           values?: string | null
           voice_description?: string | null
         }
@@ -66,15 +63,15 @@ export type Database = {
             columns: ["brand_id"]
             isOneToOne: false
             referencedRelation: "brands"
-            referencedColumns: ["id"]
+            referencedColumns: ["brand_id"]
           },
         ]
       }
       brands: {
         Row: {
+          brand_id: string
           created_at: string
           description: string | null
-          id: string
           industry: string | null
           name: string
           updated_at: string
@@ -82,9 +79,9 @@ export type Database = {
           website_url: string | null
         }
         Insert: {
+          brand_id?: string
           created_at?: string
           description?: string | null
-          id?: string
           industry?: string | null
           name: string
           updated_at?: string
@@ -92,9 +89,9 @@ export type Database = {
           website_url?: string | null
         }
         Update: {
+          brand_id?: string
           created_at?: string
           description?: string | null
-          id?: string
           industry?: string | null
           name?: string
           updated_at?: string
@@ -255,7 +252,6 @@ export type Database = {
       target_audience_profiles: {
         Row: {
           brand_id: string
-          buying_behavior: string | null
           communication_style: string | null
           content_preferences: string[] | null
           created_at: string
@@ -266,14 +262,10 @@ export type Database = {
           pain_points: string[] | null
           preferred_platforms: string[] | null
           psychographics: Json | null
-          target_audience_input: string | null
           updated_at: string
-          user_id: string | null
-          webhook_url: string | null
         }
         Insert: {
           brand_id: string
-          buying_behavior?: string | null
           communication_style?: string | null
           content_preferences?: string[] | null
           created_at?: string
@@ -284,14 +276,10 @@ export type Database = {
           pain_points?: string[] | null
           preferred_platforms?: string[] | null
           psychographics?: Json | null
-          target_audience_input?: string | null
           updated_at?: string
-          user_id?: string | null
-          webhook_url?: string | null
         }
         Update: {
           brand_id?: string
-          buying_behavior?: string | null
           communication_style?: string | null
           content_preferences?: string[] | null
           created_at?: string
@@ -302,10 +290,7 @@ export type Database = {
           pain_points?: string[] | null
           preferred_platforms?: string[] | null
           psychographics?: Json | null
-          target_audience_input?: string | null
           updated_at?: string
-          user_id?: string | null
-          webhook_url?: string | null
         }
         Relationships: [
           {
@@ -313,7 +298,7 @@ export type Database = {
             columns: ["brand_id"]
             isOneToOne: false
             referencedRelation: "brands"
-            referencedColumns: ["id"]
+            referencedColumns: ["brand_id"]
           },
         ]
       }
