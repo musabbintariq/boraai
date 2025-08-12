@@ -7,15 +7,24 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  console.log('Script generation function started');
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { idea, userId } = await req.json();
-    console.log('Generating script for idea:', idea);
+    const body = await req.json();
+    console.log('Request body received:', body);
+    
+    const { idea, userId } = body;
+    console.log('Generating script for idea:', idea?.title);
     console.log('User ID:', userId);
+
+    if (!idea || !userId) {
+      throw new Error('Missing required parameters: idea or userId');
+    }
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -48,13 +57,13 @@ serve(async (req) => {
       user_id: userId,
       title: `${idea.title} - Script`,
       script: selectedTemplate,
-      duration: Math.floor(Math.random() * 300) + 60, // Random duration between 1-5 minutes
-      platform: idea.platform,
+      duration: `${Math.floor(Math.random() * 300) + 60}s`,
+      platform: idea.platform || 'general',
       tags: idea.tags || [],
-      brand_id: idea.brand_id
+      brand_id: idea.brand_id || null
     };
 
-    console.log('Inserting script:', scriptData);
+    console.log('Inserting script data:', scriptData);
 
     // Insert script into database
     const { data: script, error } = await supabase

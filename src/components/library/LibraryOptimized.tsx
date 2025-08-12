@@ -85,10 +85,10 @@ export function LibraryOptimized() {
       }
 
       if (data && data.success) {
-        console.log('Script generated successfully');
+        console.log('Script generated successfully:', data.script);
         toast({
           title: "Script generated!",
-          description: "Your script has been created and saved."
+          description: `Script "${data.script.title}" has been created and saved. Check the Scripts section!`
         });
       } else {
         console.error('Script generation failed:', data);
