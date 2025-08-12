@@ -44,6 +44,8 @@ export function LibraryOptimized() {
     }
     
     console.log('Starting script generation for idea:', idea);
+    console.log('User ID:', user.id);
+    console.log('Idea brand_id:', idea.brand_id);
     
     toast({ 
       title: "Generating script...", 
@@ -51,6 +53,7 @@ export function LibraryOptimized() {
     });
 
     try {
+      console.log('About to call supabase.functions.invoke');
       const { data, error } = await supabase.functions.invoke('generate-script', {
         body: {
           idea: {
@@ -64,15 +67,23 @@ export function LibraryOptimized() {
         }
       });
 
-      if (error) throw error;
+      console.log('Function response data:', data);
+      console.log('Function response error:', error);
 
-      if (data.success) {
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
+
+      if (data && data.success) {
+        console.log('Script generated successfully');
         toast({
           title: "Script generated!",
           description: "Your script has been created and saved."
         });
       } else {
-        throw new Error(data.error || 'Failed to generate script');
+        console.error('Script generation failed:', data);
+        throw new Error(data?.error || 'Failed to generate script');
       }
     } catch (error) {
       console.error('Error generating script:', error);
