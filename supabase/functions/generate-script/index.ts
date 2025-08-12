@@ -1,10 +1,10 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+};
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -13,101 +13,77 @@ serve(async (req) => {
   }
 
   try {
-    const { idea, userId } = await req.json()
-    
-    console.log('Request payload:', { idea, userId })
-    
-    console.log('Generating script for idea:', idea.title)
-    
+    const { idea, userId } = await req.json();
+    console.log('Generating script for idea:', idea);
+    console.log('User ID:', userId);
+
     // Initialize Supabase client
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Generate a random script for demonstration (replace with n8n webhook when ready)
-    // const n8nWebhookUrl = Deno.env.get('N8N_SCRIPT_GENERATION_WEBHOOK_URL')
-    const scriptTemplates = [
-      "Hook: Did you know that {topic}? Let me share why this matters to you...\n\nProblem: Many people struggle with {challenge}.\n\nSolution: Here's what actually works: {solution}\n\nCall to Action: Try this today and let me know how it goes!",
-      "Start with a question: What if I told you {topic}?\n\nShare the story: {backstory}\n\nReveal the insight: The key is {insight}\n\nEnd with impact: This changed everything for me, and it can for you too.",
-      "Bold statement: {topic} is not what you think it is.\n\nExplain why: Here's the truth most people miss: {truth}\n\nProvide value: Instead, do this: {actionable_tip}\n\nEngage: What's your experience with this?",
-      "Personal story: Last week, {personal_experience}\n\nLesson learned: This taught me {lesson}\n\nHow to apply: You can use this by {application}\n\nQuestion: Have you experienced something similar?"
-    ];
-
-    const randomTemplate = scriptTemplates[Math.floor(Math.random() * scriptTemplates.length)];
-    
-    // Replace placeholders with content from the idea
-    const generatedScript = randomTemplate
-      .replace(/{topic}/g, idea.title)
-      .replace(/{challenge}/g, `understanding ${idea.platform} content`)
-      .replace(/{solution}/g, idea.content.substring(0, 100) + "...")
-      .replace(/{backstory}/g, `I was working on ${idea.platform} content`)
-      .replace(/{insight}/g, idea.content.substring(0, 80) + "...")
-      .replace(/{truth}/g, `${idea.platform} success requires authenticity`)
-      .replace(/{actionable_tip}/g, idea.content.substring(0, 120) + "...")
-      .replace(/{personal_experience}/g, `I discovered something about ${idea.title.toLowerCase()}`)
-      .replace(/{lesson}/g, idea.content.substring(0, 90) + "...")
-      .replace(/{application}/g, `focusing on ${idea.platform} best practices`);
-
-    const scriptData = {
-      script: generatedScript,
-      duration: ['30s', '60s', '90s', '2min'][Math.floor(Math.random() * 4)],
-      content: generatedScript
+    // Generate script templates based on platform
+    const templates = {
+      instagram: [
+        `🎬 ${idea.title}\n\n${idea.content}\n\n📱 Perfect for Instagram posts and stories!\n\n#content #instagram #${idea.tags?.[0] || 'social'}`,
+        `✨ ${idea.title}\n\nHere's what you need to know:\n${idea.content}\n\nWhat do you think? Let me know in the comments! 👇\n\n#${idea.tags?.join(' #') || 'content'}`,
+        `💡 ${idea.title}\n\n${idea.content}\n\nSave this post for later! 🔖\n\n#contentcreator #tips #${idea.tags?.[0] || 'inspiration'}`
+      ],
+      youtube: [
+        `${idea.title}\n\nINTRO:\nHey everyone! Today I want to talk about ${idea.content.toLowerCase()}\n\nMAIN CONTENT:\n[Expand on: ${idea.content}]\n\nCONCLUSION:\nThat's a wrap! Don't forget to like and subscribe for more content like this!\n\nTAGS: ${idea.tags?.join(', ') || 'content, youtube'}`,
+        `${idea.title} - Full Script\n\nHOOK: ${idea.content}\n\nSTORY/EXPLANATION:\n[Elaborate on the main points]\n\nCALL TO ACTION:\nWhat's your experience with this? Comment below!\n\n#${idea.tags?.join(' #') || 'youtube #content'}`
+      ],
+      default: [
+        `${idea.title}\n\n${idea.content}\n\nKey takeaways:\n- [Point 1]\n- [Point 2]\n- [Point 3]\n\n#${idea.tags?.join(' #') || 'content'}`,
+        `${idea.title}\n\n${idea.content}\n\nWhat's your opinion on this? Share your thoughts!\n\n${idea.tags?.map(tag => `#${tag}`).join(' ') || '#content #social'}`
+      ]
     };
 
-    console.log('Generated random script:', scriptData);
+    // Select appropriate template
+    const platformTemplates = templates[idea.platform as keyof typeof templates] || templates.default;
+    const selectedTemplate = platformTemplates[Math.floor(Math.random() * platformTemplates.length)];
 
-    // Save the generated script to database
-    const { data: savedScript, error } = await supabase
+    // Create script data
+    const scriptData = {
+      user_id: userId,
+      title: `${idea.title} - Script`,
+      script: selectedTemplate,
+      duration: Math.floor(Math.random() * 300) + 60, // Random duration between 1-5 minutes
+      platform: idea.platform,
+      tags: idea.tags || [],
+      brand_id: idea.brand_id
+    };
+
+    console.log('Inserting script:', scriptData);
+
+    // Insert script into database
+    const { data: script, error } = await supabase
       .from('scripts')
-      .insert({
-        user_id: userId,
-        title: `Script: ${idea.title}`,
-        script: scriptData.script || scriptData.content,
-        platform: idea.platform,
-        duration: scriptData.duration || '60s',
-        tags: [...(idea.tags || []), 'generated'],
-        brand_id: idea.brand_id || null
-      })
+      .insert(scriptData)
       .select()
-      .single()
+      .single();
 
     if (error) {
-      console.error('Error saving script:', error)
-      throw error
+      console.error('Database error:', error);
+      throw error;
     }
 
-    console.log('Script saved successfully:', savedScript.id)
+    console.log('Script created successfully:', script);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        script: savedScript,
-        message: 'Script generated and saved successfully'
-      }),
-      { 
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json' 
-        } 
-      }
-    )
-
+      JSON.stringify({ success: true, script }),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      },
+    );
   } catch (error) {
-    console.error('Error in generate-script function:', error)
-    
+    console.error('Error in generate-script function:', error);
     return new Response(
-      JSON.stringify({ 
-        success: false, 
-        error: error.message 
-      }),
-      { 
+      JSON.stringify({ success: false, error: error.message }),
+      {
         status: 500,
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'application/json' 
-        } 
-      }
-    )
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      },
+    );
   }
-})
+});
