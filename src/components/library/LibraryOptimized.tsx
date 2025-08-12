@@ -38,21 +38,30 @@ export function LibraryOptimized() {
 
   const handleScriptIt = async (idea: any) => {
     console.log('Scripting idea:', idea.title);
-    if (!user) {
-      console.log('No user found, aborting script generation');
-      return;
-    }
     
-    console.log('Starting script generation for idea:', idea);
-    console.log('User ID:', user.id);
-    console.log('Idea brand_id:', idea.brand_id);
-    
-    toast({ 
-      title: "Generating script...", 
-      description: `Creating script for: ${idea.title}` 
-    });
-
     try {
+      console.log('User object:', user);
+      console.log('Full idea object:', idea);
+      
+      if (!user) {
+        console.log('No user found, showing auth error');
+        toast({
+          title: "Authentication required",
+          description: "Please log in to generate scripts.",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      console.log('Starting script generation for idea:', idea);
+      console.log('User ID:', user.id);
+      console.log('Idea brand_id:', idea.brand_id);
+      
+      toast({ 
+        title: "Generating script...", 
+        description: `Creating script for: ${idea.title}` 
+      });
+
       console.log('About to call supabase.functions.invoke');
       const { data, error } = await supabase.functions.invoke('generate-script', {
         body: {
