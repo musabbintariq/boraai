@@ -37,65 +37,43 @@ export function LibraryOptimized() {
   };
 
   const handleScriptIt = async (idea: any) => {
-    console.log('Scripting idea:', idea.title);
-    
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to generate scripts.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     try {
-      console.log('User object:', user);
-      console.log('Full idea object:', idea);
-      
-      if (!user) {
-        console.log('No user found, showing auth error');
-        toast({
-          title: "Authentication required",
-          description: "Please log in to generate scripts.",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      console.log('Starting script generation for idea:', idea);
-      console.log('User ID:', user.id);
-      console.log('Idea brand_id:', idea.brand_id);
-      
       toast({ 
         title: "Generating script...", 
         description: `Creating script for: ${idea.title}` 
       });
 
-      console.log('About to call supabase.functions.invoke');
-      const { data, error } = await supabase.functions.invoke('generate-script', {
+      // Simple direct call to generate-script function
+      const response = await supabase.functions.invoke('generate-script', {
         body: {
-          idea: {
-            title: idea.title,
-            content: idea.content,
-            platform: idea.platform,
-            tags: idea.tags,
-            brand_id: idea.brand_id
-          },
+          idea: idea,
           userId: user.id
         }
       });
 
-      console.log('Function response data:', data);
-      console.log('Function response error:', error);
-
-      if (error) {
-        console.error('Supabase function error:', error);
-        throw error;
+      if (response.error) {
+        throw new Error(response.error.message || 'Failed to generate script');
       }
 
-      if (data && data.success) {
-        console.log('Script generated successfully:', data.script);
+      if (response.data?.success) {
         toast({
           title: "Script generated!",
-          description: `Script "${data.script.title}" has been created and saved. Check the Scripts section!`
+          description: `Script "${response.data.script.title}" has been created successfully!`
         });
       } else {
-        console.error('Script generation failed:', data);
-        throw new Error(data?.error || 'Failed to generate script');
+        throw new Error('Script generation failed');
       }
     } catch (error) {
-      console.error('Error generating script:', error);
+      console.error('Script generation error:', error);
       toast({
         title: "Error",
         description: "Failed to generate script. Please try again.",
