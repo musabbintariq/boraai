@@ -113,7 +113,7 @@ export const GenerateIdeasDialog = ({
             <Label htmlFor="competitorsSocialLinks">What's your goal with the post</Label>
             <Textarea
               id="competitorsSocialLinks"
-              placeholder="Enter competitor social media links (one per line)"
+              placeholder="e.g., promote a product, get more comments, build trust."
               value={formData.competitorsSocialLinks}
               onChange={(e) => setFormData(prev => ({ ...prev, competitorsSocialLinks: e.target.value }))}
               className="min-h-[60px]"
