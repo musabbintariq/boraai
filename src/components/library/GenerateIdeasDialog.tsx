@@ -89,7 +89,7 @@ export const GenerateIdeasDialog = ({
       };
 
       // Replace with your actual n8n webhook URL
-      const webhookUrl = "YOUR_N8N_WEBHOOK_URL_HERE";
+      const webhookUrl = "https://n8n.srv878539.hstgr.cloud/webhook-test/f4c3bee0-ffc9-4ed1-ab2f-bdd1d12035df";
       
       const response = await fetch(webhookUrl, {
         method: 'POST',
