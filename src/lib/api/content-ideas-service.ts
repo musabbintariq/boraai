@@ -43,8 +43,11 @@ export class ContentIdeasService {
       .select("*")
       .order("created_at", { ascending: false });
 
+    // Always filter by brand_id - either specific brand or null for no brand
     if (this.activeBrandId) {
       query = query.eq("brand_id", this.activeBrandId);
+    } else {
+      query = query.is("brand_id", null);
     }
 
     const { data, error } = await query;
