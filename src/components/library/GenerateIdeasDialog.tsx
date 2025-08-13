@@ -100,10 +100,10 @@ export const GenerateIdeasDialog = ({
         <form onSubmit={handleSubmit} className="space-y-4 py-2">
 
           <div className="space-y-2">
-            <Label htmlFor="topic">Any topic in mind</Label>
+            <Label htmlFor="topic">What's your goal with this post?</Label>
             <Input
               id="topic"
-              placeholder="any concept or idea in mind"
+              placeholder="e.g., increase brand awareness, drive sales, educate audience"
               value={formData.topic || ""}
               onChange={(e) => setFormData(prev => ({ ...prev, topic: e.target.value }))}
             />
