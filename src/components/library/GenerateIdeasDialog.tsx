@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
 import { useBrands } from "@/hooks/useBrands";
+import { useBrandContext } from "@/contexts/BrandContext";
 
 interface GenerateIdeasDialogProps {
   isOpen: boolean;
@@ -29,12 +30,13 @@ export const GenerateIdeasDialog = ({
   onOpenChange,
   selectedBrandId 
 }: GenerateIdeasDialogProps) => {
+  const { activeBrandId } = useBrandContext();
   const [formData, setFormData] = useState<GenerateFormData>({
     topic: "",
     competitorsSocialLinks: "",
     platforms: "",
     format: "",
-    brandId: selectedBrandId || null,
+    brandId: activeBrandId,
   });
   const { saveGeneratedIdea } = useGeneratedIdeas();
   const { brands } = useBrands();
@@ -106,7 +108,7 @@ export const GenerateIdeasDialog = ({
       competitorsSocialLinks: "",
       platforms: "",
       format: "",
-      brandId: selectedBrandId || null,
+      brandId: activeBrandId,
     });
   };
 
