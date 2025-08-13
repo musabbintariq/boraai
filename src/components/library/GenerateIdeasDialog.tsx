@@ -128,7 +128,7 @@ export const GenerateIdeasDialog = ({
           </div>
 
           <div className="space-y-2">
-            <Label>Platforms to Target</Label>
+            <Label>Platforms to Target *</Label>
             <Select value={formData.platforms} onValueChange={handlePlatformChange}>
               <SelectTrigger className="w-full bg-background">
                 <SelectValue placeholder="Select platform(s)" />
@@ -142,7 +142,7 @@ export const GenerateIdeasDialog = ({
           </div>
 
           <div className="space-y-2">
-            <Label>Post Format</Label>
+            <Label>Post Format *</Label>
             <Select value={formData.format} onValueChange={handleFormatChange}>
               <SelectTrigger className="w-full bg-background">
                 <SelectValue placeholder="Select post format" />
