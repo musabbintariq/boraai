@@ -24,6 +24,7 @@ export interface ScriptCreateData {
   duration?: string;
   platform: string;
   tags: string[];
+  brand_id?: string;
 }
 
 export interface ScriptUpdateData {
@@ -32,6 +33,7 @@ export interface ScriptUpdateData {
   duration?: string;
   platform?: string;
   tags?: string[];
+  brand_id?: string;
 }
 
 export const useScriptsOptimized = () => {
