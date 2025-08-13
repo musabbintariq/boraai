@@ -39,6 +39,25 @@ export const GenerateIdeasDialog = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate required fields
+    if (!formData.platforms) {
+      toast({
+        title: "Platform required",
+        description: "Please select a platform to target.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!formData.format) {
+      toast({
+        title: "Post format required", 
+        description: "Please select a post format.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     // Mock generation - in real app this would call an AI service
     const mockIdeas = [
       {
