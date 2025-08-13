@@ -110,7 +110,7 @@ export const GenerateIdeasDialog = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="competitorsSocialLinks">Competitors' Social Links</Label>
+            <Label htmlFor="competitorsSocialLinks">What's your goal with the post</Label>
             <Textarea
               id="competitorsSocialLinks"
               placeholder="Enter competitor social media links (one per line)"
