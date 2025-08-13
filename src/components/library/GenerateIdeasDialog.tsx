@@ -103,7 +103,7 @@ export const GenerateIdeasDialog = ({
             <Label htmlFor="topic">Any topic in mind</Label>
             <Input
               id="topic"
-              placeholder="e.g., Summer fashion, AI trends, Healthy recipes"
+              placeholder="any concept or idea in mind"
               value={formData.topic || ""}
               onChange={(e) => setFormData(prev => ({ ...prev, topic: e.target.value }))}
             />
