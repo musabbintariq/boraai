@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
 import { useBrands } from "@/hooks/useBrands";
 import { useBrandContext } from "@/contexts/BrandContext";
+import { useAuth } from "@/hooks/useAuth";
 
 interface GenerateIdeasDialogProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ export const GenerateIdeasDialog = ({
   selectedBrandId 
 }: GenerateIdeasDialogProps) => {
   const { activeBrandId } = useBrandContext();
+  const { user } = useAuth();
   const [formData, setFormData] = useState<GenerateFormData>({
     topic: "",
     competitorsSocialLinks: "",
@@ -63,53 +65,66 @@ export const GenerateIdeasDialog = ({
       });
       return;
     }
-    
-    // Mock generation - in real app this would call an AI service
-    const mockIdeas = [
-      {
-        title: "Behind the Scenes Content",
-        content: `Show your audience what goes on behind the scenes of your business. People love authentic content that gives them a peek into your process.`,
-        platform: formData.platforms,
-        tags: ["behind-the-scenes", "authentic", "process"],
-        generation_context: { ...formData, timestamp: new Date().toISOString() },
-        brandId: formData.brandId || undefined
-      },
-      {
-        title: "Industry Tips & Tricks",
-        content: `Share valuable tips and tricks${formData.topic ? ` about ${formData.topic}` : ''}. Position yourself as an expert while providing genuine value to your audience.`,
-        platform: formData.platforms,
-        tags: ["tips", "expert", "value"],
-        generation_context: { ...formData, timestamp: new Date().toISOString() },
-        brandId: formData.brandId || undefined
-      },
-      {
-        title: "Customer Success Story",
-        content: `Feature a customer success story showing how your products or services made a difference. Social proof is powerful content.`,
-        platform: formData.platforms,
-        tags: ["testimonial", "success-story", "social-proof"],
-        generation_context: { ...formData, timestamp: new Date().toISOString() },
-        brandId: formData.brandId || undefined
-      }
-    ];
 
-    // Save generated ideas to the database
-    for (const idea of mockIdeas) {
-      await saveGeneratedIdea(idea);
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to generate content ideas.",
+        variant: "destructive"
+      });
+      return;
     }
 
-    toast({
-      title: "Ideas generated!",
-      description: `${mockIdeas.length} content ideas are ready for your review.`
-    });
-    
-    onOpenChange(false);
-    setFormData({
-      topic: "",
-      competitorsSocialLinks: "",
-      platforms: "",
-      format: "",
-      brandId: activeBrandId,
-    });
+    // Send data to n8n webhook
+    try {
+      const webhookPayload = {
+        userId: user.id,
+        brandId: formData.brandId,
+        formData: {
+          topic: formData.topic || "",
+          goal: formData.competitorsSocialLinks,
+          platforms: [formData.platforms],
+          format: formData.format
+        }
+      };
+
+      // Replace with your actual n8n webhook URL
+      const webhookUrl = "YOUR_N8N_WEBHOOK_URL_HERE";
+      
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookPayload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Webhook call failed');
+      }
+
+      toast({
+        title: "Content generation started!",
+        description: "Your content ideas are being generated and will appear shortly."
+      });
+      
+      onOpenChange(false);
+      setFormData({
+        topic: "",
+        competitorsSocialLinks: "",
+        platforms: "",
+        format: "",
+        brandId: activeBrandId,
+      });
+
+    } catch (error) {
+      console.error('Webhook error:', error);
+      toast({
+        title: "Generation failed",
+        description: "There was an error generating content ideas. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handlePlatformChange = (value: string) => {
