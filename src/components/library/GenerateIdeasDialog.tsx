@@ -34,7 +34,7 @@ export const GenerateIdeasDialog = ({
     competitorsSocialLinks: "",
     platforms: "",
     format: "",
-    brandId: selectedBrandId,
+    brandId: selectedBrandId || null,
   });
   const { saveGeneratedIdea } = useGeneratedIdeas();
   const { brands } = useBrands();
@@ -106,7 +106,7 @@ export const GenerateIdeasDialog = ({
       competitorsSocialLinks: "",
       platforms: "",
       format: "",
-      brandId: selectedBrandId,
+      brandId: selectedBrandId || null,
     });
   };
 
