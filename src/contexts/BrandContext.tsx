@@ -1,39 +1,39 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface BrandContextType {
-  selectedBrandId: string | null;
-  setSelectedBrandId: (brandId: string | null) => void;
+  activeBrandId: string | null;
+  setActiveBrandId: (brandId: string | null) => void;
   autoSelectBrand: (brands: any[]) => void;
 }
 
 const BrandContext = createContext<BrandContextType | undefined>(undefined);
 
 export const BrandProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null);
+  const [activeBrandId, setActiveBrandId] = useState<string | null>(null);
 
-  const handleSetSelectedBrandId = (brandId: string | null) => {
-    setSelectedBrandId(brandId);
+  const handleSetActiveBrandId = (brandId: string | null) => {
+    setActiveBrandId(brandId);
     if (brandId) {
-      localStorage.setItem('lastSelectedBrandId', brandId);
+      localStorage.setItem('activeBrandId', brandId);
     } else {
-      localStorage.removeItem('lastSelectedBrandId');
+      localStorage.removeItem('activeBrandId');
     }
   };
 
   const autoSelectBrand = (brands: any[]) => {
-    if (!selectedBrandId && brands.length > 0) {
-      const lastUsedBrandId = localStorage.getItem('lastSelectedBrandId');
+    if (!activeBrandId && brands.length > 0) {
+      const lastUsedBrandId = localStorage.getItem('activeBrandId');
       const brandToSelect = lastUsedBrandId && brands.find(b => b.brand_id === lastUsedBrandId) 
         ? lastUsedBrandId 
         : brands[0].brand_id;
-      setSelectedBrandId(brandToSelect);
+      setActiveBrandId(brandToSelect);
     }
   };
 
   return (
     <BrandContext.Provider value={{ 
-      selectedBrandId, 
-      setSelectedBrandId: handleSetSelectedBrandId,
+      activeBrandId, 
+      setActiveBrandId: handleSetActiveBrandId,
       autoSelectBrand 
     }}>
       {children}

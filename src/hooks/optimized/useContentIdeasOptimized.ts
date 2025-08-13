@@ -2,37 +2,20 @@ import { useEffect } from "react";
 import { useAuth } from "../useAuth";
 import { useAsyncOperation } from "../shared/useAsyncOperation";
 import { useOptimisticUpdates } from "../shared/useOptimisticUpdates";
-import { BaseCrudService } from "@/lib/api/base-crud";
-import { formatContentIdea } from "@/lib/formatters/data-formatters";
+import { useBrandContext } from "@/contexts/BrandContext";
+import { 
+  ContentIdeasService, 
+  ContentIdea, 
+  ContentIdeaCreateData, 
+  ContentIdeaUpdateData 
+} from "@/lib/api/content-ideas-service";
 
-export interface ContentIdea {
-  id: string;
-  user_id: string;
-  title: string;
-  content: string;
-  platform: string;
-  tags: string[];
-  created_at: string;
-  updated_at: string;
-  createdAt: string; // for backward compatibility
-}
-
-export interface ContentIdeaCreateData {
-  title: string;
-  content: string;
-  platform: string;
-  tags: string[];
-}
-
-export interface ContentIdeaUpdateData {
-  title?: string;
-  content?: string;
-  platform?: string;
-  tags?: string[];
-}
+// Re-export types for backward compatibility
+export type { ContentIdea, ContentIdeaCreateData, ContentIdeaUpdateData } from "@/lib/api/content-ideas-service";
 
 export const useContentIdeasOptimized = () => {
   const { user } = useAuth();
+  const { activeBrandId } = useBrandContext();
   const { isLoading, execute } = useAsyncOperation();
   const { 
     items: ideas, 
@@ -43,11 +26,7 @@ export const useContentIdeasOptimized = () => {
     isOptimistic 
   } = useOptimisticUpdates<ContentIdea>();
 
-  const service = new BaseCrudService<ContentIdea, ContentIdeaCreateData, ContentIdeaUpdateData>(
-    "content_ideas",
-    user,
-    formatContentIdea
-  );
+  const service = new ContentIdeasService(user, activeBrandId);
 
   const fetchIdeas = async () => {
     if (!user) {
@@ -119,7 +98,7 @@ export const useContentIdeasOptimized = () => {
 
   useEffect(() => {
     fetchIdeas();
-  }, [user]);
+  }, [user, activeBrandId]);
 
   return {
     ideas,

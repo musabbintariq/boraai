@@ -28,7 +28,7 @@ export const UserProfileHeader = () => {
   const { user, signOut } = useAuth();
   const { profile } = useUserProfile();
   const { brands } = useBrands();
-  const { selectedBrandId, setSelectedBrandId, autoSelectBrand } = useBrandContext();
+  const { activeBrandId, setActiveBrandId, autoSelectBrand } = useBrandContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export const UserProfileHeader = () => {
       </div>
       
       {brands.length > 0 && (
-        <Select value={selectedBrandId || ""} onValueChange={setSelectedBrandId}>
+        <Select value={activeBrandId || ""} onValueChange={setActiveBrandId}>
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Select a brand" />
           </SelectTrigger>

@@ -11,16 +11,13 @@ import { GenerateIdeasDialog } from "./GenerateIdeasDialog";
 import { useContentIdeasOptimized } from "@/hooks/optimized/useContentIdeasOptimized";
 import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
 import { useScriptsOptimized } from "@/hooks/optimized/useScriptsOptimized";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useBrandContext } from "@/contexts/BrandContext";
 
 export function LibraryOptimized() {
   const { ideas, loading, updateIdea, removeIdea } = useContentIdeasOptimized();
   const { pendingIdeas } = useGeneratedIdeas();
   const { addScript } = useScriptsOptimized();
   const { user } = useAuth();
-  const { selectedBrandId } = useBrandContext();
   const [editingIdea, setEditingIdea] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
@@ -73,11 +70,9 @@ Key points:
 #${idea.tags?.join(' #') || 'content'}`,
         duration: '120s',
         platform: idea.platform || 'general',
-        tags: idea.tags || [],
-        brand_id: idea.brand_id || selectedBrandId || null
+        tags: idea.tags || []
       };
 
-      console.log("Creating script with data:", scriptData);
       await addScript(scriptData);
 
       toast({

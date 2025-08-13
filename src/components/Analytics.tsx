@@ -69,7 +69,7 @@ const engagementData = [{
 export function Dashboard() {
   const { profile } = useUserProfile();
   const { brands } = useBrands();
-  const { selectedBrandId, setSelectedBrandId } = useBrandContext();
+  const { activeBrandId, setActiveBrandId } = useBrandContext();
   const statsData = [{
     title: "Total Followers",
     value: "2,100",
@@ -106,7 +106,7 @@ export function Dashboard() {
                   </p>
                 </div>
                 {brands.length > 0 && (
-                  <Select value={selectedBrandId || ""} onValueChange={setSelectedBrandId}>
+                  <Select value={activeBrandId || ""} onValueChange={setActiveBrandId}>
                     <SelectTrigger className="w-[200px]">
                       <SelectValue placeholder="Select a brand" />
                     </SelectTrigger>

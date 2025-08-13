@@ -2,42 +2,20 @@ import { useEffect } from "react";
 import { useAuth } from "../useAuth";
 import { useAsyncOperation } from "../shared/useAsyncOperation";
 import { useOptimisticUpdates } from "../shared/useOptimisticUpdates";
-import { BaseCrudService } from "@/lib/api/base-crud";
-import { formatScript } from "@/lib/formatters/data-formatters";
+import { useBrandContext } from "@/contexts/BrandContext";
+import { 
+  ScriptsService, 
+  Script, 
+  ScriptCreateData, 
+  ScriptUpdateData 
+} from "@/lib/api/scripts-service";
 
-export interface Script {
-  id: string;
-  user_id: string;
-  title: string;
-  script: string;
-  duration?: string;
-  platform: string;
-  tags: string[];
-  created_at: string;
-  updated_at: string;
-  createdAt: string; // for backward compatibility
-}
-
-export interface ScriptCreateData {
-  title: string;
-  script: string;
-  duration?: string;
-  platform: string;
-  tags: string[];
-  brand_id?: string;
-}
-
-export interface ScriptUpdateData {
-  title?: string;
-  script?: string;
-  duration?: string;
-  platform?: string;
-  tags?: string[];
-  brand_id?: string;
-}
+// Re-export types for backward compatibility
+export type { Script, ScriptCreateData, ScriptUpdateData } from "@/lib/api/scripts-service";
 
 export const useScriptsOptimized = () => {
   const { user } = useAuth();
+  const { activeBrandId } = useBrandContext();
   const { isLoading, execute } = useAsyncOperation();
   const { 
     items: scripts, 
@@ -48,11 +26,7 @@ export const useScriptsOptimized = () => {
     isOptimistic 
   } = useOptimisticUpdates<Script>();
 
-  const service = new BaseCrudService<Script, ScriptCreateData, ScriptUpdateData>(
-    "scripts",
-    user,
-    formatScript
-  );
+  const service = new ScriptsService(user, activeBrandId);
 
   const fetchScripts = async () => {
     if (!user) {
@@ -124,7 +98,7 @@ export const useScriptsOptimized = () => {
 
   useEffect(() => {
     fetchScripts();
-  }, [user]);
+  }, [user, activeBrandId]);
 
   return {
     scripts,

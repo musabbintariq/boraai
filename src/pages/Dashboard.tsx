@@ -10,14 +10,14 @@ import { Scripts } from "@/components/Scripts";
 
 const DashboardContent = () => {
   const [activeView, setActiveView] = useState<"dashboard" | "library" | "scripts" | "brands">("dashboard");
-  const { selectedBrandId } = useBrandContext();
+  const { activeBrandId } = useBrandContext();
 
   const renderContent = () => {
     switch(activeView) {
       case "dashboard": return <DashboardComponent />;
       case "brands": return <BrandsList />;
-      case "library": return <Library selectedBrandId={selectedBrandId} />;
-      case "scripts": return <Scripts selectedBrandId={selectedBrandId} />;
+      case "library": return <LibraryOptimized />;
+      case "scripts": return <ScriptsOptimized />;
     }
   };
 
