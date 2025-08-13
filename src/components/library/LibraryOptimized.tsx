@@ -47,31 +47,39 @@ export function LibraryOptimized() {
     }
 
     try {
+      console.log("Scripting idea:", idea.title);
+      
       toast({ 
         title: "Generating script...", 
         description: `Creating script for: ${idea.title}` 
       });
 
-      // Simple direct call to generate-script function
-      const response = await supabase.functions.invoke('generate-script', {
-        body: {
-          idea: idea,
-          userId: user.id
-        }
+      // Create script directly using addScript
+      const scriptData = {
+        title: `${idea.title} - Script`,
+        script: `🎬 ${idea.title}
+
+${idea.content}
+
+📝 Perfect for ${idea.platform} content!
+
+Key points:
+• Engaging hook: "${idea.title}"
+• Main message: ${idea.content}
+• Call to action: What's your experience with this?
+
+#${idea.tags?.join(' #') || 'content'}`,
+        duration: '120s',
+        platform: idea.platform || 'general',
+        tags: idea.tags || []
+      };
+
+      await addScript(scriptData);
+
+      toast({
+        title: "Script generated!",
+        description: `Script "${scriptData.title}" has been created successfully!`
       });
-
-      if (response.error) {
-        throw new Error(response.error.message || 'Failed to generate script');
-      }
-
-      if (response.data?.success) {
-        toast({
-          title: "Script generated!",
-          description: `Script "${response.data.script.title}" has been created successfully!`
-        });
-      } else {
-        throw new Error('Script generation failed');
-      }
     } catch (error) {
       console.error('Script generation error:', error);
       toast({
