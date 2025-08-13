@@ -19,6 +19,7 @@ interface GenerateFormData {
   topic?: string;
   competitorsSocialLinks: string;
   platforms: string;
+  format: string;
 }
 
 export const GenerateIdeasDialog = ({ 
@@ -30,6 +31,7 @@ export const GenerateIdeasDialog = ({
     topic: "",
     competitorsSocialLinks: "",
     platforms: "",
+    format: "",
   });
   const { saveGeneratedIdea } = useGeneratedIdeas();
   const { toast } = useToast();
@@ -80,11 +82,16 @@ export const GenerateIdeasDialog = ({
       topic: "",
       competitorsSocialLinks: "",
       platforms: "",
+      format: "",
     });
   };
 
   const handlePlatformChange = (value: string) => {
     setFormData(prev => ({ ...prev, platforms: value }));
+  };
+
+  const handleFormatChange = (value: string) => {
+    setFormData(prev => ({ ...prev, format: value }));
   };
 
   return (
@@ -130,6 +137,21 @@ export const GenerateIdeasDialog = ({
                 <SelectItem value="instagram">Instagram</SelectItem>
                 <SelectItem value="linkedin">LinkedIn</SelectItem>
                 <SelectItem value="youtube">YouTube</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Post Format</Label>
+            <Select value={formData.format} onValueChange={handleFormatChange}>
+              <SelectTrigger className="w-full bg-background">
+                <SelectValue placeholder="Select post format" />
+              </SelectTrigger>
+              <SelectContent className="bg-background border-border z-50">
+                <SelectItem value="reel">Reel</SelectItem>
+                <SelectItem value="single-page-static">Single Page Static</SelectItem>
+                <SelectItem value="carousel">Carousel</SelectItem>
+                <SelectItem value="plain-text">Plain Text Post</SelectItem>
               </SelectContent>
             </Select>
           </div>
