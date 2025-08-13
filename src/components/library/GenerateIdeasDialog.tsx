@@ -8,37 +8,45 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
+import { useBrands } from "@/hooks/useBrands";
+import { useBrandContext } from "@/contexts/BrandContext";
+import { useAuth } from "@/hooks/useAuth";
+
 interface GenerateIdeasDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   selectedBrandId?: string | null;
 }
+
 interface GenerateFormData {
   topic?: string;
   competitorsSocialLinks: string;
   platforms: string;
   format: string;
+  brandId?: string | null;
 }
-export const GenerateIdeasDialog = ({
-  isOpen,
+
+export const GenerateIdeasDialog = ({ 
+  isOpen, 
   onOpenChange,
-  selectedBrandId
+  selectedBrandId 
 }: GenerateIdeasDialogProps) => {
+  const { activeBrandId } = useBrandContext();
+  const { user } = useAuth();
   const [formData, setFormData] = useState<GenerateFormData>({
     topic: "",
     competitorsSocialLinks: "",
     platforms: "",
-    format: ""
+    format: "",
+    brandId: activeBrandId,
   });
-  const {
-    saveGeneratedIdea
-  } = useGeneratedIdeas();
-  const {
-    toast
-  } = useToast();
+  const { saveGeneratedIdea } = useGeneratedIdeas();
+  const { brands } = useBrands();
+  const { toast } = useToast();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     // Validate required fields
     if (!formData.platforms) {
       toast({
@@ -48,77 +56,91 @@ export const GenerateIdeasDialog = ({
       });
       return;
     }
+    
     if (!formData.format) {
       toast({
-        title: "Post format required",
+        title: "Post format required", 
         description: "Please select a post format.",
         variant: "destructive"
       });
       return;
     }
 
-    // Mock generation - in real app this would call an AI service
-    const mockIdeas = [{
-      title: "Behind the Scenes Content",
-      content: `Show your audience what goes on behind the scenes of your business. People love authentic content that gives them a peek into your process.`,
-      platform: formData.platforms,
-      tags: ["behind-the-scenes", "authentic", "process"],
-      generation_context: {
-        ...formData,
-        timestamp: new Date().toISOString()
-      },
-      brandId: selectedBrandId || undefined
-    }, {
-      title: "Industry Tips & Tricks",
-      content: `Share valuable tips and tricks${formData.topic ? ` about ${formData.topic}` : ''}. Position yourself as an expert while providing genuine value to your audience.`,
-      platform: formData.platforms,
-      tags: ["tips", "expert", "value"],
-      generation_context: {
-        ...formData,
-        timestamp: new Date().toISOString()
-      },
-      brandId: selectedBrandId || undefined
-    }, {
-      title: "Customer Success Story",
-      content: `Feature a customer success story showing how your products or services made a difference. Social proof is powerful content.`,
-      platform: formData.platforms,
-      tags: ["testimonial", "success-story", "social-proof"],
-      generation_context: {
-        ...formData,
-        timestamp: new Date().toISOString()
-      },
-      brandId: selectedBrandId || undefined
-    }];
-
-    // Save generated ideas to the database
-    for (const idea of mockIdeas) {
-      await saveGeneratedIdea(idea);
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to generate content ideas.",
+        variant: "destructive"
+      });
+      return;
     }
-    toast({
-      title: "Ideas generated!",
-      description: `${mockIdeas.length} content ideas are ready for your review.`
-    });
-    onOpenChange(false);
-    setFormData({
-      topic: "",
-      competitorsSocialLinks: "",
-      platforms: "",
-      format: ""
-    });
+
+    // Send data to n8n webhook
+    try {
+      const webhookPayload = {
+        userId: user.id,
+        brandId: formData.brandId,
+        formData: {
+          topic: formData.topic || "",
+          goal: formData.competitorsSocialLinks,
+          platforms: [formData.platforms],
+          format: formData.format
+        }
+      };
+
+      // Replace with your actual n8n webhook URL
+      const webhookUrl = "https://n8n.srv878539.hstgr.cloud/webhook-test/f4c3bee0-ffc9-4ed1-ab2f-bdd1d12035df";
+      
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookPayload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Webhook call failed');
+      }
+
+      toast({
+        title: "Content generation started!",
+        description: "Your content ideas are being generated and will appear shortly."
+      });
+      
+      onOpenChange(false);
+      setFormData({
+        topic: "",
+        competitorsSocialLinks: "",
+        platforms: "",
+        format: "",
+        brandId: activeBrandId,
+      });
+
+    } catch (error) {
+      console.error('Webhook error:', error);
+      toast({
+        title: "Generation failed",
+        description: "There was an error generating content ideas. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
+
   const handlePlatformChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      platforms: value
-    }));
+    setFormData(prev => ({ ...prev, platforms: value }));
   };
+
   const handleFormatChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      format: value
-    }));
+    setFormData(prev => ({ ...prev, format: value }));
   };
-  return <Dialog open={isOpen} onOpenChange={onOpenChange}>
+
+  const handleBrandChange = (value: string) => {
+    setFormData(prev => ({ ...prev, brandId: value === "none" ? null : value }));
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[450px] bg-card border-border shadow-butter-glow">
         <DialogHeader>
           <DialogTitle className="font-serif text-xl">Generate Content Ideas</DialogTitle>
@@ -128,21 +150,42 @@ export const GenerateIdeasDialog = ({
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4 py-2">
+          <div className="space-y-2">
+            <Label>Brand</Label>
+            <Select value={formData.brandId || "none"} onValueChange={handleBrandChange}>
+              <SelectTrigger className="w-full bg-background">
+                <SelectValue placeholder="Select a brand" />
+              </SelectTrigger>
+              <SelectContent className="bg-background border-border z-50">
+                <SelectItem value="none">No Brand</SelectItem>
+                {brands.map((brand) => (
+                  <SelectItem key={brand.brand_id} value={brand.brand_id}>
+                    {brand.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
           <div className="space-y-2">
             <Label htmlFor="topic">Any topic in mind</Label>
-            <Input id="topic" placeholder="Any concept or idea in mind" value={formData.topic || ""} onChange={e => setFormData(prev => ({
-            ...prev,
-            topic: e.target.value
-          }))} />
+            <Input
+              id="topic"
+              placeholder="Any concept or idea in mind"
+              value={formData.topic || ""}
+              onChange={(e) => setFormData(prev => ({ ...prev, topic: e.target.value }))}
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="competitorsSocialLinks">What's your goal with the post</Label>
-            <Textarea id="competitorsSocialLinks" placeholder="e.g., promote a product, get more comments, build trust." value={formData.competitorsSocialLinks} onChange={e => setFormData(prev => ({
-            ...prev,
-            competitorsSocialLinks: e.target.value
-          }))} className="min-h-[60px]" />
+            <Textarea
+              id="competitorsSocialLinks"
+              placeholder="e.g., promote a product, get more comments, build trust."
+              value={formData.competitorsSocialLinks}
+              onChange={(e) => setFormData(prev => ({ ...prev, competitorsSocialLinks: e.target.value }))}
+              className="min-h-[60px]"
+            />
           </div>
 
           <div className="space-y-2">
@@ -168,7 +211,7 @@ export const GenerateIdeasDialog = ({
               <SelectContent className="bg-background border-border z-50">
                 <SelectItem value="reel">Reel</SelectItem>
                 <SelectItem value="single-page-static">Single Page Static</SelectItem>
-                <SelectItem value="carousel"></SelectItem>
+                <SelectItem value="carousel">Carousel</SelectItem>
                 <SelectItem value="plain-text">Plain Text Post</SelectItem>
               </SelectContent>
             </Select>
@@ -178,9 +221,15 @@ export const GenerateIdeasDialog = ({
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"></Button>
+            <Button 
+              type="submit" 
+              className="bg-[hsl(var(--butter-yellow))] text-black hover:bg-[hsl(var(--butter-yellow))]/90"
+            >
+              Generate Content
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
-    </Dialog>;
+    </Dialog>
+  );
 };
