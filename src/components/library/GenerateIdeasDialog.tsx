@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
+import { useBrands } from "@/hooks/useBrands";
 
 interface GenerateIdeasDialogProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ interface GenerateFormData {
   competitorsSocialLinks: string;
   platforms: string;
   format: string;
+  brandId?: string | null;
 }
 
 export const GenerateIdeasDialog = ({ 
@@ -32,8 +34,10 @@ export const GenerateIdeasDialog = ({
     competitorsSocialLinks: "",
     platforms: "",
     format: "",
+    brandId: selectedBrandId,
   });
   const { saveGeneratedIdea } = useGeneratedIdeas();
+  const { brands } = useBrands();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,7 +70,7 @@ export const GenerateIdeasDialog = ({
         platform: formData.platforms,
         tags: ["behind-the-scenes", "authentic", "process"],
         generation_context: { ...formData, timestamp: new Date().toISOString() },
-        brandId: selectedBrandId || undefined
+        brandId: formData.brandId || undefined
       },
       {
         title: "Industry Tips & Tricks",
@@ -74,7 +78,7 @@ export const GenerateIdeasDialog = ({
         platform: formData.platforms,
         tags: ["tips", "expert", "value"],
         generation_context: { ...formData, timestamp: new Date().toISOString() },
-        brandId: selectedBrandId || undefined
+        brandId: formData.brandId || undefined
       },
       {
         title: "Customer Success Story",
@@ -82,7 +86,7 @@ export const GenerateIdeasDialog = ({
         platform: formData.platforms,
         tags: ["testimonial", "success-story", "social-proof"],
         generation_context: { ...formData, timestamp: new Date().toISOString() },
-        brandId: selectedBrandId || undefined
+        brandId: formData.brandId || undefined
       }
     ];
 
@@ -102,6 +106,7 @@ export const GenerateIdeasDialog = ({
       competitorsSocialLinks: "",
       platforms: "",
       format: "",
+      brandId: selectedBrandId,
     });
   };
 
@@ -111,6 +116,10 @@ export const GenerateIdeasDialog = ({
 
   const handleFormatChange = (value: string) => {
     setFormData(prev => ({ ...prev, format: value }));
+  };
+
+  const handleBrandChange = (value: string) => {
+    setFormData(prev => ({ ...prev, brandId: value === "none" ? null : value }));
   };
 
   return (
@@ -124,6 +133,22 @@ export const GenerateIdeasDialog = ({
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4 py-2">
+          <div className="space-y-2">
+            <Label>Brand</Label>
+            <Select value={formData.brandId || "none"} onValueChange={handleBrandChange}>
+              <SelectTrigger className="w-full bg-background">
+                <SelectValue placeholder="Select a brand" />
+              </SelectTrigger>
+              <SelectContent className="bg-background border-border z-50">
+                <SelectItem value="none">No Brand</SelectItem>
+                {brands.map((brand) => (
+                  <SelectItem key={brand.brand_id} value={brand.brand_id}>
+                    {brand.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
           <div className="space-y-2">
             <Label htmlFor="topic">Any topic in mind</Label>
