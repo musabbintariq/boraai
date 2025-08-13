@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
+import { useBrandContext } from "@/contexts/BrandContext";
 import { toast } from "@/hooks/use-toast";
 
 export interface GeneratedIdea {
@@ -32,6 +33,7 @@ export const useGeneratedIdeas = () => {
   const [pendingIdeas, setPendingIdeas] = useState<GeneratedIdea[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { activeBrandId } = useBrandContext();
 
   const fetchGeneratedIdeas = async () => {
     if (!user) return;
@@ -145,6 +147,7 @@ export const useGeneratedIdeas = () => {
         .from('generated_ideas')
         .insert({
           user_id: user.id,
+          brand_id: activeBrandId || null, // Include current active brand
           ...ideaData,
           feedback_status: 'pending'
         })
@@ -215,7 +218,7 @@ export const useGeneratedIdeas = () => {
         .from('content_ideas')
         .insert({
           user_id: user.id,
-          brand_id: generatedIdea.brand_id || null,
+          brand_id: activeBrandId || null, // Use current active brand
           title: generatedIdea.title,
           content: generatedIdea.content,
           platform: generatedIdea.platform,

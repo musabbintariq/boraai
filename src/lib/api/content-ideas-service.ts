@@ -38,8 +38,6 @@ export class ContentIdeasService {
   async fetchAll(): Promise<ContentIdea[]> {
     if (!this.user) throw new Error("User not authenticated");
 
-    console.log("ContentIdeasService.fetchAll - activeBrandId:", this.activeBrandId);
-
     let query = supabase
       .from("content_ideas")
       .select("*")
@@ -53,7 +51,6 @@ export class ContentIdeasService {
     }
 
     const { data, error } = await query;
-    console.log("ContentIdeasService.fetchAll - query result:", data?.length, "ideas");
     if (error) throw error;
     
     return data.map(formatContentIdea);

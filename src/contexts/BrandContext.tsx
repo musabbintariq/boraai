@@ -12,7 +12,6 @@ export const BrandProvider = ({ children }: { children: ReactNode }) => {
   const [activeBrandId, setActiveBrandId] = useState<string | null>(null);
 
   const handleSetActiveBrandId = (brandId: string | null) => {
-    console.log("BrandContext: Setting activeBrandId to:", brandId);
     setActiveBrandId(brandId);
     if (brandId) {
       localStorage.setItem('activeBrandId', brandId);
@@ -22,7 +21,6 @@ export const BrandProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const autoSelectBrand = (brands: any[]) => {
-    console.log("BrandContext: autoSelectBrand called with brands:", brands.length, "current activeBrandId:", activeBrandId);
     // Don't auto-select any brand - let users manually choose
     // This prevents filtering issues with existing ideas that have brand_id: null
   };
