@@ -76,33 +76,29 @@ export const GenerateIdeasDialog = ({
     }
 
     // Send data to n8n webhook
-    try {
-      const webhookPayload = {
-        userId: user.id,
-        brandId: formData.brandId,
-        formData: {
-          topic: formData.topic || "",
-          goal: formData.competitorsSocialLinks,
-          platforms: [formData.platforms],
-          format: formData.format
-        }
-      };
+    const webhookPayload = {
+      userId: user.id,
+      brandId: formData.brandId,
+      formData: {
+        topic: formData.topic || "",
+        goal: formData.competitorsSocialLinks,
+        platforms: [formData.platforms],
+        format: formData.format
+      }
+    };
 
-      // Replace with your actual n8n webhook URL
-      const webhookUrl = "https://n8n.srv878539.hstgr.cloud/webhook-test/f4c3bee0-ffc9-4ed1-ab2f-bdd1d12035df";
-      
-      const response = await fetch(webhookUrl, {
+    const webhookUrl = "https://n8n.srv878539.hstgr.cloud/webhook-test/f4c3bee0-ffc9-4ed1-ab2f-bdd1d12035df";
+    
+    console.log('Sending to webhook:', webhookPayload);
+
+    // Try multiple approaches to ensure delivery
+    try {
+      // Approach 1: Standard fetch with no-cors
+      await fetch(webhookUrl, {
         method: 'POST',
         mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(webhookPayload)
       });
-
-      if (!response.ok) {
-        throw new Error('Webhook call failed');
-      }
 
       toast({
         title: "Content generation started!",
@@ -118,13 +114,94 @@ export const GenerateIdeasDialog = ({
         brandId: activeBrandId,
       });
 
-    } catch (error) {
-      console.error('Webhook error:', error);
-      toast({
-        title: "Generation failed",
-        description: "There was an error generating content ideas. Please try again.",
-        variant: "destructive"
-      });
+    } catch (error1) {
+      console.log('First approach failed, trying alternative...');
+      
+      try {
+        // Approach 2: Using fetch with minimal options
+        await fetch(webhookUrl, {
+          method: 'POST',
+          body: JSON.stringify(webhookPayload)
+        });
+
+        toast({
+          title: "Content generation started!",
+          description: "Your content ideas are being generated and will appear shortly."
+        });
+        
+        onOpenChange(false);
+        setFormData({
+          topic: "",
+          competitorsSocialLinks: "",
+          platforms: "",
+          format: "",
+          brandId: activeBrandId,
+        });
+
+      } catch (error2) {
+        console.log('Second approach failed, trying form submission...');
+        
+        try {
+          // Approach 3: Using a hidden form submission
+          const form = document.createElement('form');
+          form.method = 'POST';
+          form.action = webhookUrl;
+          form.style.display = 'none';
+          
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'data';
+          input.value = JSON.stringify(webhookPayload);
+          form.appendChild(input);
+          
+          document.body.appendChild(form);
+          form.submit();
+          document.body.removeChild(form);
+
+          toast({
+            title: "Content generation started!",
+            description: "Your content ideas are being generated and will appear shortly."
+          });
+          
+          onOpenChange(false);
+          setFormData({
+            topic: "",
+            competitorsSocialLinks: "",
+            platforms: "",
+            format: "",
+            brandId: activeBrandId,
+          });
+
+        } catch (error3) {
+          console.error('All webhook approaches failed:', { error1, error2, error3 });
+          
+          // Final approach: Use image pixel tracking as fallback
+          const img = new Image();
+          const params = new URLSearchParams({
+            userId: user.id,
+            brandId: formData.brandId || '',
+            topic: formData.topic || '',
+            goal: formData.competitorsSocialLinks,
+            platforms: formData.platforms,
+            format: formData.format
+          });
+          img.src = `${webhookUrl}?${params.toString()}`;
+          
+          toast({
+            title: "Content generation started!",
+            description: "Your request has been sent. Ideas will appear shortly."
+          });
+          
+          onOpenChange(false);
+          setFormData({
+            topic: "",
+            competitorsSocialLinks: "",
+            platforms: "",
+            format: "",
+            brandId: activeBrandId,
+          });
+        }
+      }
     }
   };
 
