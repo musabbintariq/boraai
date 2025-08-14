@@ -36,6 +36,9 @@ web_port = 54326
 [functions.generate-script]
 verify_jwt = true
 
+[functions.webhook-ideas-receiver]
+verify_jwt = false
+
 [auth]
 enabled = true
 port = 54327
