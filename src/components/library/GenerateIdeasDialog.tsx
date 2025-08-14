@@ -79,12 +79,12 @@ export const GenerateIdeasDialog = ({
     const webhookPayload = {
       userId: user.id,
       brandId: formData.brandId,
-      formData: {
-        topic: formData.topic || "",
-        goal: formData.competitorsSocialLinks,
-        platforms: [formData.platforms],
-        format: formData.format
-      }
+      topic: formData.topic || "",
+      goal: formData.competitorsSocialLinks,
+      platforms: [formData.platforms],
+      format: formData.format,
+      timestamp: new Date().toISOString(),
+      webhookResponseUrl: `https://vhsksvknbzpeznvsudek.supabase.co/functions/v1/webhook-ideas-receiver`
     };
 
     const webhookUrl = "https://n8n.srv878539.hstgr.cloud/webhook-test/f89f212c-22dd-4587-830c-430fe97e156f";

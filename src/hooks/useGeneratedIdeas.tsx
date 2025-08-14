@@ -271,6 +271,33 @@ export const useGeneratedIdeas = () => {
     fetchGeneratedIdeas();
   }, [user]);
 
+  // Real-time subscription for new generated ideas
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel('generated-ideas-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'generated_ideas',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('New generated idea received:', payload);
+          // Refetch ideas when new ones are added
+          fetchGeneratedIdeas();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
   return {
     generatedIdeas,
     pendingIdeas,
