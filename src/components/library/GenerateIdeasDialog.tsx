@@ -87,7 +87,7 @@ export const GenerateIdeasDialog = ({
       webhookResponseUrl: `https://vhsksvknbzpeznvsudek.supabase.co/functions/v1/webhook-ideas-receiver`
     };
 
-    const webhookUrl = "https://n8n.srv878539.hstgr.cloud/webhook/f89f212c-22dd-4587-830c-430fe97e156f";
+    const webhookUrl = "https://n8n.srv878539.hstgr.cloud/webhook-test/f89f212c-22dd-4587-830c-430fe97e156f";
     
     console.log('Sending to webhook:', webhookPayload);
 
