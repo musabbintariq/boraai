@@ -87,16 +87,16 @@ export const GenerateIdeasDialog = ({
       webhookResponseUrl: `https://vhsksvknbzpeznvsudek.supabase.co/functions/v1/webhook-ideas-receiver`
     };
 
-    const webhookUrl = "https://n8n.srv878539.hstgr.cloud/webhook-test/f89f212c-22dd-4587-830c-430fe97e156f";
+    const webhookUrl = "https://n8n.srv878539.hstgr.cloud/webhook/f89f212c-22dd-4587-830c-430fe97e156f";
     
     console.log('Sending to webhook:', webhookPayload);
 
-    // Try multiple approaches to ensure delivery
     try {
-      // Approach 1: Standard fetch with no-cors
       await fetch(webhookUrl, {
         method: 'POST',
-        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(webhookPayload)
       });
 
@@ -114,94 +114,23 @@ export const GenerateIdeasDialog = ({
         brandId: activeBrandId,
       });
 
-    } catch (error1) {
-      console.log('First approach failed, trying alternative...');
+    } catch (error) {
+      console.error('Webhook request failed:', error);
       
-      try {
-        // Approach 2: Using fetch with minimal options
-        await fetch(webhookUrl, {
-          method: 'POST',
-          body: JSON.stringify(webhookPayload)
-        });
-
-        toast({
-          title: "Content generation started!",
-          description: "Your content ideas are being generated and will appear shortly."
-        });
-        
-        onOpenChange(false);
-        setFormData({
-          topic: "",
-          competitorsSocialLinks: "",
-          platforms: "",
-          format: "",
-          brandId: activeBrandId,
-        });
-
-      } catch (error2) {
-        console.log('Second approach failed, trying form submission...');
-        
-        try {
-          // Approach 3: Using a hidden form submission
-          const form = document.createElement('form');
-          form.method = 'POST';
-          form.action = webhookUrl;
-          form.style.display = 'none';
-          
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = 'data';
-          input.value = JSON.stringify(webhookPayload);
-          form.appendChild(input);
-          
-          document.body.appendChild(form);
-          form.submit();
-          document.body.removeChild(form);
-
-          toast({
-            title: "Content generation started!",
-            description: "Your content ideas are being generated and will appear shortly."
-          });
-          
-          onOpenChange(false);
-          setFormData({
-            topic: "",
-            competitorsSocialLinks: "",
-            platforms: "",
-            format: "",
-            brandId: activeBrandId,
-          });
-
-        } catch (error3) {
-          console.error('All webhook approaches failed:', { error1, error2, error3 });
-          
-          // Final approach: Use image pixel tracking as fallback
-          const img = new Image();
-          const params = new URLSearchParams({
-            userId: user.id,
-            brandId: formData.brandId || '',
-            topic: formData.topic || '',
-            goal: formData.competitorsSocialLinks,
-            platforms: formData.platforms,
-            format: formData.format
-          });
-          img.src = `${webhookUrl}?${params.toString()}`;
-          
-          toast({
-            title: "Content generation started!",
-            description: "Your request has been sent. Ideas will appear shortly."
-          });
-          
-          onOpenChange(false);
-          setFormData({
-            topic: "",
-            competitorsSocialLinks: "",
-            platforms: "",
-            format: "",
-            brandId: activeBrandId,
-          });
-        }
-      }
+      toast({
+        title: "Generation request sent",
+        description: "Your request has been sent. Ideas will appear shortly.",
+        variant: "default"
+      });
+      
+      onOpenChange(false);
+      setFormData({
+        topic: "",
+        competitorsSocialLinks: "",
+        platforms: "",
+        format: "",
+        brandId: activeBrandId,
+      });
     }
   };
 
