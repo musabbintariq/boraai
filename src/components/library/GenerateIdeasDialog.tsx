@@ -48,6 +48,15 @@ export const GenerateIdeasDialog = ({
     e.preventDefault();
     
     // Validate required fields
+    if (!formData.brandId) {
+      toast({
+        title: "Brand required",
+        description: "Please select a brand to generate content for.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     if (!formData.platforms) {
       toast({
         title: "Platform required",
@@ -129,7 +138,7 @@ export const GenerateIdeasDialog = ({
   };
 
   const handleBrandChange = (value: string) => {
-    setFormData(prev => ({ ...prev, brandId: value === "none" ? null : value }));
+    setFormData(prev => ({ ...prev, brandId: value }));
   };
 
   return (
@@ -145,12 +154,11 @@ export const GenerateIdeasDialog = ({
         <form onSubmit={handleSubmit} className="space-y-4 py-2">
           <div className="space-y-2">
             <Label>Brand</Label>
-            <Select value={formData.brandId || "none"} onValueChange={handleBrandChange}>
+            <Select value={formData.brandId || ""} onValueChange={handleBrandChange}>
               <SelectTrigger className="w-full bg-background">
                 <SelectValue placeholder="Select a brand" />
               </SelectTrigger>
               <SelectContent className="bg-background border-border z-50">
-                <SelectItem value="none">No Brand</SelectItem>
                 {brands.map((brand) => (
                   <SelectItem key={brand.brand_id} value={brand.brand_id}>
                     {brand.name}
