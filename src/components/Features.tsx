@@ -13,18 +13,6 @@ const Features = () => {
     icon: TrendingUp,
     title: "Platform Optimization",
     description: "Content optimized for Instagram, TikTok, LinkedIn & more"
-  }, {
-    icon: Heart,
-    title: "Team Collaboration",
-    description: "Collaborate with your team and approve content workflows"
-  }, {
-    icon: Zap,
-    title: "Bulk Content Creation",
-    description: "Generate hundreds of posts in minutes"
-  }, {
-    icon: Library,
-    title: "Content Scheduling",
-    description: "Plan and schedule content across all platforms"
   }];
   return <section id="features" className="py-16 sm:py-24 lg:py-32 bg-background">
       <div className="max-w-7xl mx-auto px-6">
