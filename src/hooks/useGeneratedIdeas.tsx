@@ -160,6 +160,12 @@ export const useGeneratedIdeas = () => {
       setGeneratedIdeas(prev => [newIdea, ...prev]);
       setPendingIdeas(prev => [newIdea, ...prev]);
 
+      // Show notification for new idea
+      toast({
+        title: "New idea generated!",
+        description: `"${newIdea.title}" is ready for review`,
+      });
+
       return newIdea;
     } catch (error) {
       console.error('Error saving generated idea:', error);
@@ -287,8 +293,19 @@ export const useGeneratedIdeas = () => {
         },
         (payload) => {
           console.log('New generated idea received:', payload);
-          // Refetch ideas when new ones are added
-          fetchGeneratedIdeas();
+          const newIdea = payload.new as GeneratedIdea;
+          
+          // Add to state immediately
+          setGeneratedIdeas(prev => [newIdea, ...prev]);
+          if (newIdea.feedback_status === 'pending') {
+            setPendingIdeas(prev => [newIdea, ...prev]);
+            
+            // Show notification for new idea
+            toast({
+              title: "New idea generated!",
+              description: `"${newIdea.title}" is ready for review`,
+            });
+          }
         }
       )
       .subscribe();

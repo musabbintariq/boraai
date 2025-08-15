@@ -75,7 +75,23 @@ export const GenerateIdeasDialog = ({
       return;
     }
 
-    // Send data to n8n webhook
+    // Close dialog immediately and reset form
+    onOpenChange(false);
+    setFormData({
+      topic: "",
+      competitorsSocialLinks: "",
+      platforms: "",
+      format: "",
+      brandId: activeBrandId,
+    });
+
+    // Show immediate feedback
+    toast({
+      title: "Content generation started!",
+      description: "Your content ideas are being generated and will appear shortly."
+    });
+
+    // Send data to n8n webhook in background
     const webhookPayload = {
       userId: user.id,
       brandId: formData.brandId,
@@ -91,47 +107,17 @@ export const GenerateIdeasDialog = ({
     
     console.log('Sending to webhook:', webhookPayload);
 
-    try {
-      await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(webhookPayload)
-      });
-
-      toast({
-        title: "Content generation started!",
-        description: "Your content ideas are being generated and will appear shortly."
-      });
-      
-      onOpenChange(false);
-      setFormData({
-        topic: "",
-        competitorsSocialLinks: "",
-        platforms: "",
-        format: "",
-        brandId: activeBrandId,
-      });
-
-    } catch (error) {
+    // Send webhook request without blocking UI
+    fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(webhookPayload)
+    }).catch(error => {
       console.error('Webhook request failed:', error);
-      
-      toast({
-        title: "Generation request sent",
-        description: "Your request has been sent. Ideas will appear shortly.",
-        variant: "default"
-      });
-      
-      onOpenChange(false);
-      setFormData({
-        topic: "",
-        competitorsSocialLinks: "",
-        platforms: "",
-        format: "",
-        brandId: activeBrandId,
-      });
-    }
+      // Don't show error toast as the user has already seen success message
+    });
   };
 
   const handlePlatformChange = (value: string) => {
