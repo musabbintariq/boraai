@@ -29,12 +29,12 @@ const CTA = () => {
         </div>
         
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 sm:mb-8 leading-[0.9] tracking-wide font-serif">
-          Transform Your Content{" "}
-          <span className="block">Strategy Today</span>
+          Scale Your Agency{" "}
+          <span className="block">Operations Today</span>
         </h2>
         
         <p className="text-lg sm:text-xl text-white/80 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-          Join thousands of content creators who never run out of fresh, engaging ideas.
+          Join hundreds of social media managers and agencies who deliver exceptional results for their clients.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-6 sm:mb-8">

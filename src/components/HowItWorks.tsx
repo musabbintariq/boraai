@@ -4,18 +4,18 @@ import { ArrowRight, User, Sparkles, Heart } from "lucide-react";
 const HowItWorks = () => {
   const steps = [{
     icon: User,
-    title: "Tell Us About Your Brand",
-    description: "Share your niche, target audience, and any competitor pages for inspiration.",
+    title: "Set Up Client Brands",
+    description: "Add your clients' brands, define their voice, and set target audiences for each account.",
     color: "from-blue-500 to-purple-600"
   }, {
     icon: Sparkles,
-    title: "Get AI-Generated Ideas",
-    description: "Our AI analyzes trends and generates personalized content ideas just for you.",
+    title: "Generate Content at Scale",
+    description: "Our AI creates platform-specific content for all your clients simultaneously.",
     color: "from-purple-600 to-pink-600"
   }, {
     icon: Heart,
-    title: "Save & Organize",
-    description: "Like your favorite ideas and build your personal content library for future use.",
+    title: "Review & Schedule",
+    description: "Approve content, collaborate with your team, and schedule posts across all platforms.",
     color: "from-pink-600 to-red-500"
   }];
   return <section id="how-it-works" className="py-16 sm:py-24 lg:py-32 bg-muted/20">
@@ -25,7 +25,7 @@ const HowItWorks = () => {
             How It Works
           </h2>
           <p className="text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed text-base sm:text-lg">
-            Get from zero to viral content ideas in just three simple steps.
+            Streamline your social media management workflow in three simple steps.
           </p>
         </div>
 

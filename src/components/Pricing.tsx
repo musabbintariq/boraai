@@ -5,30 +5,33 @@ import { Check, Sparkles } from "lucide-react";
 const Pricing = () => {
   const plans = [
     {
-      name: "Free",
-      price: "$0",
-      period: "forever",
-      description: "Get started with basic content ideas",
+      name: "Starter",
+      price: "$49",
+      period: "per month",
+      description: "Perfect for freelance social media managers",
       features: [
-        "5 content ideas per month",
-        "Basic templates",
+        "Up to 3 client brands",
+        "500 posts per month",
+        "All major platforms",
+        "Basic analytics",
         "Email support"
       ],
-      buttonText: "Get Started",
+      buttonText: "Start Free Trial",
       buttonVariant: "outline" as const,
       popular: false
     },
     {
-      name: "Solo Creator",
-      price: "$20",
+      name: "Professional",
+      price: "$149",
       period: "per month",
-      description: "Perfect for individual content creators",
+      description: "Ideal for growing agencies and teams",
       features: [
-        "Unlimited content ideas",
-        "Premium templates",
+        "Up to 15 client brands",
+        "2,500 posts per month",
+        "Team collaboration tools",
+        "Advanced analytics",
         "Priority support",
-        "Analytics dashboard",
-        "Export to various formats"
+        "White-label options"
       ],
       buttonText: "Start Free Trial",
       buttonVariant: "default" as const,
@@ -38,14 +41,14 @@ const Pricing = () => {
       name: "Enterprise",
       price: "Custom",
       period: "pricing",
-      description: "For teams and large organizations",
+      description: "For large agencies and enterprises",
       features: [
-        "Everything in Solo Creator",
-        "Team collaboration",
+        "Unlimited client brands",
+        "Unlimited posts",
         "Custom integrations",
         "Dedicated account manager",
-        "Advanced analytics",
-        "Custom branding"
+        "Advanced analytics & reporting",
+        "Full white-label solution"
       ],
       buttonText: "Contact Sales",
       buttonVariant: "outline" as const,
@@ -61,7 +64,7 @@ const Pricing = () => {
             Choose Your Plan
           </h2>
           <p className="text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed text-base sm:text-lg">
-            Select the perfect plan for your content creation needs
+            Choose the right plan to scale your social media management business
           </p>
         </div>
 

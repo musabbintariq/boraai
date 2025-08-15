@@ -3,38 +3,38 @@ import { Brain, Heart, Library, Target, Zap, TrendingUp } from "lucide-react";
 const Features = () => {
   const features = [{
     icon: Brain,
-    title: "AI-Powered Ideas",
-    description: "Personalized content ideas for your niche"
+    title: "Multi-Client Management",
+    description: "Manage content for multiple clients from one dashboard"
   }, {
     icon: Target,
-    title: "Niche-Specific",
-    description: "Tailored ideas for your audience"
+    title: "Brand-Specific Content",
+    description: "Tailored content that matches each client's brand voice"
   }, {
     icon: TrendingUp,
-    title: "Trending Topics",
-    description: "Stay ahead with trending content"
+    title: "Platform Optimization",
+    description: "Content optimized for Instagram, TikTok, LinkedIn & more"
   }, {
     icon: Heart,
-    title: "Save & Organize",
-    description: "Build your personal content library"
+    title: "Team Collaboration",
+    description: "Collaborate with your team and approve content workflows"
   }, {
     icon: Zap,
-    title: "Instant Generation",
-    description: "Fresh ideas in seconds"
+    title: "Bulk Content Creation",
+    description: "Generate hundreds of posts in minutes"
   }, {
     icon: Library,
-    title: "Content Library",
-    description: "Organize ideas in one place"
+    title: "Content Scheduling",
+    description: "Plan and schedule content across all platforms"
   }];
   return <section id="features" className="py-16 sm:py-24 lg:py-32 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16 sm:mb-20 px-4">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6 tracking-wide font-serif">
             Everything You Need to{" "}
-            <span style={{ color: 'hsl(45 93% 58%)' }}>Create Amazing Content</span>
+            <span style={{ color: 'hsl(45 93% 58%)' }}>Scale Social Media</span>
           </h2>
           <p className="text-muted-foreground max-w-3xl mx-auto font-light leading-relaxed text-base sm:text-lg">
-            Powerful features designed to streamline your content creation process and boost your creativity.
+            Professional tools designed for social media managers and agencies to deliver outstanding results.
           </p>
         </div>
 
