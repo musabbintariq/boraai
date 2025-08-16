@@ -226,7 +226,7 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
               <Label className="text-sm font-medium text-muted-foreground">PAIN POINTS</Label>
               <div className="flex flex-wrap gap-2 mt-2">
                 {persona.pain_points.map((point, index) => (
-                  <Badge key={index} variant="outline" className="bg-red-50 border-red-200">{point}</Badge>
+                  <Badge key={index} variant="outline" className="bg-red-50 border-red-200 text-foreground">{point}</Badge>
                 ))}
               </div>
             </div>
@@ -237,7 +237,7 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
               <Label className="text-sm font-medium text-muted-foreground">GOALS</Label>
               <div className="flex flex-wrap gap-2 mt-2">
                 {persona.goals.map((goal, index) => (
-                  <Badge key={index} variant="outline" className="bg-green-50 border-green-200">{goal}</Badge>
+                  <Badge key={index} variant="outline" className="bg-green-50 border-green-200 text-foreground">{goal}</Badge>
                 ))}
               </div>
             </div>
