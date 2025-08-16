@@ -15,8 +15,7 @@ serve(async (req) => {
     const { brandId, userId, niche_description, timestamp } = await req.json()
     console.log('Triggering persona generation for:', { brandId, userId, niche_description })
 
-    // TODO: Replace this URL with your actual n8n webhook URL
-    const n8nWebhookUrl = 'https://your-n8n-instance.com/webhook/generate-persona'
+    const n8nWebhookUrl = 'https://n8n.srv878539.hstgr.cloud/webhook-test/0091a82d-dbc3-4bee-ad72-5d55b434d17a'
     
     // Send data to n8n workflow
     const response = await fetch(n8nWebhookUrl, {
