@@ -62,6 +62,38 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
     }
   }, [user, brandId]);
 
+  // Real-time listener for target audience updates
+  useEffect(() => {
+    if (!brandId) return;
+
+    const channel = supabase
+      .channel('target-audience-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'target_audience_profiles',
+          filter: `brand_id=eq.${brandId}`
+        },
+        (payload) => {
+          console.log('Real-time persona update:', payload);
+          if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            setPersona(payload.new as TargetAudience);
+            setHasPersona(true);
+            setIsEditing(false);
+            setGenerating(false);
+            toast.success('Target audience persona generated and saved!');
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [brandId]);
+
   const fetchTargetAudience = async () => {
     try {
       setLoading(true);
@@ -97,64 +129,32 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
       return;
     }
 
+    if (!user) {
+      toast.error('Please log in to generate persona');
+      return;
+    }
 
     setGenerating(true);
     try {
-      // Call backend endpoint which will trigger n8n webhook
-      const response = await fetch('/api/generate-persona', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Trigger the n8n webhook for persona generation
+      const response = await supabase.functions.invoke('generate-persona-trigger', {
+        body: {
+          brandId: brandId,
+          userId: user.id,
           niche_description: nicheInput,
           timestamp: new Date().toISOString(),
-        }),
+        }
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to connect to n8n workflow');
+      if (response.error) {
+        throw new Error(response.error.message);
       }
 
-      const result = await response.json();
+      toast.success('Persona generation started! You\'ll see the results appear automatically.');
       
-      // Use the response from n8n workflow to populate the persona
-      const generatedPersona: TargetAudience = {
-        brand_id: brandId,
-        niche_description: result.niche_description || nicheInput,
-        demographics: result.demographics || {
-          ageRange: "25-45",
-          gender: "All genders", 
-          location: "Urban areas, North America & Europe",
-          income: "$50,000 - $150,000"
-        },
-        pain_points: result.pain_points || [
-          "Lack of time for content creation",
-          "Difficulty staying consistent",
-          "Struggling with engagement",
-          "Limited design skills"
-        ],
-        goals: result.goals || [
-          "Build authentic brand presence",
-          "Increase online engagement", 
-          "Save time on content creation",
-          "Grow their audience"
-        ],
-        psychographics: result.psychographics || {
-          interests: ["Digital marketing", "Entrepreneurship", "Social media trends", "Business growth"],
-          values: ["Authenticity", "Quality", "Innovation", "Efficiency"],
-          lifestyle: "Busy professionals seeking work-life balance"
-        },
-        preferred_platforms: result.preferred_platforms || ["Instagram", "LinkedIn", "TikTok", "Twitter"],
-        content_preferences: result.content_preferences || ["Visual content", "Quick tips", "Behind-the-scenes", "Success stories"]
-      };
-
-      setPersona(generatedPersona);
-      toast.success('Target audience persona generated successfully using n8n workflow!');
     } catch (error) {
-      console.error('Error generating persona:', error);
-      toast.error('Failed to generate persona. Please try again.');
-    } finally {
+      console.error('Error triggering persona generation:', error);
+      toast.error('Failed to start persona generation. Please try again.');
       setGenerating(false);
     }
   };
@@ -288,7 +288,7 @@ export function BrandTargetAudienceManager({ brandId }: BrandTargetAudienceManag
               disabled={!nicheInput.trim() || generating}
               className="w-full"
             >
-              {generating ? "Generating Persona via n8n..." : "Generate Target Audience Persona"}
+              {generating ? "Starting Generation..." : "Generate Target Audience Persona"}
             </Button>
           </div>
         )}
