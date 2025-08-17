@@ -46,44 +46,39 @@ export function LibraryOptimized() {
     }
 
     try {
-      console.log("Scripting idea:", idea.title);
+      console.log("Sending idea to n8n for script generation:", idea.title);
       
-      toast({ 
-        title: "Generating script...", 
-        description: `Creating script for: ${idea.title}` 
-      });
-
-      // Create script directly using addScript
-      const scriptData = {
-        title: `${idea.title} - Script`,
-        script: `🎬 ${idea.title}
-
-${idea.content}
-
-📝 Perfect for ${idea.platform} content!
-
-Key points:
-• Engaging hook: "${idea.title}"
-• Main message: ${idea.content}
-• Call to action: What's your experience with this?
-
-#${idea.tags?.join(' #') || 'content'}`,
-        duration: '120s',
+      // Send idea data to n8n webhook for script generation
+      const webhookData = {
+        ideaTitle: idea.title,
+        ideaDescription: idea.content,
+        brandId: idea.brand_id || null,
+        userId: user.id,
         platform: idea.platform || 'general',
         tags: idea.tags || []
       };
 
-      await addScript(scriptData);
+      const response = await fetch('https://n8n.srv878539.hstgr.cloud/webhook-test/9520b977-ef6e-4538-baae-97b57532f40e', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to trigger script generation workflow');
+      }
 
       toast({
-        title: "Script generated!",
-        description: `Script "${scriptData.title}" has been created successfully!`
+        title: "Script generation started!",
+        description: "Your script is being generated and will appear in your scripts library shortly.",
       });
     } catch (error) {
       console.error('Script generation error:', error);
       toast({
         title: "Error",
-        description: "Failed to generate script. Please try again.",
+        description: "Failed to start script generation. Please try again.",
         variant: "destructive"
       });
     }
