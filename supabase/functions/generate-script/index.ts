@@ -12,9 +12,29 @@ serve(async (req) => {
   }
 
   try {
-    const { idea, userId } = await req.json();
+    const { 
+      idea, 
+      userId, 
+      ideaTitle, 
+      ideaDescription, 
+      brandId, 
+      platform, 
+      tags, 
+      format, 
+      duration, 
+      carouselLength 
+    } = await req.json();
 
-    if (!idea || !userId) {
+    // Support both old format (idea object) and new format (individual fields)
+    const ideaData = idea || {
+      title: ideaTitle,
+      content: ideaDescription,
+      platform: platform,
+      tags: tags,
+      brand_id: brandId
+    };
+
+    if (!ideaData || !userId) {
       throw new Error('Missing required data');
     }
 
@@ -22,28 +42,32 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Create a simple script based on the idea
-    const scriptContent = `🎬 ${idea.title}
+    // Create a script based on the idea and format
+    const formatText = format === 'carousel' 
+      ? `📱 ${carouselLength}-slide carousel` 
+      : `🎬 ${duration}s reel`;
+    
+    const scriptContent = `${formatText}: ${ideaData.title}
 
-${idea.content}
+${ideaData.content}
 
-📝 Perfect for ${idea.platform} content!
+📝 Perfect for ${ideaData.platform} content!
 
 Key points:
-• Engaging hook: "${idea.title}"
-• Main message: ${idea.content}
+• Engaging hook: "${ideaData.title}"
+• Main message: ${ideaData.content}
 • Call to action: What's your experience with this?
 
-#${idea.tags?.join(' #') || 'content'}`;
+#${ideaData.tags?.join(' #') || 'content'}`;
 
     const scriptData = {
       user_id: userId,
-      title: `${idea.title} - Script`,
+      title: `${ideaData.title} - Script`,
       script: scriptContent,
-      duration: '120s',
-      platform: idea.platform || 'general',
-      tags: idea.tags || [],
-      brand_id: idea.brand_id || null
+      duration: format === 'reel' ? `${duration}s` : '120s',
+      platform: ideaData.platform || 'general',
+      tags: ideaData.tags || [],
+      brand_id: ideaData.brand_id || brandId || null
     };
 
     const { data: script, error } = await supabase
