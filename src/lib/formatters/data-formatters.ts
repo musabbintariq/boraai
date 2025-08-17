@@ -6,6 +6,7 @@ export const formatContentIdea = (data: any) => ({
   content: data.content,
   platform: data.platform,
   tags: data.tags || [],
+  brand_id: data.brand_id,
   created_at: data.created_at,
   updated_at: data.updated_at,
   createdAt: data.created_at // for backward compatibility
