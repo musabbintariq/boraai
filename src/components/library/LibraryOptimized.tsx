@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/common/EmptyState";
 import { IdeaFeedback } from "@/components/IdeaFeedback";
 import { EditIdeaDialog } from "./EditIdeaDialog";
 import { GenerateIdeasDialog } from "./GenerateIdeasDialog";
+import { ScriptFormatDialog, type ScriptFormatData } from "./ScriptFormatDialog";
 import { useContentIdeasOptimized } from "@/hooks/optimized/useContentIdeasOptimized";
 import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
 import { useScriptsOptimized } from "@/hooks/optimized/useScriptsOptimized";
@@ -21,6 +22,8 @@ export function LibraryOptimized() {
   const [editingIdea, setEditingIdea] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
+  const [isScriptFormatDialogOpen, setIsScriptFormatDialogOpen] = useState(false);
+  const [selectedIdeaForScript, setSelectedIdeaForScript] = useState<any>(null);
   const { toast } = useToast();
   
   const handleCopy = (content: string) => {
@@ -35,7 +38,7 @@ export function LibraryOptimized() {
     removeIdea(id);
   };
 
-  const handleScriptIt = async (idea: any) => {
+  const handleScriptIt = (idea: any) => {
     if (!user) {
       toast({
         title: "Authentication required",
@@ -45,17 +48,26 @@ export function LibraryOptimized() {
       return;
     }
 
+    setSelectedIdeaForScript(idea);
+    setIsScriptFormatDialogOpen(true);
+  };
+
+  const handleScriptFormatConfirm = async (formatData: ScriptFormatData) => {
+    if (!selectedIdeaForScript || !user) return;
+
     try {
-      console.log("Sending idea to n8n for script generation:", idea.title);
+      console.log("Sending idea to n8n for script generation:", selectedIdeaForScript.title);
       
       // Send idea data to n8n webhook for script generation
       const webhookData = {
-        ideaTitle: idea.title,
-        ideaDescription: idea.content,
-        brandId: idea.brand_id,
+        ideaTitle: selectedIdeaForScript.title,
+        ideaDescription: selectedIdeaForScript.content,
+        brandId: selectedIdeaForScript.brand_id,
         userId: user.id,
-        platform: idea.platform || 'general',
-        tags: idea.tags || []
+        platform: selectedIdeaForScript.platform || 'general',
+        tags: selectedIdeaForScript.tags || [],
+        format: formatData.format,
+        ...(formatData.format === 'reel' ? { duration: formatData.duration } : { carouselLength: formatData.carouselLength })
       };
 
       const response = await fetch('https://n8n.srv878539.hstgr.cloud/webhook-test/9520b977-ef6e-4538-baae-97b57532f40e', {
@@ -72,7 +84,7 @@ export function LibraryOptimized() {
 
       toast({
         title: "Script generation started!",
-        description: "Your script is being generated and will appear in your scripts library shortly.",
+        description: `Your ${formatData.format} script is being generated and will appear in your scripts library shortly.`,
       });
     } catch (error) {
       console.error('Script generation error:', error);
@@ -178,6 +190,12 @@ export function LibraryOptimized() {
       <GenerateIdeasDialog
         isOpen={isGenerateDialogOpen}
         onOpenChange={setIsGenerateDialogOpen}
+      />
+
+      <ScriptFormatDialog
+        isOpen={isScriptFormatDialogOpen}
+        onOpenChange={setIsScriptFormatDialogOpen}
+        onConfirm={handleScriptFormatConfirm}
       />
     </div>
   );
