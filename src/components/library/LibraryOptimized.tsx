@@ -52,7 +52,7 @@ export function LibraryOptimized() {
       const webhookData = {
         ideaTitle: idea.title,
         ideaDescription: idea.content,
-        brandId: idea.brand_id || null,
+        brandId: idea.brand_id,
         userId: user.id,
         platform: idea.platform || 'general',
         tags: idea.tags || []
