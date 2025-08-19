@@ -70,7 +70,7 @@ export function LibraryOptimized() {
         ...(formatData.format === 'reel' ? { duration: formatData.duration } : { carouselLength: formatData.carouselLength })
       };
 
-      const response = await fetch('https://n8n.srv878539.hstgr.cloud/webhook-test/9520b977-ef6e-4538-baae-97b57532f40e', {
+      const response = await fetch('https://n8n.srv878539.hstgr.cloud/webhook/9520b977-ef6e-4538-baae-97b57532f40e', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
