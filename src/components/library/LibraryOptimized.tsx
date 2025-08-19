@@ -13,12 +13,14 @@ import { useContentIdeasOptimized } from "@/hooks/optimized/useContentIdeasOptim
 import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
 import { useScriptsOptimized } from "@/hooks/optimized/useScriptsOptimized";
 import { useAuth } from "@/hooks/useAuth";
+import { useBrandContext } from "@/contexts/BrandContext";
 
 export function LibraryOptimized() {
   const { ideas, loading, updateIdea, removeIdea } = useContentIdeasOptimized();
   const { pendingIdeas } = useGeneratedIdeas();
   const { addScript } = useScriptsOptimized();
   const { user } = useAuth();
+  const { activeBrandId } = useBrandContext();
   const [editingIdea, setEditingIdea] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
@@ -62,7 +64,7 @@ export function LibraryOptimized() {
       const webhookData = {
         ideaTitle: selectedIdeaForScript.title,
         ideaDescription: selectedIdeaForScript.content,
-        brandId: selectedIdeaForScript.brand_id || null,
+        brandId: selectedIdeaForScript.brand_id || activeBrandId || null,
         userId: user.id,
         platform: selectedIdeaForScript.platform || 'general',
         tags: selectedIdeaForScript.tags || [],
