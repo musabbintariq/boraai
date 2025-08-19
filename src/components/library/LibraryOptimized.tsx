@@ -62,13 +62,15 @@ export function LibraryOptimized() {
       const webhookData = {
         ideaTitle: selectedIdeaForScript.title,
         ideaDescription: selectedIdeaForScript.content,
-        brandId: selectedIdeaForScript.brand_id,
+        brandId: selectedIdeaForScript.brand_id || null,
         userId: user.id,
         platform: selectedIdeaForScript.platform || 'general',
         tags: selectedIdeaForScript.tags || [],
         format: formatData.format,
         ...(formatData.format === 'reel' ? { duration: formatData.duration } : { carouselLength: formatData.carouselLength })
       };
+
+      console.log('Webhook payload:', webhookData);
 
       const response = await fetch('https://n8n.srv878539.hstgr.cloud/webhook/9520b977-ef6e-4538-baae-97b57532f40e', {
         method: 'POST',
