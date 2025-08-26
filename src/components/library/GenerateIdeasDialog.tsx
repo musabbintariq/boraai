@@ -11,6 +11,8 @@ import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
 import { useBrands } from "@/hooks/useBrands";
 import { useBrandContext } from "@/contexts/BrandContext";
 import { useAuth } from "@/hooks/useAuth";
+import { useWebhookNotificationContext } from "@/contexts/WebhookNotificationContext";
+import { useContentIdeasOptimized } from "@/hooks/optimized/useContentIdeasOptimized";
 
 interface GenerateIdeasDialogProps {
   isOpen: boolean;
@@ -33,6 +35,8 @@ export const GenerateIdeasDialog = ({
 }: GenerateIdeasDialogProps) => {
   const { activeBrandId } = useBrandContext();
   const { user } = useAuth();
+  const { startNotification, completeNotification } = useWebhookNotificationContext();
+  const { refetch: refetchIdeas } = useContentIdeasOptimized();
   const [formData, setFormData] = useState<GenerateFormData>({
     topic: "",
     competitorsSocialLinks: "",
@@ -84,6 +88,9 @@ export const GenerateIdeasDialog = ({
       return;
     }
 
+    // Start the webhook notification
+    const notificationId = startNotification('ideas', 'Generating content ideas...');
+
     // Close dialog immediately and reset form
     onOpenChange(false);
     setFormData({
@@ -92,12 +99,6 @@ export const GenerateIdeasDialog = ({
       platforms: "",
       format: "",
       brandId: activeBrandId,
-    });
-
-    // Show immediate feedback
-    toast({
-      title: "Content generation started!",
-      description: "Your content ideas are being generated and will appear shortly."
     });
 
     // Send data to n8n webhook in background
@@ -116,17 +117,40 @@ export const GenerateIdeasDialog = ({
     
     console.log('Sending to webhook:', webhookPayload);
 
-    // Send webhook request without blocking UI
-    fetch(webhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(webhookPayload)
-    }).catch(error => {
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookPayload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to trigger idea generation workflow');
+      }
+
+      // Complete the notification and refresh data
+      completeNotification(notificationId, () => {
+        refetchIdeas();
+      });
+
+      toast({
+        title: "Content generation started!",
+        description: "Your content ideas are being generated and will appear shortly."
+      });
+    } catch (error) {
       console.error('Webhook request failed:', error);
-      // Don't show error toast as the user has already seen success message
-    });
+      
+      // Complete notification even on error
+      completeNotification(notificationId);
+      
+      toast({
+        title: "Error",
+        description: "Failed to start content generation. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handlePlatformChange = (value: string) => {
