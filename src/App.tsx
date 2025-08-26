@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrandProvider } from "./contexts/BrandContext";
+import { WebhookNotificationProvider } from "./contexts/WebhookNotificationContext";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import BrandManagement from "./pages/BrandManagement";
@@ -15,26 +17,30 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/dashboard/brands/:brandId" element={
-            <ProtectedRoute>
-              <BrandManagement />
-            </ProtectedRoute>
-          } />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <BrandProvider>
+        <WebhookNotificationProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/dashboard/brands/:brandId" element={
+                <ProtectedRoute>
+                  <BrandManagement />
+                </ProtectedRoute>
+              } />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </WebhookNotificationProvider>
+      </BrandProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

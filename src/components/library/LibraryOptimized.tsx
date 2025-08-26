@@ -14,13 +14,15 @@ import { useGeneratedIdeas } from "@/hooks/useGeneratedIdeas";
 import { useScriptsOptimized } from "@/hooks/optimized/useScriptsOptimized";
 import { useAuth } from "@/hooks/useAuth";
 import { useBrandContext } from "@/contexts/BrandContext";
+import { useWebhookNotificationContext } from "@/contexts/WebhookNotificationContext";
 
 export function LibraryOptimized() {
-  const { ideas, loading, updateIdea, removeIdea } = useContentIdeasOptimized();
+  const { ideas, loading, updateIdea, removeIdea, refetch: refetchIdeas } = useContentIdeasOptimized();
   const { pendingIdeas } = useGeneratedIdeas();
-  const { addScript } = useScriptsOptimized();
+  const { addScript, refetch: refetchScripts } = useScriptsOptimized();
   const { user } = useAuth();
   const { activeBrandId } = useBrandContext();
+  const { startNotification, completeNotification } = useWebhookNotificationContext();
   const [editingIdea, setEditingIdea] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isGenerateDialogOpen, setIsGenerateDialogOpen] = useState(false);
@@ -57,6 +59,9 @@ export function LibraryOptimized() {
   const handleScriptFormatConfirm = async (formatData: ScriptFormatData) => {
     if (!selectedIdeaForScript || !user) return;
 
+    // Start the webhook notification
+    const notificationId = startNotification('script', `Generating ${formatData.format} script...`);
+
     try {
       console.log("Sending idea to n8n for script generation:", selectedIdeaForScript.title);
       
@@ -86,12 +91,21 @@ export function LibraryOptimized() {
         throw new Error('Failed to trigger script generation workflow');
       }
 
+      // Complete the notification and refresh data
+      completeNotification(notificationId, () => {
+        refetchScripts();
+      });
+
       toast({
         title: "Script generation started!",
         description: `Your ${formatData.format} script is being generated and will appear in your scripts library shortly.`,
       });
     } catch (error) {
       console.error('Script generation error:', error);
+      
+      // Complete notification even on error
+      completeNotification(notificationId);
+      
       toast({
         title: "Error",
         description: "Failed to start script generation. Please try again.",
