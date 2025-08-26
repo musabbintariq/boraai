@@ -20,10 +20,17 @@ interface DashboardSidebarProps {
 }
 
 export function DashboardSidebar({ activeView, setActiveView }: DashboardSidebarProps) {
-  const { state } = useSidebar();
-  const collapsed = state === "collapsed";
   const navigate = useNavigate();
   const { signOut } = useAuth();
+  
+  // Safely use the sidebar hook
+  let collapsed = false;
+  try {
+    const { state } = useSidebar();
+    collapsed = state === "collapsed";
+  } catch (error) {
+    console.warn("useSidebar hook not available:", error);
+  }
 
   const menuItems = [
     {

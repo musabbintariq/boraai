@@ -10,7 +10,7 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = ({ children, activeView, setActiveView }: DashboardLayoutProps) => {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
         <DashboardSidebar activeView={activeView} setActiveView={setActiveView} />
         <main className="flex-1">
