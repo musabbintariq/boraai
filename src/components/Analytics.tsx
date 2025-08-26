@@ -7,7 +7,7 @@ import { StatCard } from "@/components/common/StatCard";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { useBrands } from "@/hooks/useBrands";
 import { useBrandContext } from "@/contexts/BrandContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GenerateIdeasDialog } from "@/components/library/GenerateIdeasDialog";
 
 // Mock data for demonstration
@@ -77,6 +77,20 @@ export function Dashboard({ setActiveView }: DashboardProps) {
     setActiveBrandId
   } = useBrandContext();
   const [showGenerateDialog, setShowGenerateDialog] = useState(false);
+  
+  // Load ElevenLabs ConvAI script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
+    script.async = true;
+    script.type = 'text/javascript';
+    document.head.appendChild(script);
+    
+    return () => {
+      // Cleanup script if component unmounts
+      document.head.removeChild(script);
+    };
+  }, []);
   const statsData = [{
     title: "Total Followers",
     value: "2,100",
@@ -159,6 +173,11 @@ export function Dashboard({ setActiveView }: DashboardProps) {
           <FileText className="h-5 w-5" />
           <span className="text-base">Generate Scripts</span>
         </Button>
+      </div>
+
+      {/* Voice Assistant */}
+      <div className="mb-8 flex justify-center">
+        <div dangerouslySetInnerHTML={{ __html: '<elevenlabs-convai agent-id="agent_1501k3m6s3qfe2srb0dpesaf8zbp"></elevenlabs-convai>' }} />
       </div>
 
       <GenerateIdeasDialog
