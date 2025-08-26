@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, TrendingUp, Zap } from "lucide-react";
+import { Sparkles, TrendingUp, Zap, Building2, Lightbulb, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 const Hero = () => {
   const navigate = useNavigate();
@@ -58,6 +58,33 @@ const Hero = () => {
           <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 sm:px-10 py-4 bg-white/5 backdrop-blur-md border-white/20 text-white hover:bg-white/10 rounded-xl font-light text-base">
             Watch Demo
           </Button>
+        </div>
+        
+        {/* Minimal glowing action buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-12 sm:mb-16 px-4">
+          <button 
+            onClick={() => navigate('/dashboard')}
+            className="group flex items-center gap-3 px-6 py-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-lg text-white hover:bg-black/60 hover:border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:scale-105"
+          >
+            <Building2 className="w-4 h-4" />
+            <span className="text-sm font-light">Manage Brands</span>
+          </button>
+          
+          <button 
+            onClick={() => navigate('/dashboard')}
+            className="group flex items-center gap-3 px-6 py-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-lg text-white hover:bg-black/60 hover:border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:scale-105"
+          >
+            <Lightbulb className="w-4 h-4" />
+            <span className="text-sm font-light">Generate Ideas</span>
+          </button>
+          
+          <button 
+            onClick={() => navigate('/dashboard')}
+            className="group flex items-center gap-3 px-6 py-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-lg text-white hover:bg-black/60 hover:border-white/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:scale-105"
+          >
+            <FileText className="w-4 h-4" />
+            <span className="text-sm font-light">Generate Scripts</span>
+          </button>
         </div>
         
         {/* Clean stats section */}
