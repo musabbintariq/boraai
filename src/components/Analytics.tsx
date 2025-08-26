@@ -1,12 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Users, Heart, Eye, Zap } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { StatCard } from "@/components/common/StatCard";
@@ -67,9 +61,16 @@ const engagementData = [{
   views: 5200
 }];
 export function Dashboard() {
-  const { profile } = useUserProfile();
-  const { brands } = useBrands();
-  const { activeBrandId, setActiveBrandId } = useBrandContext();
+  const {
+    profile
+  } = useUserProfile();
+  const {
+    brands
+  } = useBrands();
+  const {
+    activeBrandId,
+    setActiveBrandId
+  } = useBrandContext();
   const statsData = [{
     title: "Total Followers",
     value: "2,100",
@@ -105,20 +106,16 @@ export function Dashboard() {
                     Welcome to your content creation dashboard.
                   </p>
                 </div>
-                {brands.length > 0 && (
-                  <Select value={activeBrandId || ""} onValueChange={setActiveBrandId}>
+                {brands.length > 0 && <Select value={activeBrandId || ""} onValueChange={setActiveBrandId}>
                     <SelectTrigger className="w-[200px]">
                       <SelectValue placeholder="Select a brand" />
                     </SelectTrigger>
                     <SelectContent>
-                      {brands.map((brand) => (
-                        <SelectItem key={brand.brand_id} value={brand.brand_id}>
+                      {brands.map(brand => <SelectItem key={brand.brand_id} value={brand.brand_id}>
                           {brand.name}
-                        </SelectItem>
-                      ))}
+                        </SelectItem>)}
                     </SelectContent>
-                  </Select>
-                )}
+                  </Select>}
               </div>
             </CardContent>
           </Card>
@@ -126,59 +123,12 @@ export function Dashboard() {
       </div>
 
       {/* Analytics Section */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-serif font-bold mb-4">Analytics Dashboard</h2>
-        <p className="text-muted-foreground">
-          Track your social media performance and growth metrics.
-        </p>
-      </div>
+      
 
       {/* Overview Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {statsData.map(stat => <StatCard key={stat.title} title={stat.title} value={stat.value} trend={stat.trend} icon={stat.icon} />)}
-      </div>
+      
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-card border-border shadow-butter-glow">
-          <CardHeader>
-            <CardTitle className="font-sans font-bold">Followers Growth</CardTitle>
-            <CardDescription>Monthly followers growth over the last 6 months</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={followersData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="followers" stroke="hsl(var(--butter-yellow))" strokeWidth={2} dot={{
-                fill: "hsl(var(--butter-yellow))"
-              }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-card border-border shadow-butter-glow">
-          <CardHeader>
-            <CardTitle className="font-sans font-bold">Engagement Metrics</CardTitle>
-            <CardDescription>Likes, comments, and views over the last 6 months</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={engagementData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="likes" fill="hsl(var(--butter-yellow))" />
-                <Bar dataKey="comments" fill="hsl(var(--primary))" />
-                <Bar dataKey="views" fill="hsl(var(--muted))" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
+      
     </div>;
 }
