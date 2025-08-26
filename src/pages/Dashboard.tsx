@@ -2,11 +2,9 @@ import { useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { BrandProvider, useBrandContext } from "@/contexts/BrandContext";
 import { LibraryOptimized } from "@/components/library/LibraryOptimized";
-import { Dashboard as DashboardComponent } from "@/components/Analytics";
+import { DashboardActions } from "@/components/dashboard/DashboardActions";
 import { ScriptsOptimized } from "@/components/scripts/ScriptsOptimized";
 import { BrandsList } from "@/components/brands/BrandsList";
-import { Library } from "@/components/Library";
-import { Scripts } from "@/components/Scripts";
 
 const DashboardContent = () => {
   const [activeView, setActiveView] = useState<"dashboard" | "library" | "scripts" | "brands">("dashboard");
@@ -14,7 +12,7 @@ const DashboardContent = () => {
 
   const renderContent = () => {
     switch(activeView) {
-      case "dashboard": return <DashboardComponent />;
+      case "dashboard": return <DashboardActions setActiveView={setActiveView} />;
       case "brands": return <BrandsList />;
       case "library": return <LibraryOptimized />;
       case "scripts": return <ScriptsOptimized />;
