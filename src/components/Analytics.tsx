@@ -1,13 +1,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Users, Heart, Eye, Zap } from "lucide-react";
+import { Users, Heart, Eye, Zap, Settings, Lightbulb, FileText } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { StatCard } from "@/components/common/StatCard";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { useBrands } from "@/hooks/useBrands";
 import { useBrandContext } from "@/contexts/BrandContext";
 import { useState } from "react";
+import { GenerateIdeasDialog } from "@/components/library/GenerateIdeasDialog";
 
 // Mock data for demonstration
 const followersData = [{
@@ -60,7 +61,11 @@ const engagementData = [{
   comments: 280,
   views: 5200
 }];
-export function Dashboard() {
+interface DashboardProps {
+  setActiveView?: (view: "dashboard" | "library" | "scripts" | "brands") => void;
+}
+
+export function Dashboard({ setActiveView }: DashboardProps) {
   const {
     profile
   } = useUserProfile();
@@ -71,6 +76,7 @@ export function Dashboard() {
     activeBrandId,
     setActiveBrandId
   } = useBrandContext();
+  const [showGenerateDialog, setShowGenerateDialog] = useState(false);
   const statsData = [{
     title: "Total Followers",
     value: "2,100",
@@ -122,13 +128,43 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* Analytics Section */}
-      
+      {/* Action Buttons */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <Button
+          variant="minimal"
+          size="lg"
+          onClick={() => setActiveView?.("brands")}
+          className="h-16 flex items-center gap-3 text-left justify-start"
+        >
+          <Settings className="h-5 w-5" />
+          <span className="text-base">Manage Brands</span>
+        </Button>
+        
+        <Button
+          variant="minimal"
+          size="lg"
+          onClick={() => setShowGenerateDialog(true)}
+          className="h-16 flex items-center gap-3 text-left justify-start"
+        >
+          <Lightbulb className="h-5 w-5" />
+          <span className="text-base">Generate Ideas</span>
+        </Button>
+        
+        <Button
+          variant="minimal"
+          size="lg"
+          onClick={() => setActiveView?.("scripts")}
+          className="h-16 flex items-center gap-3 text-left justify-start"
+        >
+          <FileText className="h-5 w-5" />
+          <span className="text-base">Generate Scripts</span>
+        </Button>
+      </div>
 
-      {/* Overview Stats */}
-      
-
-      {/* Charts */}
-      
+      <GenerateIdeasDialog
+        isOpen={showGenerateDialog}
+        onOpenChange={setShowGenerateDialog}
+        selectedBrandId={activeBrandId}
+      />
     </div>;
 }

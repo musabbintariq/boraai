@@ -14,7 +14,7 @@ const DashboardContent = () => {
 
   const renderContent = () => {
     switch(activeView) {
-      case "dashboard": return <DashboardComponent />;
+      case "dashboard": return <DashboardComponent setActiveView={setActiveView} />;
       case "brands": return <BrandsList />;
       case "library": return <LibraryOptimized />;
       case "scripts": return <ScriptsOptimized />;
