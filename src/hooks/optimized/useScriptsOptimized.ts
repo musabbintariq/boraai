@@ -117,7 +117,8 @@ export const useScriptsOptimized = () => {
         },
         (payload) => {
           console.log('Real-time scripts update:', payload);
-          fetchScripts(); // Refresh data when changes occur
+          // Use the memoized fetchScripts function
+          fetchScripts();
         }
       )
       .subscribe();
@@ -125,7 +126,7 @@ export const useScriptsOptimized = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, fetchScripts]);
+  }, [user]); // Remove fetchScripts from dependencies
 
   return {
     scripts,

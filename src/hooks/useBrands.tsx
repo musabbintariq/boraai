@@ -51,7 +51,8 @@ export const useBrands = () => {
         },
         (payload) => {
           console.log('Real-time brands update:', payload);
-          fetchBrands(); // Refresh data when changes occur
+          // Use the memoized fetchBrands function
+          fetchBrands();
         }
       )
       .subscribe();
@@ -59,7 +60,7 @@ export const useBrands = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user]);
+  }, [user]); // Remove fetchBrands from dependencies to prevent recreation
 
   const fetchBrands = async () => {
     try {

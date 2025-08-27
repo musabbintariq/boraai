@@ -117,7 +117,8 @@ export const useContentIdeasOptimized = () => {
         },
         (payload) => {
           console.log('Real-time content ideas update:', payload);
-          fetchIdeas(); // Refresh data when changes occur
+          // Use the memoized fetchIdeas function
+          fetchIdeas();
         }
       )
       .subscribe();
@@ -125,7 +126,7 @@ export const useContentIdeasOptimized = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, fetchIdeas]);
+  }, [user]); // Remove fetchIdeas from dependencies
 
   return {
     ideas,
