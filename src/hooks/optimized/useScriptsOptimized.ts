@@ -3,6 +3,7 @@ import { useAuth } from "../useAuth";
 import { useAsyncOperation } from "../shared/useAsyncOperation";
 import { useOptimisticUpdates } from "../shared/useOptimisticUpdates";
 import { useBrandContext } from "@/contexts/BrandContext";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   ScriptsService, 
   Script, 
@@ -99,6 +100,32 @@ export const useScriptsOptimized = () => {
   useEffect(() => {
     fetchScripts();
   }, [user, activeBrandId]);
+
+  // Real-time subscription for scripts
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel('scripts-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'scripts',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Real-time scripts update:', payload);
+          fetchScripts(); // Refresh data when changes occur
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, fetchScripts]);
 
   return {
     scripts,

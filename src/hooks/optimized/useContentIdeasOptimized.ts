@@ -3,6 +3,7 @@ import { useAuth } from "../useAuth";
 import { useAsyncOperation } from "../shared/useAsyncOperation";
 import { useOptimisticUpdates } from "../shared/useOptimisticUpdates";
 import { useBrandContext } from "@/contexts/BrandContext";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   ContentIdeasService, 
   ContentIdea, 
@@ -99,6 +100,32 @@ export const useContentIdeasOptimized = () => {
   useEffect(() => {
     fetchIdeas();
   }, [user, activeBrandId]);
+
+  // Real-time subscription for content ideas
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel('content-ideas-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'content_ideas',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Real-time content ideas update:', payload);
+          fetchIdeas(); // Refresh data when changes occur
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, fetchIdeas]);
 
   return {
     ideas,

@@ -35,6 +35,32 @@ export const useBrands = () => {
     }
   }, [user]);
 
+  // Real-time subscription for brands
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel('brands-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'brands',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Real-time brands update:', payload);
+          fetchBrands(); // Refresh data when changes occur
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
   const fetchBrands = async () => {
     try {
       setLoading(true);
