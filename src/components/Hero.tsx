@@ -37,7 +37,7 @@ const Hero = () => {
         
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 leading-[0.9] tracking-wide font-serif">
           <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent">
-            we handle the thinking. you handle the creating.
+            We handle thinking. You handle the creating.
           </span>
         </h1>
         
