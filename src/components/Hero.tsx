@@ -42,8 +42,9 @@ const Hero = () => {
         </h1>
         
         <p className="text-lg sm:text-xl text-white/80 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed font-light px-4">
-          AI-powered content generation for social media managers and agencies.
-          Create engaging content at scale for multiple clients and platforms.
+          We believe the best content comes from the heart, not from a machine. But the endless grind of finding what works—the research, the analysis, the strategy—can kill creativity.
+          
+          Bora AI is designed to take over the "thinking" by providing you with a constant stream of personalized, on-brand ideas. This frees you up to do what you do best: Create authentic, human-made content that connects.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-12 sm:mb-16 px-4">
