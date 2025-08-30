@@ -41,7 +41,7 @@ const Hero = () => {
           </span>
         </h1>
         
-        <p className="text-lg sm:text-xl text-white/80 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed font-light px-4">
+        <p className="text-lg sm:text-xl text-white mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed font-light px-4" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
           Bora AI handles the endless research and analysis, delivering a consistent creative direction. This frees you to focus on what you do best: Creating authentic content that connects.
         </p>
         
